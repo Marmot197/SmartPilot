@@ -1,4 +1,4 @@
-# 🤖SmartPilot:Neurosymbolic Customized and Compact CoPilot for Manufacturing
+# 🤖SmartPilot:Agent-Based CoPilot for Intelligent Manufacturing
 
 We introduce SmartPilot: 𝘼 𝘾𝙪𝙨𝙩𝙤𝙢, 𝘾𝙤𝙢𝙥𝙖𝙘𝙩 𝙖𝙣𝙙 𝙉𝙚𝙪𝙧𝙤𝙨𝙮𝙢𝙗𝙤𝙡𝙞𝙘 𝘼𝙄 𝙢𝙤𝙙𝙚𝙡 - The co-pilot that leverages a **custom**, **right_sized**, **neurosymbolic** AI model to transform manufacturing processes.
 
