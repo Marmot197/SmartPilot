@@ -2,7 +2,7 @@
 
 We introduce SmartPilot: 𝘼 𝘾𝙪𝙨𝙩𝙤𝙢, 𝘾𝙤𝙢𝙥𝙖𝙘𝙩 𝙖𝙣𝙙 𝙉𝙚𝙪𝙧𝙤𝙨𝙮𝙢𝙗𝙤𝙡𝙞𝙘 𝘼𝙄 𝙢𝙤𝙙𝙚𝙡 - The co-pilot that leverages a **custom**, **right_sized**, **neurosymbolic** AI model to transform manufacturing processes.
 
-Visit here for the demo: [Demo link](https://youtu.be/UG6HdPqzIxQ)
+Visit here for the demo: [Demo link](https://youtu.be/etgkhH_8jS4)
 
 ## Core System Framework: Key Components and Technical Features of the SmartPilot Platform
 
