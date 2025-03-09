@@ -4,6 +4,23 @@ We introduce SmartPilot: 𝘼 𝘾𝙪𝙨𝙩𝙤𝙢, 𝘾𝙤𝙢𝙥𝙖𝙘
 
 Visit here for the demo: [Demo link](https://youtu.be/etgkhH_8jS4)
 
+
+# To Run SmartPilot: Follow these steps
+
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+
+To run the chatbot with Front-End
+
+```
+pip install streamlit
+cd src
+
+streamlit run new-main.py
+```
+
 ## Core System Framework: Key Components and Technical Features of the SmartPilot Platform
 
 ![Core System Framework](https://github.com/ChathurangiShyalika/Manufacturing_Copilot/blob/master/SmartPilot.png "Core System Framework of SmartPilot")
