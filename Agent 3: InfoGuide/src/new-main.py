@@ -1,7 +1,6 @@
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from random import choice
 from assets.DataUtils import AssetLoader
 from copilots.Memory_Utils import Knowledge_Representation, Retr, Symbolic_Model
 from copilots.Agents import LLM
@@ -30,8 +29,10 @@ def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_d
     predicted_labels = [id2label[label.item()] for label in torch.argmax(logits, axis=1)]
     return predicted_labels
 
+# Streamlit UI
 st.title("MTSS Copilot - Anomaly Prediction Assistant")
 
+# Sidebar for user role selection
 st.sidebar.title("🛠 User Simulation")
 users_and_queries = AssetLoader.get_queries()
 user_roles = list(users_and_queries.keys())
@@ -45,8 +46,10 @@ st.write("**Chat with the AI:**")
 user_input = st.chat_input("Ask a question about anomaly detection or documentation...")
 
 tokenizer, model, id2label = load_anomaly_prediction_model()
+
 if user_input or st.sidebar.button("Run Simulation"):
     st.session_state["messages"].append({"role": "user", "content": user_input or user_query})
+    
     if selected_role == 'Anomaly Prediction and Sensor Values':
         time_series_data = ["[663. 463. 500.]"]
         predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_data)
@@ -58,7 +61,74 @@ if user_input or st.sidebar.button("Run Simulation"):
         llm = LLM()
         llm.set_prompt(system_template, user_query, context)
         response = llm.respond_to_prompt()
+    
     st.session_state["messages"].append({"role": "assistant", "content": response})
 
+# Inject custom CSS for chat UI enhancements
+st.markdown("""
+    <style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        max-height: 500px;
+    }
+    .user-bubble {
+        background-color: #73000a;
+        color: white;
+        border: 1px solid #73000a;
+        border-radius: 15px;
+        padding: 10px 20px;
+        max-width: 60%;
+        margin: 10px 0;
+        text-align: left;
+        float: right;
+        clear: both;
+    }
+    .ai-bubble {
+        background-color: #f0f0f0;
+        color: black;
+        border-radius: 15px;
+        padding: 10px 20px;
+        max-width: 60%;
+        margin: 10px 0;
+        text-align: left;
+        float: left;
+        clear: both;
+    }
+    .user-bubble img {
+        position: absolute;
+        top: -10px;
+        right: -50px;
+        width: 30px;
+        height: 30px;
+    }
+    .ai-bubble img {
+        position: absolute;
+        top: -10px;
+        left: -50px;
+        width: 50px;
+        height: 50px;
+    }
+    .chat-container > div {
+        margin-bottom: 20px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Display chat messages with styled bubbles
+st.write('<div class="chat-container">', unsafe_allow_html=True)
+
 for msg in st.session_state["messages"]:
-    st.chat_message(msg["role"]).write(msg["content"])
+    if msg["role"] == "user":
+        st.markdown(
+            f"<div class='user-bubble'><img src='https://cdn-icons-png.flaticon.com/512/747/747545.png' />{msg['content']}</div>",
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown(
+            f"<div class='ai-bubble'><img src='https://cdn-icons-png.freepik.com/512/6783/6783338.png' /><strong>MTSS Copilot</strong>: {msg['content']}</div>",
+            unsafe_allow_html=True
+        )
+
+st.write('</div>', unsafe_allow_html=True)
