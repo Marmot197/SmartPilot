@@ -32,16 +32,10 @@ def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_d
     predicted_labels = [id2label[label.item()] for label in torch.argmax(logits, axis=1)]
     return predicted_labels
 
-<<<<<<< HEAD
 
 # Streamlit UI
 st.title("SmartPilot")
 
-=======
-# Streamlit UI
-st.title("MTSS Copilot - Anomaly Prediction Assistant")
-
->>>>>>> 29854981539b2674b35c20a65c1953232d9171a8
 # Sidebar for user role selection
 st.sidebar.title("🛠 User Simulation")
 users_and_queries = AssetLoader.get_queries()
@@ -59,11 +53,7 @@ tokenizer, model, id2label = load_anomaly_prediction_model()
 
 if user_input or st.sidebar.button("Run Simulation"):
     st.session_state["messages"].append({"role": "user", "content": user_input or user_query})
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 29854981539b2674b35c20a65c1953232d9171a8
     if selected_role == 'Anomaly Prediction and Sensor Values':
         try:
             input_parts = user_input.split(";")
@@ -81,11 +71,7 @@ if user_input or st.sidebar.button("Run Simulation"):
         llm = LLM()
         llm.set_prompt(system_template, user_query, context)
         response = llm.respond_to_prompt()
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 29854981539b2674b35c20a65c1953232d9171a8
     st.session_state["messages"].append({"role": "assistant", "content": response})
 
 # Inject custom CSS for chat UI enhancements
@@ -120,51 +106,13 @@ st.markdown("""
         float: left;
         clear: both;
     }
-<<<<<<< HEAD
-=======
-    .user-bubble img {
-        position: absolute;
-        top: -10px;
-        right: -50px;
-        width: 30px;
-        height: 30px;
-    }
-    .ai-bubble img {
-        position: absolute;
-        top: -10px;
-        left: -50px;
-        width: 50px;
-        height: 50px;
-    }
-    .chat-container > div {
-        margin-bottom: 20px;
-    }
->>>>>>> 29854981539b2674b35c20a65c1953232d9171a8
     </style>
 """, unsafe_allow_html=True)
 
 # Display chat messages with styled bubbles
-<<<<<<< HEAD
 # Display chat messages using st.chat_message() for user and assistant icons
 for msg in st.session_state["messages"]:
     with st.chat_message(msg["role"]):
         st.markdown(f"<div style='white-space: pre-line;'>{msg['content']}</div>", unsafe_allow_html=True)
 
 
-=======
-st.write('<div class="chat-container">', unsafe_allow_html=True)
-
-for msg in st.session_state["messages"]:
-    if msg["role"] == "user":
-        st.markdown(
-            f"<div class='user-bubble'><img src='https://cdn-icons-png.flaticon.com/512/747/747545.png' />{msg['content']}</div>",
-            unsafe_allow_html=True
-        )
-    else:
-        st.markdown(
-            f"<div class='ai-bubble'><img src='https://cdn-icons-png.freepik.com/512/6783/6783338.png' /><strong>MTSS Copilot</strong>: {msg['content']}</div>",
-            unsafe_allow_html=True
-        )
-
-st.write('</div>', unsafe_allow_html=True)
->>>>>>> 29854981539b2674b35c20a65c1953232d9171a8
