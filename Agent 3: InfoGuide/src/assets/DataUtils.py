@@ -18,13 +18,17 @@ class AssetLoader:
         ]
 
         anomaly_prediction_queries = [
-            "just print the context as it is",
-            "just print the context as it is "
+            "Enter the current sensor values to check if an anomaly will happen next",
+        ]
+
+        prod_forecast_queries = [
+            "Enter the current production statistics to get the next production",
         ]
 
         queries = {
             "Documentation": documentation_queries,
-            "Anomaly Prediction and Sensor Values": anomaly_prediction_queries
+            "Anomaly Prediction and Sensor Values": anomaly_prediction_queries,
+            "Production Forecasting": prod_forecast_queries
         }
         return queries
 
@@ -44,7 +48,11 @@ class AssetLoader:
                                                        - Providing the sensor values associated with the next time step.
                                                        - Assisting users in understanding the implications of predicted anomalies.
                                                        - Offering guidance on how to adjust the manufacturing process to avoid or mitigate predicted anomalies.
-                                                       - Ensuring that users have the most accurate and up-to-date sensor readings for decision-making."""
+                                                       - Ensuring that users have the most accurate and up-to-date sensor readings for decision-making.""",
+
+            "Production Forecasting": """You assist users with tasks related to predicting product demand in vegemite production pipeline. Your responsibilities include:
+                                                               - Predicting next hour yeast product yield. """
+
         }
 
         return system_templates

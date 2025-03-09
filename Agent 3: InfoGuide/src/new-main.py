@@ -32,6 +32,31 @@ def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_d
     predicted_labels = [id2label[label.item()] for label in torch.argmax(logits, axis=1)]
     return predicted_labels
 
+def prod_forecasting_model():
+    model_checkpoint = os.path.join(os.path.dirname(__file__), "..", "..", "Models", "final_finetuned_model_ForeSight")
+
+    tokenizer_f = AutoTokenizer.from_pretrained(model_checkpoint)
+    df = pd.read_json('./fine_tune_data_foresight.json')
+    unique_labels_f = df['completion'].unique().tolist()
+    id2label_f = {i: label for i, label in enumerate(unique_labels_f)}
+    label2id_f = {label: i for i, label in enumerate(unique_labels_f)}
+    model_f = AutoModelForSequenceClassification.from_pretrained(
+        model_checkpoint, num_labels=len(unique_labels_f), id2label=id2label_f, label2id=label2id_f
+    )
+    return tokenizer_f, model_f, id2label_f
+
+
+def get_prod_forecast(tokenizer_f, model_f, id2label_f, user_query, time_series_data):
+    new_text_inputs = [f"{series} {user_query}" for series in time_series_data]
+    tokenized_inputs = tokenizer_f(new_text_inputs, padding=True, truncation=True, return_tensors="pt")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    tokenized_inputs = {key: value.to(device) for key, value in tokenized_inputs.items()}
+    model_f.to(device)
+    with torch.no_grad():
+        logits = model(**tokenized_inputs).logits
+    predicted_labels = [id2label_f[label.item()] for label in torch.argmax(logits, axis=1)]
+    return predicted_labels
+
 
 # Streamlit UI
 st.title("SmartPilot:Agent-Based CoPilot for Intelligent Manufacturing")
@@ -50,6 +75,7 @@ st.write("**Chat with the AI:**")
 user_input = st.chat_input("Enter time-series data (comma-separated) and ask your question...")
 
 tokenizer, model, id2label = load_anomaly_prediction_model()
+tokenizer_f, model_f, id2label_f = prod_forecasting_model()
 
 if user_input or st.sidebar.button("Run Simulation"):
     st.session_state["messages"].append({"role": "user", "content": user_input or user_query})
@@ -62,6 +88,16 @@ if user_input or st.sidebar.button("Run Simulation"):
 
             predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_query_text, time_series_data)
             response = f"Predicted anomaly labels: {', '.join(predicted_labels)}"
+        except Exception as e:
+            response = f"Error in processing input: {str(e)}"
+    elif selected_role == 'Production Forecasting':
+        try:
+            input_parts = user_input.split(";")
+            time_series_data = input_parts[0].strip().split(",") if len(input_parts) > 1 else ["[0. 0. 0.]"]
+            user_query_text = input_parts[1].strip() if len(input_parts) > 1 else user_query
+
+            predicted_labels = get_prod_forecast(tokenizer_f, model_f, id2label_f, user_query_text, time_series_data)
+            response = f"Predicted product values: {', '.join(predicted_labels)}"
         except Exception as e:
             response = f"Error in processing input: {str(e)}"
     else:
