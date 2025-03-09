@@ -1,14 +1,15 @@
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
-from random import choice
 from assets.DataUtils import AssetLoader
 from copilots.Memory_Utils import Knowledge_Representation, Retr, Symbolic_Model
 from copilots.Agents import LLM
 import pandas as pd
+import os
 
 def load_anomaly_prediction_model():
-    model_checkpoint = 'final_best_model'
+    model_checkpoint = os.path.join(os.path.dirname(__file__), "..", "..", "Models", "final_best_model_PredictX")
+
     tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
     df = pd.read_excel('./LLM_FT_dataset.csv')
     unique_labels = df['predicted_label'].unique().tolist()
@@ -18,6 +19,7 @@ def load_anomaly_prediction_model():
         model_checkpoint, num_labels=len(unique_labels), id2label=id2label, label2id=label2id
     )
     return tokenizer, model, id2label
+
 
 def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_data):
     new_text_inputs = [f"{series} {user_query}" for series in time_series_data]
@@ -30,8 +32,11 @@ def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_d
     predicted_labels = [id2label[label.item()] for label in torch.argmax(logits, axis=1)]
     return predicted_labels
 
-st.title("MTSS Copilot - Anomaly Prediction Assistant")
 
+# Streamlit UI
+st.title("SmartPilot")
+
+# Sidebar for user role selection
 st.sidebar.title("🛠 User Simulation")
 users_and_queries = AssetLoader.get_queries()
 user_roles = list(users_and_queries.keys())
@@ -42,15 +47,23 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
 st.write("**Chat with the AI:**")
-user_input = st.chat_input("Ask a question about anomaly detection or documentation...")
+user_input = st.chat_input("Enter time-series data (comma-separated) and ask your question...")
 
 tokenizer, model, id2label = load_anomaly_prediction_model()
+
 if user_input or st.sidebar.button("Run Simulation"):
     st.session_state["messages"].append({"role": "user", "content": user_input or user_query})
+
     if selected_role == 'Anomaly Prediction and Sensor Values':
-        time_series_data = ["[663. 463. 500.]"]
-        predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_data)
-        response = f"Predicted anomaly labels: {', '.join(predicted_labels)}"
+        try:
+            input_parts = user_input.split(";")
+            time_series_data = input_parts[0].strip().split(",") if len(input_parts) > 1 else ["[0. 0. 0.]"]
+            user_query_text = input_parts[1].strip() if len(input_parts) > 1 else user_query
+
+            predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_query_text, time_series_data)
+            response = f"Predicted anomaly labels: {', '.join(predicted_labels)}"
+        except Exception as e:
+            response = f"Error in processing input: {str(e)}"
     else:
         data = Knowledge_Representation.organize_data(AssetLoader.read_data())
         context = Retr.retrieve_context(data, user_query, symb_model=Symbolic_Model(), top_k=1)[0]
@@ -58,7 +71,48 @@ if user_input or st.sidebar.button("Run Simulation"):
         llm = LLM()
         llm.set_prompt(system_template, user_query, context)
         response = llm.respond_to_prompt()
+
     st.session_state["messages"].append({"role": "assistant", "content": response})
 
+# Inject custom CSS for chat UI enhancements
+st.markdown("""
+    <style>
+    .chat-container {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        max-height: 500px;
+    }
+    .user-bubble {
+        background-color: #73000a;
+        color: white;
+        border: 1px solid #73000a;
+        border-radius: 15px;
+        padding: 10px 20px;
+        max-width: 60%;
+        margin: 10px 0;
+        text-align: left;
+        float: right;
+        clear: both;
+    }
+    .ai-bubble {
+        background-color: #f0f0f0;
+        color: black;
+        border-radius: 15px;
+        padding: 10px 20px;
+        max-width: 60%;
+        margin: 10px 0;
+        text-align: left;
+        float: left;
+        clear: both;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Display chat messages with styled bubbles
+# Display chat messages using st.chat_message() for user and assistant icons
 for msg in st.session_state["messages"]:
-    st.chat_message(msg["role"]).write(msg["content"])
+    with st.chat_message(msg["role"]):
+        st.markdown(f"<div style='white-space: pre-line;'>{msg['content']}</div>", unsafe_allow_html=True)
+
+
