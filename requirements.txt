@@ -24,4 +24,4 @@ datasets
 evaluate
 transformers
 peft
-
+streamlit

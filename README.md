@@ -15,10 +15,9 @@ pip install -r requirements.txt
 To run the chatbot with Front-End
 
 ```
-pip install streamlit
 cd Agent 3: InfoGuide/src
 
-streamlit run new-main.py
+streamlit run run.py
 ```
 
 ## Core System Framework: Key Components and Technical Features of the SmartPilot Platform
