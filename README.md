@@ -16,7 +16,7 @@ To run the chatbot with Front-End
 
 ```
 pip install streamlit
-cd src
+cd Agent 3: InfoGuide/src
 
 streamlit run new-main.py
 ```
