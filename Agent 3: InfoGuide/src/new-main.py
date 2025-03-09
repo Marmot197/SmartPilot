@@ -34,7 +34,7 @@ def get_anomaly_prediction(tokenizer, model, id2label, user_query, time_series_d
 
 
 # Streamlit UI
-st.title("SmartPilot")
+st.title("SmartPilot:Agent-Based CoPilot for Intelligent Manufacturing")
 
 # Sidebar for user role selection
 st.sidebar.title("🛠 User Simulation")
