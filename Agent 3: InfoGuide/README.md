@@ -12,5 +12,5 @@ To run the chatbot with Front-End
 pip install streamlit
 cd src
 
-streamlit run stream-main.py
+streamlit run agent_run.py
 ```
