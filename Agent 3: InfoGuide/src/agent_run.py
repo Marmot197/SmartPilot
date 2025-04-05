@@ -103,6 +103,10 @@ with st.sidebar:
     if st.button("Enter the current production statistics to get the next production", key="prod_forecast_query"):
         st.session_state["selected_question"] = "Enter the current production statistics to get the next production"
 
+    st.subheader("🧩 Causal Analysis Queries")
+    if st.button("Upload your dataset to start causal analysis", key="causal_agent_queries"):
+        st.session_state["selected_question"] = "Upload your dataset to start causal analysis"
+
 
 # Display selected question if available
 # Add a floating header for the "Selected Question"

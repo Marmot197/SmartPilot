@@ -4,7 +4,7 @@ from groq import Groq
 
 class LLM:
 
-    def __init__(self, api='GROQ', groq_model="mixtral-8x7b-32768"):
+    def __init__(self, api='GROQ', groq_model="llama3-70b-8192"):
         if api == 'GROQ':
             api_key = config('GROQ_API_KEY')
             self.groq_client = Groq(api_key=api_key)

@@ -25,10 +25,15 @@ class AssetLoader:
             "Enter the current production statistics to get the next production",
         ]
 
+        causal_agent_queries=[
+            "Upload your .csv dataset to analyse causal discovery"
+        ],
+
         queries = {
             "Documentation": documentation_queries,
             "Anomaly Prediction and Sensor Values": anomaly_prediction_queries,
-            "Production Forecasting": prod_forecast_queries
+            "Production Forecasting": prod_forecast_queries,
+            "Causal analysis": causal_agent_queries
         }
         return queries
 
@@ -51,7 +56,8 @@ class AssetLoader:
                                                        - Ensuring that users have the most accurate and up-to-date sensor readings for decision-making.""",
 
             "Production Forecasting": """You assist users with tasks related to predicting product demand in vegemite production pipeline. Your responsibilities include:
-                                                               - Predicting next hour yeast product yield. """
+                                                               - Predicting next hour yeast product yield. """,
+            "Causal analysis": """You assis users with causal discovery, causal analysis and root cause analysis"""
 
         }
 

@@ -1,0 +1,127 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 1400px;
+                 height: 800px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Q_VFD2_Temperature", "label": "Q_VFD2_Temperature", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Temperature"}, {"color": "#97c2fc", "id": "Q_Cell_CycleCount", "label": "Q_Cell_CycleCount", "shape": "dot", "size": 10, "title": "No matchable sensor type for this variable."}, {"color": "#97c2fc", "id": "Q_VFD1_Temperature", "label": "Q_VFD1_Temperature", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Temperature"}, {"color": "#97c2fc", "id": "Q_VFD4_Temperature", "label": "Q_VFD4_Temperature", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Temperature"}, {"color": "#97c2fc", "id": "Q_VFD3_Temperature", "label": "Q_VFD3_Temperature", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Temperature"}, {"color": "#97c2fc", "id": "I_MHS_GreenRocketTray", "label": "I_MHS_GreenRocketTray", "shape": "dot", "size": 10, "title": "No matchable sensor type for this variable."}, {"color": "#97c2fc", "id": "CycleState", "label": "CycleState", "shape": "dot", "size": 10, "title": "No matchable sensor type for this variable."}, {"color": "#97c2fc", "id": "M_R01_BJointAngle_Degree", "label": "M_R01_BJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R01_UJointAngle_Degree", "label": "M_R01_UJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "I_R01_Gripper_Load", "label": "I_R01_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R01_Gripper_Pot", "label": "I_R01_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "M_R01_LJointAngle_Degree", "label": "M_R01_LJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R01_RJointAngle_Degree", "label": "M_R01_RJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R01_SJointAngle_Degree", "label": "M_R01_SJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R01_TJointAngle_Degree", "label": "M_R01_TJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "I_R02_Gripper_Load", "label": "I_R02_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R02_Gripper_Pot", "label": "I_R02_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "M_R02_BJointAngle_Degree", "label": "M_R02_BJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R02_LJointAngle_Degree", "label": "M_R02_LJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R02_SJointAngle_Degree", "label": "M_R02_SJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R02_RJointAngle_Degree", "label": "M_R02_RJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R02_TJointAngle_Degree", "label": "M_R02_TJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R02_UJointAngle_Degree", "label": "M_R02_UJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "I_R03_Gripper_Load", "label": "I_R03_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R03_Gripper_Pot", "label": "I_R03_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "M_R03_BJointAngle_Degree", "label": "M_R03_BJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R03_LJointAngle_Degree", "label": "M_R03_LJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R03_RJointAngle_Degree", "label": "M_R03_RJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R03_TJointAngle_Degree", "label": "M_R03_TJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "I_R04_Gripper_Load", "label": "I_R04_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R04_Gripper_Pot", "label": "I_R04_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "I_Stopper1_Status", "label": "I_Stopper1_Status", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Stopper"}, {"color": "#97c2fc", "id": "I_Stopper2_Status", "label": "I_Stopper2_Status", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Stopper"}, {"color": "#97c2fc", "id": "I_Stopper3_Status", "label": "I_Stopper3_Status", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Stopper"}, {"color": "#97c2fc", "id": "I_Stopper4_Status", "label": "I_Stopper4_Status", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Stopper"}, {"color": "#97c2fc", "id": "I_Stopper5_Status", "label": "I_Stopper5_Status", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Stopper"}, {"color": "#97c2fc", "id": "M_R03_SJointAngle_Degree", "label": "M_R03_SJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R03_UJointAngle_Degree", "label": "M_R03_UJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R04_BJointAngle_Degree", "label": "M_R04_BJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R04_LJointAngle_Degree", "label": "M_R04_LJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R04_RJointAngle_Degree", "label": "M_R04_RJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R04_SJointAngle_Degree", "label": "M_R04_SJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}, {"color": "#97c2fc", "id": "M_R04_TJointAngle_Degree", "label": "M_R04_TJointAngle_Degree", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: Angle"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "Q_VFD2_Temperature", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "Q_Cell_CycleCount", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "Q_Cell_CycleCount", "to": "Q_VFD4_Temperature", "width": 1}, {"arrows": "to", "from": "Q_VFD4_Temperature", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "Q_VFD3_Temperature", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "I_MHS_GreenRocketTray", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "I_MHS_GreenRocketTray", "to": "Q_VFD4_Temperature", "width": 1}, {"arrows": "to", "from": "I_MHS_GreenRocketTray", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "CycleState", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "CycleState", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R01_BJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R01_UJointAngle_Degree", "to": "I_MHS_GreenRocketTray", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Load", "to": "Q_VFD4_Temperature", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Load", "to": "I_MHS_GreenRocketTray", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Pot", "to": "Q_VFD4_Temperature", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Pot", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Pot", "to": "I_R01_Gripper_Load", "width": 1}, {"arrows": "to", "from": "M_R01_LJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R01_RJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R01_SJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R01_TJointAngle_Degree", "to": "I_MHS_GreenRocketTray", "width": 1}, {"arrows": "to", "from": "I_R02_Gripper_Load", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R02_Gripper_Pot", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "I_R02_Gripper_Pot", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "I_R02_Gripper_Pot", "to": "I_R01_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R02_Gripper_Pot", "to": "I_R02_Gripper_Load", "width": 1}, {"arrows": "to", "from": "M_R02_BJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_BJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_BJointAngle_Degree", "to": "I_R02_Gripper_Load", "width": 1}, {"arrows": "to", "from": "M_R02_BJointAngle_Degree", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_BJointAngle_Degree", "to": "M_R02_SJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_LJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_LJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_SJointAngle_Degree", "to": "Q_VFD4_Temperature", "width": 1}, {"arrows": "to", "from": "M_R02_SJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_SJointAngle_Degree", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_RJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_RJointAngle_Degree", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_RJointAngle_Degree", "to": "M_R02_SJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_RJointAngle_Degree", "to": "M_R02_TJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_TJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_TJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_TJointAngle_Degree", "to": "M_R02_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_TJointAngle_Degree", "to": "M_R02_SJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_UJointAngle_Degree", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "M_R02_UJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_UJointAngle_Degree", "to": "M_R02_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R02_UJointAngle_Degree", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Load", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Load", "to": "M_R02_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Load", "to": "M_R02_SJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Load", "to": "I_R03_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Pot", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Pot", "to": "I_R02_Gripper_Load", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Pot", "to": "I_R02_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Pot", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R03_BJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R03_LJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R03_RJointAngle_Degree", "to": "M_R01_UJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "M_R03_TJointAngle_Degree", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "Q_VFD1_Temperature", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "M_R01_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "I_R02_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "M_R02_RJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "M_R02_SJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "M_R02_TJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Load", "to": "I_R03_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Pot", "to": "Q_Cell_CycleCount", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Pot", "to": "M_R02_BJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Pot", "to": "M_R02_LJointAngle_Degree", "width": 1}, {"arrows": "to", "from": "I_R04_Gripper_Pot", "to": "M_R02_TJointAngle_Degree", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {"edges": {"arrows": {"to": {"enabled": true}}}, "nodes": {"shape": "dot", "size": 16}};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
