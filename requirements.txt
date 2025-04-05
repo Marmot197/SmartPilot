@@ -25,3 +25,7 @@ evaluate
 transformers
 peft
 streamlit
+pyvis
+causal-learn
+git+https://github.com/tomsons22/trustworthyAI.git@c2e3535eba28cabf8e1309f55bffc3e4d4d78c00#subdirectory=gcastle
+cdt
