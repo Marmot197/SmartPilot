@@ -14,9 +14,10 @@ import subprocess
 import glob
 from sentence_transformers import SentenceTransformer, util
 import pickle
-from copilots.RootCause import parse_sensor_ranges, analyze_all, compute_rca_statistics
 import json
 import numpy as np
+from copilots.RootCause import parse_sensor_ranges, analyze_all, compute_rca_statistics
+from copilots.ProcessOntologyQA import ProcessOntologyQA
 
 @st.cache_resource
 def load_embedding_model():
@@ -51,6 +52,9 @@ ns = {
     "om": Namespace("http://www.ontology-of-units-of-measure.org/resource/om-2/"),
     "rparts": Namespace("http://purl.org/ieee1872-owl/rParts/")
 }
+
+if "ProcessOntologyQa" not in st.session_state:
+    st.session_state["ProcessOntologyQa"] = ProcessOntologyQA("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
 
 
 def detect_robot_sensor_query(user_query):
@@ -1214,22 +1218,96 @@ if user_input:
         predicted_labels = get_prod_forecast(tokenizer_f, model_f, id2label_f, user_input, ["[0. 0. 0.]"])
         response = f"Predicted product values: {', '.join(predicted_labels)}"
 
-    # ⚫ LLM fallback + feature info
-    else:
-        data = Knowledge_Representation.organize_data(AssetLoader.read_data())
-        context = Retr.retrieve_context(data, user_input, symb_model=Symbolic_Model(), top_k=1)[0]
+    elif st.session_state.get("ProcessOntologyQa") is not None:
+        process_qa = st.session_state["ProcessOntologyQa"]
+        lowered = user_input.lower().strip()
+        process_response = None
 
-        if "selected_features" in st.session_state:
-            enriched_descriptions = []
-            for feature in st.session_state["selected_features"].split(","):
-                desc = get_full_feature_semantic_info(feature.strip(), rdf_graph)
-                if desc:
-                    enriched_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
-            context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(enriched_descriptions)
+        # Robot function
+        if "function of robot" in lowered:
+            match = re.search(r"function of (?:the )?robot (\d+)", lowered)
+            if match:
+                process_response = process_qa.get_robot_function(f"Robot {match.group(1)}")
 
-        llm = LLM()
-        llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, context)
-        response = llm.respond_to_prompt()
+        # Gripper of robot
+        elif "gripper of robot" in lowered:
+            match = re.search(r"gripper of (?:the )?robot (\d+)", lowered)
+            if match:
+                process_response = process_qa.get_gripper_of_robot(f"Robot {match.group(1)}")
+
+        # Sensors of robot
+        elif "sensors attached to robot" in lowered:
+            match = re.search(r"sensors attached to (?:the )?robot (\d+)", lowered)
+            if match:
+                s = process_qa.get_sensors_of_robot(f"Robot {match.group(1)}")
+                process_response = ["📡 Sensors connected:"] + s
+
+        # Sensor description / function
+        elif re.search(r"(function|description) of (?:the )?sensor", lowered):
+            match = re.search(r"(?:function|description) of (?:the )?sensor ([\w\d_ ]+)", lowered)
+            if match:
+                sensor_name = match.group(1).strip()
+                sensor_desc = process_qa.get_sensor_description(sensor_name)
+                if sensor_desc:
+                    process_response = [sensor_desc]
+
+
+        # Sensor value range
+        elif "range of" in lowered:
+            match = re.search(r"range of (?:the )?([\w\d_]+)", lowered)
+            if match:
+                process_response = [process_qa.get_sensor_value_range(match.group(1).strip())]
+
+        # Trace path from robot
+        elif "trace" in lowered and "robot" in lowered:
+            match = re.search(r"robot (\d+)", lowered)
+            if match:
+                paths = process_qa.trace_robot_to_sensor_value(f"Robot {match.group(1)}")
+                process_response = ["🔍 Trace Paths:"] + paths
+
+        # Anomalies associated with sensor
+        elif "anomalies associated with sensor" in lowered:
+            match = re.search(r"sensor ([\w\d_]+)", lowered)
+            if match:
+                process_response = process_qa.get_anomalies_for_sensor(match.group(1))
+
+        # Sensor types or sensor list
+        elif "types of sensors" in lowered or "details on the sensors" in lowered:
+            process_response = process_qa.get_all_sensor_details()
+
+        # Fallback
+        if process_response:
+            if isinstance(process_response, str):
+                process_response = [process_response]
+            if len(process_response) == 1:
+                response = f"📘 Process Ontology Answer:\n{process_response[0]}"
+            else:
+                response = "📘 Process Ontology Answer:\n- " + "\n- ".join(process_response)
+
+        # ⚫ LLM fallback + feature info
+        # ✅ Fallback from ProcessOntologyQA to LLM if nothing matched
+        if process_response is None:
+            data = Knowledge_Representation.organize_data(AssetLoader.read_data())
+            context = Retr.retrieve_context(data, user_input, symb_model=Symbolic_Model(), top_k=1)[0]
+
+            if "selected_features" in st.session_state:
+                enriched_descriptions = []
+                for feature in st.session_state["selected_features"].split(","):
+                    desc = get_full_feature_semantic_info(feature.strip(), rdf_graph)
+                    if desc:
+                        enriched_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
+                context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(enriched_descriptions)
+
+            llm = LLM()
+            llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, context)
+            response = llm.respond_to_prompt()
+        else:
+            if isinstance(process_response, str):
+                process_response = [process_response]
+            if len(process_response) == 1:
+                response = f"📘 Process Ontology Answer:\n{process_response[0]}"
+            else:
+                response = "📘 Process Ontology Answer:\n- " + "\n- ".join(process_response)
 
     # Always append the response if available
     if response:
