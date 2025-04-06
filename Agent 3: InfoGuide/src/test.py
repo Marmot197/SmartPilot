@@ -83,6 +83,11 @@ def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
         entity_info.append(f"📏 Unit: {entity_node['unit']}")
     if "item_spec" in entity_node:
         entity_info.append(f"🏭 Manufacturer Info (from spec): {entity_node['item_spec']}")
+    if entity_node.get("type", "").lower() == "sensor_value":
+        entity_info.append(
+            f"📏 Tolerance Range: {entity_node.get('min_value')} to {entity_node.get('max_value')} "
+            f"(Unit: {entity_node.get('unit', 'N/A')})"
+        )
 
     # Step 2: Look at related links
     related_info = []
@@ -1382,6 +1387,20 @@ if user_input:
                             process_ontology_info.append(f"{feature_clean}:\n" + "\n".join(info))
                 if process_ontology_info:
                     context += "\n\n---\n🏭 Feature Info from Process Ontology:\n" + "\n\n".join(process_ontology_info)
+
+            # Extra context: auto-include all Sensor_Value nodes
+            sensor_value_info = []
+            for node in ontology_data.get("nodes", []):
+                if node.get("type") == "Sensor_Value":
+                    val_name = node.get("item_name", "Unknown")
+                    min_val = node.get("min_value", "N/A")
+                    max_val = node.get("max_value", "N/A")
+                    unit = node.get("unit", "N/A")
+                    sensor_value_info.append(f"{val_name}:\n📏 Tolerance Range: {min_val} to {max_val} (Unit: {unit})")
+            sensor_value_info.sort()
+
+            if sensor_value_info:
+                context += "\n\n---\n📈 Sensor Tolerance Limits:\n" + "\n\n".join(sensor_value_info)
 
             # Run LLM
             llm = LLM()
