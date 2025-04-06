@@ -95,7 +95,7 @@ def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_gr
 
 # ✅ Load dataset dynamically
 csv_file = "uploaded_dataset.csv"
-df = pd.read_csv(csv_file, usecols=["Q_VFD1_Temperature", "Q_VFD2_Temperature", "Q_VFD3_Temperature", "Q_VFD4_Temperature", "I_Stopper1_Status", "I_Stopper2_Status", "I_Stopper3_Status", "I_Stopper4_Status", "I_Stopper5_Status", "Q_Cell_CycleCount", "I_MHS_GreenRocketTray", "CycleState", "I_R01_Gripper_Load", "I_R01_Gripper_Pot", "M_R01_BJointAngle_Degree", "M_R01_LJointAngle_Degree", "M_R01_RJointAngle_Degree", "M_R01_SJointAngle_Degree", "M_R01_TJointAngle_Degree", "M_R01_UJointAngle_Degree", "I_R02_Gripper_Load", "I_R02_Gripper_Pot", "M_R02_BJointAngle_Degree", "M_R02_LJointAngle_Degree", "M_R02_RJointAngle_Degree", "M_R02_SJointAngle_Degree", "M_R02_TJointAngle_Degree", "M_R02_UJointAngle_Degree", "I_R03_Gripper_Load", "I_R03_Gripper_Pot", "M_R03_BJointAngle_Degree", "M_R03_LJointAngle_Degree", "M_R03_RJointAngle_Degree", "M_R03_SJointAngle_Degree", "M_R03_TJointAngle_Degree", "M_R03_UJointAngle_Degree", "I_R04_Gripper_Load", "I_R04_Gripper_Pot", "M_R04_BJointAngle_Degree", "M_R04_LJointAngle_Degree", "M_R04_RJointAngle_Degree", "M_R04_SJointAngle_Degree", "M_R04_TJointAngle_Degree"])  # dynamically modified to use specific columns
+df = pd.read_csv(csv_file, usecols=["I_R01_Gripper_Load", "I_R01_Gripper_Pot", "I_R02_Gripper_Load", "I_R02_Gripper_Pot", "I_R03_Gripper_Load", "I_R03_Gripper_Pot", "I_R04_Gripper_Load", "I_R04_Gripper_Pot"])  # dynamically modified to use specific columns
 data = df.head(1000).to_numpy()
 node_labels = df.columns.tolist()
 

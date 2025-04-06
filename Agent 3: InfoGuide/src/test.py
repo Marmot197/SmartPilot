@@ -158,6 +158,73 @@ def get_feature_semantic_info(variable_name: str, graph: Graph):
 
     return ["No matching instance found for this sensor type."]
 
+def get_full_feature_semantic_info(variable_name: str, graph: Graph):
+    from rdflib.namespace import RDF, RDFS
+    base_data_uri = "http://purl.org/net/SmartManufacturing/v00/data/"
+    base_type_uri = "http://purl.org/net/SmartManufacturing/v00/"
+    om = Namespace("http://www.ontology-of-units-of-measure.org/resource/om-2/")
+
+    results = []
+
+    # Fuzzy match based on known sensor type suffix
+    sensor_type_map = {
+        "Gripper_Load": "GripperLoadSensor",
+        "Gripper_Pot": "GripperPotentiometerSensor",
+        "Safety_Door": "SafetyDoor",
+        "Stopper": "Stopper",
+        "Temp": "Temperature",
+        "Angle": "Angle",
+        "HMI": "HMIEStopButton",
+    }
+
+    matched_type = None
+    for keyword, sensor_class in sensor_type_map.items():
+        if keyword.lower() in variable_name.lower():
+            matched_type = sensor_class
+            break
+
+    if not matched_type:
+        return ["No matchable sensor type for this variable."]
+
+    for subj, _, obj in graph.triples((None, RDF.type, URIRef(base_type_uri + matched_type))):
+        description = []
+
+        # rdfs:comment
+        for _, _, comment in graph.triples((subj, RDFS.comment, None)):
+            description.append(f"📝 {comment}")
+
+        description.append(f"🔹 Type: {matched_type}")
+
+        # rdfs:subClassOf chain
+        for _, _, superclass in graph.triples((subj, RDFS.subClassOf, None)):
+            description.append(f"🔸 Subclass of: {superclass.split('/')[-1]}")
+
+        # om:hasUnit
+        for _, _, unit in graph.triples((subj, om.hasUnit, None)):
+            description.append(f"📏 Unit of measure: {unit.split('/')[-1]}")
+
+        # cora:robotPart / rparts:robotSensingPart
+        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#robotPart"), URIRef("http://purl.org/ieee1872-owl/rParts/robotSensingPart")]:
+            for _, _, part in graph.triples((subj, pred, None)):
+                description.append(f"🔧 Has Part: {part.split('/')[-1]}")
+
+        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#isPartOf"), URIRef("http://purl.org/ieee1872-owl/rParts/isPartOf")]:
+            for _, _, part in graph.triples((subj, pred, None)):
+                description.append(f"🧩 Is Part Of: {part.split('/')[-1]}")
+
+        # sosa:observes
+        for _, _, observed in graph.triples((subj, URIRef("http://www.w3.org/ns/sosa/observes"), None)):
+            description.append(f"📡 Observes: {observed.split('/')[-1]}")
+
+        # sosa:detects
+        for _, _, detected in graph.triples((subj, URIRef("http://www.w3.org/ns/sosa/detects"), None)):
+            description.append(f"🚨 Detects: {detected.split('/')[-1]}")
+
+        if description:
+            return description
+
+    return ["No matching instance found for this sensor type."]
+
 
 # Build Robot ID → UUID mapping and reverse
 def build_robot_sensor_map(graph):
@@ -214,8 +281,18 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
     match = re.search(r"strength.*between\s+([A-Za-z0-9_]+)\s+and\s+([A-Za-z0-9_]+)", original_query)
     if match:
         a, b = match.groups()
+
+        # 🐛 DEBUGGING BLOCK
+        st.write("🔍 Causal Strength Query:")
+        st.write(f"🔹 Variable A: `{a}`")
+        st.write(f"🔹 Variable B: `{b}`")
+        st.write(f"📜 node_labels: {node_labels}")
+
         if a in node_labels and b in node_labels:
             i, j = node_labels.index(a), node_labels.index(b)
+            st.write(f"🔢 Matrix indices: i = {i}, j = {j}")
+            st.write(f"📈 Adjacency matrix value: adj_matrix[{i}, {j}] = {adj_matrix[i, j]}")
+
             strength = adj_matrix[i, j]
             return f"🔗 The causal strength from `{a}` → `{b}` is **{strength:.4f}**"
         else:
@@ -321,41 +398,26 @@ def answer_root_cause_query(query: str, rca_results: list):
         else:
             return f"❌ No, `{a}` is not a likely root cause of `{b}` (only in {ratio*100:.1f}% of cases)."
 
-    # Q4: Which is more likely to be the root cause, A or B [of variable C]?
-    if "which" in query.lower() and "more likely" in query.lower() and "root cause" in query.lower():
-        try:
-            # Extract all variable-like tokens (must include underscore to avoid words like "to")
-            variable_candidates = [t for t in re.findall(r"\b[\w\d_]+\b", query) if "_" in t]
+    # Q4: Which is more likely to be the root cause of variable X: A or B?
+    match = re.search(
+        r"which.*more likely.*root cause.*of (?:the )?variable ([\w\d_]+).*?(?:is it|,)?\s*([\w\d_]+)\s*(?:or|,)\s*([\w\d_]+)",
+        query, re.IGNORECASE)
+    if match:
+        target_var = match.group(1).strip().lower()
+        a = match.group(2).strip().lower()
+        b = match.group(3).strip().lower()
 
-            if len(variable_candidates) < 2:
-                return "⚠️ Could not detect at least two variables to compare as root causes."
+        a_strength = avg_strengths.get((a, target_var), 0)
+        b_strength = avg_strengths.get((b, target_var), 0)
 
-            a = variable_candidates[0].strip().lower()
-            d = variable_candidates[1].strip().lower()
+        if a_strength == 0 and b_strength == 0:
+            return f"⚠️ Neither `{a}` nor `{b}` is a known root cause of `{target_var}`."
 
-            if len(variable_candidates) >= 3:
-                # ✅ Target explicitly mentioned
-                b = variable_candidates[2].strip().lower()
-            else:
-                # ❌ No explicit target given — return message, don’t guess
-                return (
-                    f"⚠️ Please specify which variable you are asking about, e.g.:\n"
-                    f"`Which is more likely to be the root cause of variable I_R01_Gripper_Pot, A or B?`"
-                )
-
-            a_strength = avg_strengths.get((a, b), 0)
-            d_strength = avg_strengths.get((d, b), 0)
-
-            if a_strength == 0 and d_strength == 0:
-                return f"⚠️ Neither `{a}` nor `{d}` is a known root cause of `{b}`."
-
-            more_likely = a if a_strength > d_strength else d
-            return (
-                f"🔍 `{more_likely}` is more likely the root cause of `{b}` "
-                f"(strengths: `{a}`={a_strength:.4f}, `{d}`={d_strength:.4f})."
-            )
-        except Exception as e:
-            return f"❌ Failed to parse your query: {e}"
+        more_likely = a if a_strength > b_strength else b
+        return (
+            f"🔍 `{more_likely}` is more likely the root cause of `{target_var}` "
+            f"(strengths: `{a}`={a_strength:.4f}, `{b}`={b_strength:.4f})."
+        )
 
     # Q5. Why is D not a likely root cause of B?
     match = re.search(r"why is ([\w\d_]+) not.*?root cause of .*variable ([\w\d_]+)", query, re.IGNORECASE)
@@ -1160,7 +1222,7 @@ if user_input:
         if "selected_features" in st.session_state:
             enriched_descriptions = []
             for feature in st.session_state["selected_features"].split(","):
-                desc = get_feature_semantic_info(feature.strip(), rdf_graph)
+                desc = get_full_feature_semantic_info(feature.strip(), rdf_graph)
                 if desc:
                     enriched_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
             context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(enriched_descriptions)
