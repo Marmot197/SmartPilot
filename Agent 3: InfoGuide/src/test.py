@@ -56,6 +56,74 @@ ns = {
 if "ProcessOntologyQa" not in st.session_state:
     st.session_state["ProcessOntologyQa"] = ProcessOntologyQA("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
 
+def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
+    nodes = ontology_json.get("nodes", [])
+    links = ontology_json.get("links", [])
+
+    entity_info = []
+    entity_node = None
+    name_to_node = {n["item_name"].lower(): n for n in nodes if "item_name" in n}
+    id_to_node = {n["id"]: n for n in nodes}
+
+    # Step 1: Match the exact node
+    for node in nodes:
+        if node.get("item_name", "").lower() == entity_name.lower():
+            entity_node = node
+            break
+
+    if not entity_node:
+        return [f"❌ No entity named `{entity_name}` found in the ontology."]
+
+    entity_info.append(f"🆔 Name: {entity_node.get('item_name')}")
+    if "type" in entity_node:
+        entity_info.append(f"🔖 Type: {entity_node['type']}")
+    if "description" in entity_node:
+        entity_info.append(f"📝 Description: {entity_node['description']}")
+    if "unit" in entity_node:
+        entity_info.append(f"📏 Unit: {entity_node['unit']}")
+    if "item_spec" in entity_node:
+        entity_info.append(f"🏭 Manufacturer Info (from spec): {entity_node['item_spec']}")
+
+    # Step 2: Look at related links
+    related_info = []
+    for link in links:
+        rel = link.get("relationship", "related_to")
+        if link.get("source") == entity_node.get("id"):
+            target_node = id_to_node.get(link["target"])
+            if target_node:
+                target_name = target_node.get("item_name", "Unknown")
+                related_info.append(f"➡️ {rel} → {target_name}")
+                if "item_spec" in target_node:
+                    entity_info.append(f"🏭 Related Manufacturer ({target_name}): {target_node['item_spec']}")
+        elif link.get("target") == entity_node.get("id"):
+            source_node = id_to_node.get(link["source"])
+            if source_node:
+                source_name = source_node.get("item_name", "Unknown")
+                related_info.append(f"⬅️ {rel} ← {source_name}")
+                if "item_spec" in source_node:
+                    entity_info.append(f"🏭 Related Manufacturer ({source_name}): {source_node['item_spec']}")
+
+    if related_info:
+        entity_info.append("🔗 Relationships:")
+        entity_info.extend([f"   - {rel}" for rel in related_info])
+
+    return entity_info
+
+
+
+import re
+
+def extract_entity_name(user_input: str, ontology_nodes: list):
+    candidates = [n.get("item_name", "").lower() for n in ontology_nodes if "item_name" in n]
+    for cand in candidates:
+        if cand in user_input.lower():
+            return cand
+    # fallback: try regex for last "word number" pattern
+    match = re.search(r"([A-Za-z_ ]+\d+)", user_input)
+    if match:
+        return match.group(1).strip().lower()
+    return None
+
 
 def detect_robot_sensor_query(user_query):
     # Extract robot number from user query
@@ -1290,17 +1358,47 @@ if user_input:
             data = Knowledge_Representation.organize_data(AssetLoader.read_data())
             context = Retr.retrieve_context(data, user_input, symb_model=Symbolic_Model(), top_k=1)[0]
 
+            # Enrich with KG semantic info
             if "selected_features" in st.session_state:
-                enriched_descriptions = []
+                kg_descriptions = []
                 for feature in st.session_state["selected_features"].split(","):
                     desc = get_full_feature_semantic_info(feature.strip(), rdf_graph)
                     if desc:
-                        enriched_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
-                context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(enriched_descriptions)
+                        kg_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
+                if kg_descriptions:
+                    context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(kg_descriptions)
 
+            # Enrich with Process Ontology info
+            # Add Process Ontology entity descriptions
+            if "ProcessOntologyQa" in st.session_state:
+                process_qa = st.session_state["ProcessOntologyQa"]
+                ontology_data = process_qa.get_ontology_data()
+                process_ontology_info = []
+                for feature in st.session_state.get("selected_features", "").split(","):
+                    feature_clean = feature.strip()
+                    if feature_clean:
+                        info = get_full_entity_semantic_info(feature_clean, ontology_data)
+                        if info:
+                            process_ontology_info.append(f"{feature_clean}:\n" + "\n".join(info))
+                if process_ontology_info:
+                    context += "\n\n---\n🏭 Feature Info from Process Ontology:\n" + "\n\n".join(process_ontology_info)
+
+            # Run LLM
             llm = LLM()
+
+            # Mentioned entity in query (like "who manufactures Robot 4")
+            ontology_nodes = ontology_data.get("nodes", [])
+            mentioned_entity = extract_entity_name(user_input, ontology_nodes)
+
+            if mentioned_entity:
+                mentioned_info = get_full_entity_semantic_info(mentioned_entity, ontology_data)
+                if mentioned_info:
+                    context += f"\n\n---\n🏭 Info on `{mentioned_entity}` from Process Ontology:\n" + "\n".join(
+                        mentioned_info)
+
             llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, context)
             response = llm.respond_to_prompt()
+
         else:
             if isinstance(process_response, str):
                 process_response = [process_response]

@@ -17,6 +17,10 @@ class ProcessOntologyQA:
             self.adjacency[link["source"]].append((link["target"], link["relationship"]))
             self.adjacency[link["target"]].append((link["source"], link["relationship"]))
 
+    def get_ontology_data(self):
+        """Return the full ontology JSON (nodes and links)."""
+        return self.ontology
+
     def answer_query(self, query: str):
         q = query.lower()
 
