@@ -103,7 +103,7 @@ def compute_rca_statistics(rca_results):
 
     avg_strengths = {k: cause_strengths[k] / cause_freq[k] for k in cause_freq}
 
-    # Debug print (optional)
+    # Debug print
     print("📊 RCA Aggregated Keys (parent ➝ sensor):")
     for (p, s), avg in avg_strengths.items():
         print(f"  {p} ➝ {s} | Avg strength = {avg:.4f}")

@@ -8,8 +8,6 @@ import pandas as pd
 import shutil
 import uuid
 from rdflib import Graph, Namespace, URIRef, RDF, RDFS
-import os
-import re
 import subprocess
 import glob
 from sentence_transformers import SentenceTransformer, util
@@ -18,6 +16,8 @@ import json
 import numpy as np
 from copilots.RootCause import parse_sensor_ranges, analyze_all, compute_rca_statistics
 from copilots.ProcessOntologyQA import ProcessOntologyQA
+import os
+import re
 
 @st.cache_resource
 def load_embedding_model():
@@ -113,10 +113,6 @@ def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
         entity_info.extend([f"   - {rel}" for rel in related_info])
 
     return entity_info
-
-
-
-import re
 
 def extract_entity_name(user_input: str, ontology_nodes: list):
     candidates = [n.get("item_name", "").lower() for n in ontology_nodes if "item_name" in n]
@@ -219,7 +215,7 @@ def get_feature_semantic_info(variable_name: str, graph: Graph):
 
     # Find all subjects in KG that have this rdf:type
     for subj, _, obj in graph.triples((None, RDF.type, URIRef(base_type_uri + matched_type))):
-        # For that subject, try to extract type/class/subclass/comment
+        # For that subject, try to extract type/class/subclass/description
         description = []
 
         for _, _, comment in graph.triples((subj, RDFS.comment, None)):
@@ -617,12 +613,6 @@ def run_causal_discovery():
     st.write("🟡 Running DiffAN...")
     #run_diffan()  # Make sure this actually runs
     st.write("✅ DiffAN completed.")
-
-
-# **Function to execute LiNGAM causal discovery**
-import streamlit as st
-import os
-import re
 
 # --- Function to answer causal queries ---
 def answer_causal_query(question, causal_relations):
