@@ -116,7 +116,7 @@ def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_gr
 # =========================
 csv_file = "uploaded_dataset.csv"
 df = pd.read_csv(csv_file)
-df = df.drop(columns=['_time', 'Description', 'actual_state'])
+#df = df.drop(columns=['_time', 'Description', 'actual_state'])
 
 data = df.head(1000).to_numpy()
 node_labels = df.columns.tolist()
@@ -175,6 +175,10 @@ print("Total Effects Matrix ( (I - B)^(-1) ):\n", inv_matrix)
 # Save total effects and adjacency with labels
 with open("lingam_total_effects.pkl", "wb") as f:
     pickle.dump((inv_matrix, node_labels), f)
+
+# Save adjacency matrix for loading in Streamlit
+with open("lingam_adjacency_matrix.pkl", "wb") as f:
+    pickle.dump((adj_matrix, node_labels), f)
 
 print("\nAll artifacts saved:\n"
       " - lingam_causal_graph.html (interactive Pyvis DAG of direct effects)\n"

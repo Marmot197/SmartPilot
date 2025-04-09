@@ -46,8 +46,8 @@ def load_lingam_total_effects():
     except Exception:
         return None, None
 
-adj_matrix, node_labels = load_lingam_matrix()
 total_effects, node_labels_te = load_lingam_total_effects()
+
 
 @st.cache_resource
 def load_knowledge_graph():
@@ -1477,4 +1477,3 @@ if user_input:
 for msg in st.session_state["messages"]:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-
