@@ -16,6 +16,7 @@ import json
 import numpy as np
 from copilots.RootCause import parse_sensor_ranges, analyze_all, compute_rca_statistics
 from copilots.ProcessOntologyQA import ProcessOntologyQA
+#from assets.OntologyQuery import extract_neo4j_data
 import os
 import re
 
@@ -36,6 +37,17 @@ def load_lingam_matrix():
 
 adj_matrix, node_labels = load_lingam_matrix()
 
+@st.cache_data
+def load_lingam_total_effects():
+    try:
+        with open("lingam_total_effects.pkl", "rb") as f:
+            total_effects, node_labels = pickle.load(f)
+        return total_effects, node_labels
+    except Exception:
+        return None, None
+
+adj_matrix, node_labels = load_lingam_matrix()
+total_effects, node_labels_te = load_lingam_total_effects()
 
 @st.cache_resource
 def load_knowledge_graph():
@@ -57,6 +69,14 @@ if "ProcessOntologyQa" not in st.session_state:
     st.session_state["ProcessOntologyQa"] = ProcessOntologyQA("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
 
 def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
+
+    #nodes, edges = extract_neo4j_data()
+
+    #d3_data = {
+      #  "nodes": list(nodes.values()),  # Convert dict to list for D3.js
+       # "links": edges
+    #}
+
     nodes = ontology_json.get("nodes", [])
     links = ontology_json.get("links", [])
 
@@ -363,13 +383,9 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
 
         if a in node_labels and b in node_labels:
             i, j = node_labels.index(a), node_labels.index(b)
-            st.write(f"🔢 Matrix indices: i = {i}, j = {j}")
-            st.write(f"📈 Adjacency matrix value: adj_matrix[{i}, {j}] = {adj_matrix[i, j]}")
-
-            strength = adj_matrix[i, j]
-            return f"🔗 The causal strength from `{a}` → `{b}` is **{strength:.4f}**"
-        else:
-            return f"❌ Variables `{a}` or `{b}` not found in the causal graph."
+            st.write(f"📈 Total effects matrix value: total_effects[{i}, {j}] = {total_effects[i, j]}")
+            strength = total_effects[i, j]  # Use total_effects instead of adj_matrix
+            return f"🔗 The TOTAL causal strength from `{a}` → `{b}` is **{strength}**"
 
     # 2. Strongest Cause Query
     match = re.search(r"strongest.*(cause|effect).*on\s+([A-Za-z0-9_]+)", original_query)
@@ -377,15 +393,13 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
         _, target = match.groups()
         if target in node_labels:
             j = node_labels.index(target)
-            causes = adj_matrix[:, j]
+            causes = total_effects[:, j]  # Use total_effects here
             if all(v == 0 for v in causes):
                 return f"ℹ️ No variable found with a causal effect on `{target}`."
             max_idx = int(np.argmax(np.abs(causes)))
             cause_var = node_labels[max_idx]
             strength = causes[max_idx]
-            return f"🔥 `{cause_var}` has the strongest causal effect on `{target}` (strength = {strength:.4f})"
-        else:
-            return f"❌ Variable `{target}` not found in the causal graph."
+            return f"🔥 `{cause_var}` has the strongest TOTAL causal effect on `{target}` (strength = {strength})"
 
     # 3. Interventional Query: If A were set to x, what is the effect on B?
     match = re.search(
@@ -398,13 +412,11 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
         if a in node_labels and b in node_labels:
             i, j = node_labels.index(a), node_labels.index(b)
             x = float(x)
-            strength = adj_matrix[i, j]
+            strength = total_effects[i, j]  # Use total_effects for intervention effect
             if strength == 0:
-                return f"ℹ️ `{a}` does **not** cause `{b}` directly. Effect ≈ 0."
+                return f"ℹ️ `{a}` does **not** cause `{b}` (total effect ≈ 0)."
             effect = x * strength
-            return f"📉 If `{a}` were set to {x}, it would cause `{b}` to change approximately by **{effect:.4f}** units (via causal strength {strength:.4f})."
-        else:
-            return f"❌ Variables `{a}` or `{b}` not found in the causal graph."
+            return f"📉 If `{a}` were set to {x}, it would cause `{b}` to change approximately by **{effect:.4f}** units (via TOTAL causal strength {strength:.4f})."
 
     # 4. Query for direct causal parents (incoming edges to B)
     match = re.search(
@@ -466,7 +478,7 @@ def answer_root_cause_query(query: str, rca_results: list):
         if total == 0:
             return f"⚠️ No data for `{b}`."
         ratio = freq / total
-        if ratio >= 0.5:
+        if ratio >= 0.1:
             return f"✅ Yes, `{a}` is a likely root cause of `{b}` (present in {ratio*100:.1f}% of cases)."
         else:
             return f"❌ No, `{a}` is not a likely root cause of `{b}` (only in {ratio*100:.1f}% of cases)."
@@ -1029,7 +1041,8 @@ with st.sidebar:
         else:
             df = st.session_state["uploaded_data"]
             sensor_ranges = parse_sensor_ranges("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt")
-            rca_results = analyze_all(df, sensor_ranges, adj_matrix, node_labels)
+            rca_results = analyze_all(df, sensor_ranges, total_effects, node_labels)
+
             st.session_state["rca_results"] = rca_results
 
             st.write("🔍 RCA Results Raw:", rca_results)
@@ -1464,5 +1477,4 @@ if user_input:
 for msg in st.session_state["messages"]:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-
 

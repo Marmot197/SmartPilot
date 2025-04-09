@@ -4,8 +4,11 @@ import networkx as nx
 from pyvis.network import Network
 from causallearn.search.FCMBased import lingam
 import os
+import pickle
 
-# ✅ Node Descriptions and Colors (same as in modified_diffan.py)
+# ================
+# Node Descriptions and Colors
+# ================
 NODE_DESCRIPTIONS = {
     "FIT101": ("Sensor", "Flowmeter; Measures inflow into raw water tank."),
     "LIT101": ("Actuator", "Level Transmitter; Raw water tank level."),
@@ -20,7 +23,6 @@ NODE_COLORS = {
     "Unknown": "#d62728"   # Red
 }
 
-
 def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_graph.html"):
     """Creates an interactive causal graph with Pyvis and embedded node legends."""
     G = nx.DiGraph()
@@ -29,10 +31,22 @@ def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_gr
     for i in range(len(node_labels)):
         G.add_node(node_labels[i])
 
+    # Note: B[i, j] is the effect of j -> i in LiNGAM,
+    # but for clarity in the Pyvis graph, we often draw i -> j if B[i,j]!=0.
+    # Adjust as needed based on your arrow convention!
+    #
+    # If the "model.adjacency_matrix_" is using B[i, j] meaning "X_j -> X_i",
+    # you might want to add_edge(node_labels[j], node_labels[i]) instead.
+    #
+    # For the default causallearn LiNGAM:
+    # B[i, j] ≠ 0 => X_j -> X_i
+    # so we do add_edge(j, i).
+
     for i in range(len(adj_matrix)):
         for j in range(len(adj_matrix[i])):
             if adj_matrix[i, j] != 0:
-                G.add_edge(node_labels[i], node_labels[j])
+                # j -> i
+                G.add_edge(node_labels[j], node_labels[i])
 
     # Create Pyvis Network
     net = Network(height="800px", width="80%", directed=True, notebook=True)
@@ -97,39 +111,73 @@ def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_gr
     print(f"Graph saved as {filename}. Open in a browser to view.")
 
 
-# ✅ Load dataset dynamically
+# =========================
+# Load dataset
+# =========================
 csv_file = "uploaded_dataset.csv"
-df = pd.read_csv(csv_file)  # dynamically modified to use specific columns
+df = pd.read_csv(csv_file)
+df = df.drop(columns=['_time', 'Description', 'actual_state'])
+
 data = df.head(1000).to_numpy()
 node_labels = df.columns.tolist()
 
-# ✅ Run LiNGAM
+# =========================
+# Run LiNGAM
+# =========================
 print("\n### Running LiNGAM for Causal Discovery ###")
 model = lingam.ICALiNGAM()
 model.fit(data)
 
-# ✅ Extract adjacency matrix
+# =========================
+# Extract adjacency matrix
+# =========================
 adj_matrix = model.adjacency_matrix_
+print("Adjacency matrix (direct effects) B:\n", adj_matrix)
 
-# ✅ Plot interactive causal graph
+# =========================
+# Plot interactive DAG (direct effects)
+# =========================
 plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_graph.html")
 
-import networkx as nx
-import pickle
-G = nx.DiGraph()
-
-
-# After model.fit(data) and graph is created
+# =========================
+# Build a networkx DiGraph for edges
+# =========================
 G = nx.DiGraph()
 for i in range(len(adj_matrix)):
     for j in range(len(adj_matrix[i])):
         if adj_matrix[i, j] != 0:
-            G.add_edge(node_labels[i], node_labels[j])
+            # j -> i in LiNGAM
+            G.add_edge(node_labels[j], node_labels[i])
 
-# Save edges
+# Save edges for later usage
 with open("lingam_graph_edges.pkl", "wb") as f:
     pickle.dump(list(G.edges()), f)
 
-# ✅ Save adjacency matrix and column order for causal reasoning queries
-with open("lingam_adjacency_matrix.pkl", "wb") as f:
-    pickle.dump((adj_matrix, node_labels), f)
+# =========================
+# Compute TOTAL EFFECTS
+# =========================
+#
+# For a linear SEM X = B X + e,
+# the total effect of X_j on X_i
+# is the (i,j)-th entry of (I - B)^(-1).
+#
+
+# 1. Identity matrix
+I = np.eye(adj_matrix.shape[0])
+
+# 2. Invert (I - B)
+inv_matrix = np.linalg.inv(I - adj_matrix)
+
+# 3. This inv_matrix is your total effects matrix.
+#    Entry (i,j) => total effect of variable j on variable i (direct + indirect).
+print("Total Effects Matrix ( (I - B)^(-1) ):\n", inv_matrix)
+
+# Save total effects and adjacency with labels
+with open("lingam_total_effects.pkl", "wb") as f:
+    pickle.dump((inv_matrix, node_labels), f)
+
+print("\nAll artifacts saved:\n"
+      " - lingam_causal_graph.html (interactive Pyvis DAG of direct effects)\n"
+      " - lingam_graph_edges.pkl (pickled edge list of direct effects)\n"
+      " - lingam_adjacency_matrix.pkl (saving if needed)\n"
+      " - lingam_total_effects.pkl (the total effects matrix and column names)\n")
