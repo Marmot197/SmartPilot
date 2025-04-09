@@ -385,7 +385,7 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
             i, j = node_labels.index(a), node_labels.index(b)
             st.write(f"📈 Total effects matrix value: total_effects[{i}, {j}] = {total_effects[i, j]}")
             strength = total_effects[i, j]  # Use total_effects instead of adj_matrix
-            return f"🔗 The TOTAL causal strength from `{a}` → `{b}` is **{strength}**"
+            return f"🔗 The total causal strength from `{a}` → `{b}` is **{strength}**"
 
     # 2. Strongest Cause Query
     match = re.search(r"strongest.*(cause|effect).*on\s+([A-Za-z0-9_]+)", original_query)
@@ -399,7 +399,7 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
             max_idx = int(np.argmax(np.abs(causes)))
             cause_var = node_labels[max_idx]
             strength = causes[max_idx]
-            return f"🔥 `{cause_var}` has the strongest TOTAL causal effect on `{target}` (strength = {strength})"
+            return f"🔥 `{cause_var}` has the strongest total causal effect on `{target}` (strength = {strength})"
 
     # 3. Interventional Query: If A were set to x, what is the effect on B?
     match = re.search(
@@ -416,7 +416,7 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
             if strength == 0:
                 return f"ℹ️ `{a}` does **not** cause `{b}` (total effect ≈ 0)."
             effect = x * strength
-            return f"📉 If `{a}` were set to {x}, it would cause `{b}` to change approximately by **{effect:.4f}** units (via TOTAL causal strength {strength:.4f})."
+            return f"📉 If `{a}` were set to {x}, it would cause `{b}` to change approximately by **{effect:.4f}** units (via total causal strength {strength:.4f})."
 
     # 4. Query for direct causal parents (incoming edges to B)
     match = re.search(
