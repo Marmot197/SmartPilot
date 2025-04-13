@@ -16,15 +16,21 @@ import json
 import numpy as np
 from copilots.RootCause import parse_sensor_ranges, analyze_all, compute_rca_statistics
 from copilots.ProcessOntologyQA import ProcessOntologyQA
-#from assets.OntologyQuery import extract_neo4j_data
+# from assets.OntologyQuery import extract_neo4j_data
 import os
 import re
+import networkx as nx
+from pyvis.network import Network
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 @st.cache_resource
 def load_embedding_model():
     return SentenceTransformer("all-MiniLM-L6-v2")
 
+
 embedder = load_embedding_model()
+
 
 @st.cache_data
 def load_lingam_matrix():
@@ -35,7 +41,9 @@ def load_lingam_matrix():
     except Exception:
         return None, None
 
+
 adj_matrix, node_labels = load_lingam_matrix()
+
 
 @st.cache_data
 def load_lingam_total_effects():
@@ -46,6 +54,7 @@ def load_lingam_total_effects():
     except Exception:
         return None, None
 
+
 total_effects, node_labels_te = load_lingam_total_effects()
 
 
@@ -54,6 +63,7 @@ def load_knowledge_graph():
     g = Graph()
     g.parse("assets/Analog24HrRunKG_Demo_New.ttl", format="turtle")
     return g
+
 
 # Namespaces
 ns = {
@@ -66,16 +76,17 @@ ns = {
 }
 
 if "ProcessOntologyQa" not in st.session_state:
-    st.session_state["ProcessOntologyQa"] = ProcessOntologyQA("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
+    st.session_state["ProcessOntologyQa"] = ProcessOntologyQA(
+        "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
+
 
 def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
+    # nodes, edges = extract_neo4j_data()
 
-    #nodes, edges = extract_neo4j_data()
-
-    #d3_data = {
-      #  "nodes": list(nodes.values()),  # Convert dict to list for D3.js
-       # "links": edges
-    #}
+    # d3_data = {
+    #  "nodes": list(nodes.values()),  # Convert dict to list for D3.js
+    # "links": edges
+    # }
 
     nodes = ontology_json.get("nodes", [])
     links = ontology_json.get("links", [])
@@ -134,6 +145,7 @@ def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
 
     return entity_info
 
+
 def extract_entity_name(user_input: str, ontology_nodes: list):
     candidates = [n.get("item_name", "").lower() for n in ontology_nodes if "item_name" in n]
     for cand in candidates:
@@ -174,6 +186,7 @@ def detect_robot_sensor_query(user_query):
         return robot_number, best_score
     return None, None
 
+
 def detect_anomaly_type_query_semantic(user_query: str, threshold: float = 0.7) -> bool:
     query_embedding = embedder.encode(user_query, convert_to_tensor=True)
 
@@ -193,6 +206,7 @@ def detect_anomaly_type_query_semantic(user_query: str, threshold: float = 0.7) 
     best_score = scores.max().item()
 
     return best_score > threshold
+
 
 def get_anomaly_types_from_kg(graph: Graph) -> list:
     base_uri = "http://purl.org/net/SmartManufacturing/v00/"
@@ -251,6 +265,7 @@ def get_feature_semantic_info(variable_name: str, graph: Graph):
 
     return ["No matching instance found for this sensor type."]
 
+
 def get_full_feature_semantic_info(variable_name: str, graph: Graph):
     from rdflib.namespace import RDF, RDFS
     base_data_uri = "http://purl.org/net/SmartManufacturing/v00/data/"
@@ -297,11 +312,13 @@ def get_full_feature_semantic_info(variable_name: str, graph: Graph):
             description.append(f"📏 Unit of measure: {unit.split('/')[-1]}")
 
         # cora:robotPart / rparts:robotSensingPart
-        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#robotPart"), URIRef("http://purl.org/ieee1872-owl/rParts/robotSensingPart")]:
+        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#robotPart"),
+                     URIRef("http://purl.org/ieee1872-owl/rParts/robotSensingPart")]:
             for _, _, part in graph.triples((subj, pred, None)):
                 description.append(f"🔧 Has Part: {part.split('/')[-1]}")
 
-        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#isPartOf"), URIRef("http://purl.org/ieee1872-owl/rParts/isPartOf")]:
+        for pred in [URIRef("http://purl.org/ieee1872-owl/cora-bare#isPartOf"),
+                     URIRef("http://purl.org/ieee1872-owl/rParts/isPartOf")]:
             for _, _, part in graph.triples((subj, pred, None)):
                 description.append(f"🧩 Is Part Of: {part.split('/')[-1]}")
 
@@ -334,6 +351,7 @@ def build_robot_sensor_map(graph):
 
     return robot_label_to_uuid, uuid_to_robot_label
 
+
 # Load KG and build mappings
 rdf_graph = load_knowledge_graph()
 robot_label_to_uuid, uuid_to_robot_label = build_robot_sensor_map(rdf_graph)
@@ -341,6 +359,7 @@ robot_label_to_uuid, uuid_to_robot_label = build_robot_sensor_map(rdf_graph)
 # Store in session
 st.session_state["robot_label_to_uuid"] = robot_label_to_uuid
 st.session_state["uuid_to_robot_label"] = uuid_to_robot_label
+
 
 def get_sensors_connected_to_robot(robot_number: str, graph: Graph, robot_map: dict):
     label = f"Robot {robot_number.zfill(1)}"
@@ -362,6 +381,7 @@ def get_sensors_connected_to_robot(robot_number: str, graph: Graph, robot_map: d
         return f"ℹ️ No sensors connected to Robot {robot_number}."
 
     return f"🔌 Sensors connected to Robot {robot_number}:\n\n- " + "\n- ".join(sensor_info)
+
 
 def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
     original_query = user_query  # preserve original case
@@ -440,6 +460,80 @@ def handle_causal_reasoning_query(user_query: str, adj_matrix, node_labels):
 
     return None
 
+def counterfactual_effect(a_value, a_name, b_name, total_effects, node_labels):
+    if a_name not in node_labels or b_name not in node_labels:
+        return None
+    i, j = node_labels.index(a_name), node_labels.index(b_name)
+    strength = total_effects[i, j]
+    return a_value * strength, strength
+
+def validate_counterfactual(df, a_name, a1, a2, b_name, total_effects, node_labels, tolerance=0.2):
+    if a_name not in node_labels or b_name not in node_labels:
+        return None
+
+    i, j = node_labels.index(a_name), node_labels.index(b_name)
+    strength = total_effects[i, j]
+    predicted_change = (a2 - a1) * strength
+
+    # Filter rows where A ≈ a1 or A ≈ a2
+    baseline_rows = df[np.isclose(df[a_name], a1, atol=tolerance)]
+    counterfactual_rows = df[np.isclose(df[a_name], a2, atol=tolerance)]
+
+    if len(baseline_rows) < 3 or len(counterfactual_rows) < 3:
+        return {
+            "predicted_change": predicted_change,
+            "observed_change": None,
+            "strength": strength,
+            "note": f"Not enough rows around A={a1} and A={a2} (±{tolerance})"
+        }
+
+    observed_change = counterfactual_rows[b_name].mean() - baseline_rows[b_name].mean()
+
+    return {
+        "predicted_change": predicted_change,
+        "observed_change": observed_change,
+        "difference": abs(predicted_change - observed_change),
+        "strength": strength,
+        "note": "ok"
+    }
+
+
+# Run batch evaluation
+def batch_evaluate_causal_pairs(df, total_effects, node_labels, tolerance=50):
+    results = []
+
+    for i, a_name in enumerate(node_labels):
+        a_data = df[a_name].dropna()
+        if len(a_data) < 10:
+            continue
+
+        # Use 25th and 75th percentiles as a₁ and a₂
+        a1 = a_data.quantile(0.25)
+        a2 = a_data.quantile(0.75)
+
+        for j, b_name in enumerate(node_labels):
+            if i == j:
+                continue
+
+            strength = total_effects[i, j]
+            if abs(strength) < 1e-5:
+                continue  # Ignore near-zero edges
+
+            result = validate_counterfactual(df, a_name, a1, a2, b_name, total_effects, node_labels, tolerance)
+            if result.get("observed_change") is not None:
+                results.append({
+                    "A (Cause)": a_name,
+                    "B (Effect)": b_name,
+                    "Baseline A": a1,
+                    "Intervened A": a2,
+                    "Predicted ΔB": result["predicted_change"],
+                    "Observed ΔB": result["observed_change"],
+                    "Error (|Δ|)": result["difference"],
+                    "Total Effect": result["strength"]
+                })
+
+    return pd.DataFrame(results)
+
 def answer_root_cause_query(query: str, rca_results: list):
     query = query.strip()
     cause_freq, avg_strengths, total_counts = compute_rca_statistics(rca_results)
@@ -465,7 +559,7 @@ def answer_root_cause_query(query: str, rca_results: list):
         if not b_causes:
             return f"⚠️ No root cause data found for `{b}`."
         top_3 = sorted(b_causes.items(), key=lambda x: -x[1])[:3]
-        lines = [f"{i+1}. `{k[0]}` (avg strength: {v:.4f})" for i, (k, v) in enumerate(top_3)]
+        lines = [f"{i + 1}. `{k[0]}` (avg strength: {v:.4f})" for i, (k, v) in enumerate(top_3)]
         return f"📊 Top 3 likely root causes of `{b}`:\n\n" + "\n".join(lines)
 
     # Q3. Is A a likely root cause of B?
@@ -479,9 +573,9 @@ def answer_root_cause_query(query: str, rca_results: list):
             return f"⚠️ No data for `{b}`."
         ratio = freq / total
         if ratio >= 0.1:
-            return f"✅ Yes, `{a}` is a likely root cause of `{b}` (present in {ratio*100:.1f}% of cases)."
+            return f"✅ Yes, `{a}` is a likely root cause of `{b}` (present in {ratio * 100:.1f}% of cases)."
         else:
-            return f"❌ No, `{a}` is not a likely root cause of `{b}` (only in {ratio*100:.1f}% of cases)."
+            return f"❌ No, `{a}` is not a likely root cause of `{b}` (only in {ratio * 100:.1f}% of cases)."
 
     # Q4: Which is more likely to be the root cause of variable X: A or B?
     match = re.search(
@@ -534,6 +628,10 @@ if "uploaded_file_path" not in st.session_state:
 
 if "selected_features" not in st.session_state or st.session_state["selected_features"] is None:
     st.session_state["selected_features"] = ""  # Ensure it's always a string
+
+if "causal_eval_results" not in st.session_state:
+    st.session_state["causal_eval_results"] = None
+
 
 # Load models
 def load_anomaly_prediction_model():
@@ -599,6 +697,62 @@ def get_prod_forecast(tokenizer_f, model_f, id2label_f, user_query, time_series_
 
     return positive_predictions
 
+def render_custom_graph(save_path="custom_lingam_graph.html", enable_download=True, edge_list=None, edge_weights=None):
+    import networkx as nx
+    from pyvis.network import Network
+
+    if edge_list is None:
+        edge_list = st.session_state.get("lingam_edges", [])
+    if edge_weights is None:
+        edge_weights = {}
+
+    G = nx.DiGraph()
+    selected_nodes = [n.strip() for n in st.session_state.get("selected_features", "").split(",") if n.strip()]
+    tooltip_map = {node: "<br>".join(get_feature_semantic_info(node, rdf_graph)) for node in selected_nodes}
+
+    for node in selected_nodes:
+        G.add_node(node)
+
+    for (source, target) in edge_list:
+        G.add_edge(source, target)
+
+    net = Network(height="800px", width="1400px", notebook=False, directed=True)
+    net.from_nx(G)
+
+    for edge in net.edges:
+        s, t = edge["from"], edge["to"]
+        if (s, t) in edge_weights:
+            edge["title"] = f"Stability Score: {edge_weights[(s, t)]:.4f}"
+        else:
+            edge["title"] = "No stability score available"
+
+    for node in net.nodes:
+        if node["id"] in tooltip_map:
+            node["title"] = tooltip_map[node["id"]]
+
+    net.set_options("""
+        var options = {
+          "edges": { "arrows": { "to": { "enabled": true } } },
+          "nodes": { "shape": "dot", "size": 16 }
+        }
+    """)
+    net.save_graph(save_path)
+
+    with open(save_path, "r", encoding="utf-8") as f:
+        html_content_custom = f.read()
+    st.components.v1.html(html_content_custom, height=800, width=1400, scrolling=True)
+
+    if enable_download:
+        with open(save_path, "rb") as f:
+            st.download_button(
+                label="📥 Download Customized LiNGAM Graph",
+                data=f,
+                file_name=os.path.basename(save_path),
+                mime="text/html",
+                key=f"download_custom_lingam_{uuid.uuid4()}"
+            )
+
+
 
 # **Function to execute LiNGAM and DiffAN causal discovery**
 def run_causal_discovery():
@@ -623,8 +777,9 @@ def run_causal_discovery():
 
     ### **Step 2: Execute DiffAN Causal Discovery**
     st.write("🟡 Running DiffAN...")
-    #run_diffan()  # Make sure this actually runs
+    # run_diffan()  # Make sure this actually runs
     st.write("✅ DiffAN completed.")
+
 
 # --- Function to answer causal queries ---
 def answer_causal_query(question, causal_relations):
@@ -651,6 +806,50 @@ def answer_causal_query(question, causal_relations):
                 return f"❌ No causal relation between `{source}` and `{target}` found."
 
     return "⚠️ I couldn't understand the causal query clearly. Please rephrase."
+# 🔍 Visualize filtered causal graph using PyVis
+
+def render_filtered_causal_graph(df_results, error_threshold=20.0):
+    G = nx.DiGraph()
+
+    for _, row in df_results.iterrows():
+        source = row["A (Cause)"]
+        target = row["B (Effect)"]
+        strength = row["Total Effect"]
+        error = row["Error (|Δ|)"]
+
+        G.add_node(source)
+        G.add_node(target)
+        #hardcoded thresholds for error values to use for visualization
+        color = "green" if error < 10 else "orange" if error < 20 else "red"
+
+        G.add_edge(source, target, title=f"Effect: {strength:.4f}\nError: {error:.2f}", color=color)
+
+    net = Network(height="800px", width="1400px", notebook=False, directed=True)
+    net.from_nx(G)
+    net.set_options("""
+    var options = { "edges": { "arrows": { "to": { "enabled": true } } }, "nodes": { "shape": "dot", "size": 14 } }
+    """)
+    html_path = f"filtered_causal_graph_{uuid.uuid4()}.html"
+    net.save_graph(html_path)
+
+    with open(html_path, "r", encoding="utf-8") as f:
+        st.components.v1.html(f.read(), height=800, width=1400, scrolling=True)
+
+    # Update the global session state used by "Updated Causal Graph with Custom Edges"
+    st.session_state["lingam_edges"] = [(row["A (Cause)"], row["B (Effect)"]) for _, row in df_results.iterrows() if row["Error (|Δ|)"] <= error_threshold]
+    with open("lingam_graph_edges.pkl", "wb") as f:
+        import pickle
+        pickle.dump(st.session_state["lingam_edges"], f)
+
+# 📊 Visualize heatmap of predicted vs observed
+
+def plot_causal_eval_heatmap(df_results):
+    pivot = df_results.pivot(index="A (Cause)", columns="B (Effect)", values="Error (|Δ|)")
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(pivot, annot=False, cmap="coolwarm", cbar_kws={"label": "Absolute Error"})
+    ax.set_title("Counterfactual Evaluation Error Heatmap")
+    st.pyplot(fig)
+
 
 def run_lingam():
     import os
@@ -661,54 +860,6 @@ def run_lingam():
     from pyvis.network import Network
 
     # Utility to render graph
-    def render_custom_graph(save_path="custom_lingam_graph.html", enable_download=True):
-        # Use session-stored edges instead of file
-        edge_list = st.session_state.get("lingam_edges", [])
-        G = nx.DiGraph()
-
-        # Add all edges
-        for source, target in edge_list:
-            G.add_edge(source, target)
-
-        # ✅ Add all selected features as standalone nodes if not already in the graph
-        selected_nodes = [n.strip() for n in st.session_state.get("selected_features", "").split(",") if n.strip()]
-        tooltip_map = {}
-
-        for node in selected_nodes:
-            semantic_info = get_feature_semantic_info(node, rdf_graph)
-            tooltip_map[node] = "<br>".join(semantic_info) if semantic_info else "No info from KG"
-            G.add_node(node)  # Add node with no tooltip — just to preserve edge logic
-
-        net = Network(height="800px", width="1400px", notebook=False, directed=True)
-        net.from_nx(G)
-        # Overwrite PyVis node tooltips using tooltip_map
-        for node in net.nodes:
-            node_id = node["id"]
-            if node_id in tooltip_map:
-                node["title"] = tooltip_map[node_id]
-
-        net.set_options("""
-            var options = {
-              "edges": { "arrows": { "to": { "enabled": true } } },
-              "nodes": { "shape": "dot", "size": 16 }
-            }
-        """)
-        net.save_graph(save_path)
-
-        # Display in Streamlit
-        with open(save_path, "r", encoding="utf-8") as f:
-            html_content_custom = f.read()
-        st.components.v1.html(html_content_custom, height=800, width=1400, scrolling=True)
-
-        if enable_download:
-            with open(save_path, "rb") as f:
-                st.download_button(
-                    label="📥 Download Customized LiNGAM Graph",
-                    data=f,
-                    file_name=os.path.basename(save_path),
-                    mime="text/html",
-                    key=f"download_custom_lingam_{uuid.uuid4()}"
-                )
 
     lingam_script_path = "lingam.py"
     modified_lingam_script = "modified_lingam.py"
@@ -776,7 +927,8 @@ def run_lingam():
         with open(lingam_html_path, "r", encoding="utf-8") as f:
             html_content = f.read()
         st.session_state["lingam_graph_html"] = html_content
-        st.download_button("📥 Download LiNGAM Graph", data=html_content, file_name="lingam_causal_graph.html", mime="text/html",key=f"download_lingam_graph_{uuid.uuid4()}")
+        st.download_button("📥 Download LiNGAM Graph", data=html_content, file_name="lingam_causal_graph.html",
+                           mime="text/html", key=f"download_lingam_graph_{uuid.uuid4()}")
         st.components.v1.html(html_content, height=800, width=1400, scrolling=True)
     else:
         st.error("❌ LiNGAM graph not found.")
@@ -840,6 +992,126 @@ def run_lingam():
     if st.session_state["lingam_edges"]:
         st.subheader("📈 Updated Causal Graph with Custom Edges")
         render_custom_graph()
+
+    st.markdown("---")
+    st.subheader("🧪 Counterfactual & Causal Effect Analysis")
+
+    if total_effects is not None and node_labels is not None:
+        with st.form("counterfactual_form"):
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+                a_name = st.selectbox("Cause Variable (A)", node_labels, key="cf_a")
+            with col2:
+                b_name = st.selectbox("Effect Variable (B)", node_labels, key="cf_b")
+            with col3:
+                a1 = st.number_input("Baseline value of A", value=0.0, format="%.4f", key="cf_val_base")
+                a2 = st.number_input("Intervened value of A", value=1.0, format="%.4f", key="cf_val_treated")
+
+            tolerance = st.slider(
+                "Matching tolerance (±)", min_value=0.1, max_value=200.0, value=50.0, step=5.0
+            )
+
+            submitted = st.form_submit_button("Compute Counterfactual Effect")
+
+            if submitted:
+                result = validate_counterfactual(
+                    st.session_state["uploaded_data"],
+                    a_name, a1, a2, b_name,
+                    total_effects, node_labels,
+                    tolerance=tolerance  # pass user-controlled tolerance
+                )
+
+                if result is None:
+                    st.error("❌ Invalid variables selected.")
+                elif result["observed_change"] is None:
+                    st.warning(f"⚠️ {result['note']}")
+                else:
+                    pred = result['predicted_change']
+                    obs = result['observed_change']
+                    diff = result['difference']
+                    strength = result['strength']
+
+                    st.success(f"""
+                    ✅ **Predicted Change in `{b_name}`**: **{pred}**  
+                    📊 **Observed Change in Dataset**: **{obs}**  
+                    🔁 **Absolute Difference**: **{diff}**  
+                    🔗 **Total Effect Strength**: **{strength}**
+                    """)
+
+                    # 🔍 Explanation Section
+                    st.markdown("### 🧠 Explanation")
+
+                    direction = "increase" if pred > 0 else "decrease"
+                    magnitude = abs(pred)
+                    obs_direction = "increase" if obs > 0 else "decrease"
+
+                    if abs(strength) < 1e-5:
+                        confidence_statement = f"The model believes there's almost **no causal effect** from `{a_name}` to `{b_name}`."
+                    elif abs(diff) < magnitude:
+                        confidence_statement = f"The model's prediction is **close to reality**, suggesting the causal graph is likely accurate."
+                    else:
+                        confidence_statement = f"The model significantly **underestimated** the real effect, suggesting the causal graph may **miss the true strength**."
+
+                    st.markdown(f"""
+                    When `{a_name}` changed from **A₁ → A₂**, the model predicted `{b_name}` would **{direction} by ~{magnitude:.2f}**,  
+                    but the real data shows it **{obs_direction}d by ~{abs(obs):.2f}**.
+
+                    {confidence_statement}
+                    """)
+
+    else:
+         st.warning("⚠️ Total effects matrix not available. Please run LiNGAM first.")
+
+    st.markdown("### 📊 Value Distribution of A")
+
+    if a_name in st.session_state["uploaded_data"].columns:
+        import matplotlib.pyplot as plt
+        a_data = st.session_state["uploaded_data"][a_name]
+
+        fig, ax = plt.subplots()
+        ax.hist(a_data, bins=50, color="skyblue", edgecolor="black")
+        ax.set_title(f"Distribution of {a_name}")
+        ax.set_xlabel("Value")
+        ax.set_ylabel("Frequency")
+        st.pyplot(fig)
+
+
+def run_bootstrapped_lingam_evaluation(df, selected_features, n_bootstrap=20, seed=42):
+    from causallearn.search.FCMBased.lingam import DirectLiNGAM
+    from itertools import combinations
+    import numpy as np
+    import pandas as pd
+
+    edge_strengths = {}
+
+    for b in range(n_bootstrap):
+        sample_df = df[selected_features].sample(frac=1.0, replace=True, random_state=seed + b)
+        model = DirectLiNGAM()
+        model.fit(sample_df.values)
+
+        adj_matrix = model.adjacency_matrix_
+        labels = selected_features
+
+        for i, j in combinations(range(len(labels)), 2):
+            edge_strengths.setdefault((labels[i], labels[j]), []).append(adj_matrix[i, j])
+            edge_strengths.setdefault((labels[j], labels[i]), []).append(adj_matrix[j, i])
+
+    results = []
+    for (src, tgt), vals in edge_strengths.items():
+        mean_val = np.mean(vals)
+        std_val = np.std(vals)
+        stability = 1 / (1 + std_val)
+        results.append({
+            "Source": src,
+            "Target": tgt,
+            "Mean Strength": round(mean_val, 4),
+            "Std Dev": round(std_val, 4),
+            "Stability Score": round(stability, 4)
+        })
+
+    return pd.DataFrame(results).sort_values("Stability Score", ascending=False)
+
 
 
 # **Function to execute DiffAN causal discovery**
@@ -992,7 +1264,6 @@ def run_diffan():
 # UI Title
 st.title("SmartPilot: Agent-Based CoPilot for Intelligent Manufacturing")
 
-
 # Sidebar with Sample Questions
 st.sidebar.title("📌 Sample Questions")
 
@@ -1040,7 +1311,8 @@ with st.sidebar:
             st.warning("Run causal discovery first.")
         else:
             df = st.session_state["uploaded_data"]
-            sensor_ranges = parse_sensor_ranges("/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt")
+            sensor_ranges = parse_sensor_ranges(
+                "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt")
             rca_results = analyze_all(df, sensor_ranges, total_effects, node_labels)
 
             st.session_state["rca_results"] = rca_results
@@ -1058,9 +1330,83 @@ with st.sidebar:
                             for parent, strength in causes:
                                 st.markdown(f"📌 `{parent}` ➝ `{sensor}` (strength: {strength:.4f})")
                     st.markdown("---")
+    # UI for thresholds
+    st.markdown("### 🎚️ Causal Graph Filtering Thresholds")
+    st.session_state.setdefault("stability_threshold", 0.6)
+    st.session_state.setdefault("strength_threshold", 0.05)
 
+    st.session_state["stability_threshold"] = st.slider(
+        "Minimum Stability Score (Bootstrap)", min_value=0.0, max_value=1.0, value=0.6, step=0.01
+    )
 
+    st.session_state["strength_threshold"] = st.slider(
+        "Minimum Absolute Causal Strength", min_value=0.0, max_value=1.0, value=0.05, step=0.01
+    )
 
+    if st.button("Evaluate Causal Graph Stability (Bootstrap)"):
+        df = st.session_state["uploaded_data"]
+        selected_feats = [f.strip() for f in st.session_state["selected_features"].split(",")]
+
+        bootstrap_df = run_bootstrapped_lingam_evaluation(df, selected_feats, n_bootstrap=20)
+        st.session_state["bootstrap_results_df"] = bootstrap_df
+
+        st.dataframe(bootstrap_df)
+
+        # Create score lookup
+        score_lookup = {
+            (row["Source"], row["Target"]): row["Stability Score"]
+            for _, row in bootstrap_df.iterrows()
+            if (
+                    row["Stability Score"] >= st.session_state["stability_threshold"]
+                    and abs(row["Mean Strength"]) >= st.session_state["strength_threshold"]
+            )
+        }
+
+        # Get original edges
+        original_edges = st.session_state.get("lingam_edges", [])
+
+        # Filter original edges based on stability score
+        filtered_edges = [edge for edge in original_edges if edge in score_lookup]
+        tooltip_scores = {edge: score_lookup[edge] for edge in filtered_edges}
+
+        # Update causal graph
+        st.session_state["lingam_edges"] = filtered_edges
+        st.success(f"✅ Filtered LiNGAM graph to {len(filtered_edges)} stable original edges.")
+        render_custom_graph(edge_list=filtered_edges, edge_weights=tooltip_scores)
+
+    if st.button("🔁 Evaluate All Causal Pairs"):
+        df = st.session_state["uploaded_data"]
+        if df is not None and total_effects is not None and node_labels is not None:
+            st.info("Running batch counterfactual evaluation on all valid causal pairs...")
+            result_df = batch_evaluate_causal_pairs(df, total_effects, node_labels, tolerance=50)
+
+            if not result_df.empty:
+                st.success(f"Evaluated {len(result_df)} A→B causal pairs.")
+                st.session_state["causal_eval_results"] = result_df
+            else:
+                st.warning("No valid causal pairs found with sufficient data.")
+        else:
+            st.error("Dataset or causal graph not loaded.")
+
+    # Slider and graph always shown if we have results
+    if st.session_state["causal_eval_results"] is not None:
+        result_df = st.session_state["causal_eval_results"]
+        threshold = st.slider("Filter edges with prediction error below:", 0.0, 100.0, 20.0, step=1.0)
+
+        result_df["Error (|Δ|)"] = pd.to_numeric(result_df["Error (|Δ|)"], errors="coerce")
+        filtered_df = result_df[result_df["Error (|Δ|)"] <= threshold]
+        st.dataframe(filtered_df.sort_values("Error (|Δ|)", ascending=False), use_container_width=True)
+
+        # Download
+        csv = filtered_df.to_csv(index=False).encode("utf-8")
+        st.download_button("📥 Download Filtered Evaluation Results", csv, "causal_eval_filtered.csv", "text/csv")
+
+        # Graph and heatmap
+        st.subheader("📈 Filtered Causal Graph")
+        render_filtered_causal_graph(filtered_df, error_threshold=threshold)
+
+        st.subheader("📊 Error Heatmap")
+        plot_causal_eval_heatmap(result_df)
 
 # **Display Dataset Statistics in Main Window**
 if st.session_state["uploaded_data"] is not None:
@@ -1092,7 +1438,8 @@ if st.session_state["selected_question"] == "Upload your dataset":
             f.write(uploaded_file.getbuffer())
 
         # Load to session
-        st.session_state["uploaded_data"] = pd.read_csv(file_path) if file_extension == "csv" else pd.read_excel(file_path)
+        st.session_state["uploaded_data"] = pd.read_csv(file_path) if file_extension == "csv" else pd.read_excel(
+            file_path)
         st.session_state["uploaded_file_path"] = file_path
         st.session_state["selected_question"] = None
         st.success(f"✅ Dataset uploaded successfully! Stored as `{file_path}`")
@@ -1128,7 +1475,6 @@ if st.session_state["selected_question"] == "Upload your dataset":
             except Exception as e:
                 st.error(f"❌ Failed to load FF dataset: {e}")
 
-
 # **Feature Selection for Causal Analysis**
 # **Feature Selection for Causal Analysis**
 if st.session_state["selected_question"] == "Select the features for causal analysis":
@@ -1138,9 +1484,11 @@ if st.session_state["selected_question"] == "Select the features for causal anal
     if "selected_features_temp" not in st.session_state:
         st.session_state["selected_features_temp"] = st.session_state["selected_features"]
 
+
     # **Use a text input box that updates session state instantly**
     def update_selected_features():
         st.session_state["selected_features"] = st.session_state["selected_features_temp"]
+
 
     selected_features = st.text_area(
         "Enter the feature names separated by commas (e.g., FIT101, MV101, P101):",
@@ -1160,7 +1508,6 @@ if st.session_state["selected_question"] == "Select the features for causal anal
     if st.session_state["selected_features"]:
         st.session_state["selected_question"] = None
 
-
 # **Show the stored dataset path and selected features**
 if st.session_state["uploaded_file_path"]:
     st.write(f"📂 **Dataset Path:** `{st.session_state['uploaded_file_path']}`")
@@ -1176,8 +1523,10 @@ if st.session_state["selected_question"] == "Give Feature Descriptions":
     if "feature_descriptions_temp" not in st.session_state:
         st.session_state["feature_descriptions_temp"] = st.session_state.get("feature_descriptions", "")
 
+
     def update_feature_descriptions():
         st.session_state["feature_descriptions"] = st.session_state["feature_descriptions_temp"]
+
 
     feature_descriptions = st.text_area(
         "Enter feature descriptions (e.g., FIT101: Flow sensor at inlet pipe):",
@@ -1195,16 +1544,14 @@ if st.session_state["selected_question"] == "Give Feature Descriptions":
 
 # **Perform Causal Discovery**
 if st.session_state["selected_question"] == "Perform Causal Discovery":
-    if st.session_state["uploaded_file_path"] and st.session_state["selected_features"] and st.session_state["selected_features"].strip():
+    if st.session_state["uploaded_file_path"] and st.session_state["selected_features"] and st.session_state[
+        "selected_features"].strip():
         st.subheader("🔍 Running Causal Discovery...")
         run_causal_discovery()  # Execute the modified LiNGAM causal discovery script
     else:
         st.error("⚠️ Please upload a dataset and select features before performing causal discovery.")
 
-    #st.session_state["selected_question"] = None  # Reset selection
-
-
-
+    # st.session_state["selected_question"] = None  # Reset selection
 
 # Display selected question if available
 # Add a floating header for the "Selected Question"
@@ -1231,16 +1578,18 @@ st.markdown(
 
 # Display the selected question in a fixed header
 if st.session_state["selected_question"]:
-    st.markdown(f"<div class='selected-question-container'>🔹 Selected Question: {st.session_state['selected_question']}</div>", unsafe_allow_html=True)
-
-
+    st.markdown(
+        f"<div class='selected-question-container'>🔹 Selected Question: {st.session_state['selected_question']}</div>",
+        unsafe_allow_html=True)
 
 # Chat Input
 user_input = st.chat_input("Enter your question...")
 
 # If no user input, but a question was selected from sidebar, use the selected question
 if not user_input and st.session_state["selected_question"]:
-    if st.session_state["selected_question"] not in ["Upload your dataset", "Give Feature Descriptions","Select the features for causal analysis","Perform Causal Discovery"]:
+    if st.session_state["selected_question"] not in ["Upload your dataset", "Give Feature Descriptions",
+                                                     "Select the features for causal analysis",
+                                                     "Perform Causal Discovery"]:
         user_input = st.session_state["selected_question"]
         st.session_state["selected_question"] = None  # Clear after use
 
@@ -1443,7 +1792,8 @@ if user_input:
                 available_columns = df.columns.tolist()
 
                 if feature_to_add in available_columns:
-                    current_features = [f.strip() for f in st.session_state.get("selected_features", "").split(",") if f.strip()]
+                    current_features = [f.strip() for f in st.session_state.get("selected_features", "").split(",") if
+                                        f.strip()]
 
                     if feature_to_add not in current_features:
                         current_features.append(feature_to_add)
@@ -1471,7 +1821,6 @@ if user_input:
                     "role": "assistant",
                     "content": "❌ No dataset uploaded. Please upload a dataset first."
                 })
-
 
 # Display chat messages
 for msg in st.session_state["messages"]:

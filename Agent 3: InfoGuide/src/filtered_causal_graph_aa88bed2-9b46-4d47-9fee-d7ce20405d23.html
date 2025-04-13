@@ -88,8 +88,8 @@
                   
 
                   // parsing and collecting nodes and edges from the python
-                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "I_R03_Gripper_Pot", "label": "I_R03_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "I_R01_Gripper_Pot", "label": "I_R01_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "I_R04_Gripper_Load", "label": "I_R04_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R01_Gripper_Load", "label": "I_R01_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R02_Gripper_Load", "label": "I_R02_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R03_Gripper_Load", "label": "I_R03_Gripper_Load", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperLoadSensor"}, {"color": "#97c2fc", "id": "I_R02_Gripper_Pot", "label": "I_R02_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}, {"color": "#97c2fc", "id": "I_R04_Gripper_Pot", "label": "I_R04_Gripper_Pot", "shape": "dot", "size": 10, "title": "\ud83d\udd39 Type: GripperPotentiometerSensor"}]);
-                  edges = new vis.DataSet([{"arrows": "to", "from": "I_R03_Gripper_Pot", "title": "No stability score available", "to": "I_R01_Gripper_Pot", "width": 1}, {"arrows": "to", "from": "I_R03_Gripper_Pot", "title": "No stability score available", "to": "I_R04_Gripper_Load", "width": 1}, {"arrows": "to", "from": "I_R01_Gripper_Load", "title": "No stability score available", "to": "I_R02_Gripper_Load", "width": 1}]);
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "I_R03_Gripper_Pot", "label": "I_R03_Gripper_Pot", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "I_R01_Gripper_Pot", "label": "I_R01_Gripper_Pot", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "I_R04_Gripper_Load", "label": "I_R04_Gripper_Load", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "green", "from": "I_R03_Gripper_Pot", "title": "Effect: 0.4057\nError: 4.77", "to": "I_R01_Gripper_Pot", "width": 1}, {"arrows": "to", "color": "green", "from": "I_R03_Gripper_Pot", "title": "Effect: -0.5070\nError: 7.54", "to": "I_R04_Gripper_Load", "width": 1}]);
 
                   nodeColors = {};
                   allNodes = nodes.get({ returnType: "Object" });
@@ -100,7 +100,7 @@
                   // adding nodes and edges to the graph
                   data = {nodes: nodes, edges: edges};
 
-                  var options = {"edges": {"arrows": {"to": {"enabled": true}}}, "nodes": {"shape": "dot", "size": 16}};
+                  var options = {"edges": {"arrows": {"to": {"enabled": true}}}, "nodes": {"shape": "dot", "size": 14}};
 
                   
 
