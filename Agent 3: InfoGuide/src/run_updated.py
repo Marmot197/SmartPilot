@@ -819,7 +819,7 @@ def render_filtered_causal_graph(df_results, error_threshold=20.0):
 
         G.add_node(source)
         G.add_node(target)
-        #hardcoded thresholds for error values to use for visualization
+        #hardcoded t
         color = "green" if error < 10 else "orange" if error < 20 else "red"
 
         G.add_edge(source, target, title=f"Effect: {strength:.4f}\nError: {error:.2f}", color=color)
