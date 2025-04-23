@@ -23,6 +23,12 @@ import networkx as nx
 from pyvis.network import Network
 import matplotlib.pyplot as plt
 import seaborn as sns
+from copilots.MemoryManager import save_event_to_memory,enrich_context_with_memory
+
+if "context" not in st.session_state:
+    st.session_state["context"] = ""
+
+
 
 @st.cache_resource
 def load_embedding_model():
@@ -773,6 +779,11 @@ def run_causal_discovery():
     ### **Step 1: Execute LiNGAM Causal Discovery**
     st.write("🟢 Running LiNGAM...")
     run_lingam()
+    save_event_to_memory("causal_discovery", {
+        "graph": "lingam_causal_graph.html",
+        "features": st.session_state.get("selected_features", ""),
+        "dataset": st.session_state.get("uploaded_file_path", "")
+    })
     st.write("✅ LiNGAM completed.")
 
     ### **Step 2: Execute DiffAN Causal Discovery**
@@ -1330,6 +1341,11 @@ with st.sidebar:
                             for parent, strength in causes:
                                 st.markdown(f"📌 `{parent}` ➝ `{sensor}` (strength: {strength:.4f})")
                     st.markdown("---")
+            save_event_to_memory("rca_run", {
+                "anomalies_found": len([r for r in rca_results if r["anomalous_sensors"]]),
+                "features_used": st.session_state.get("selected_features", ""),
+                "dataset": st.session_state.get("uploaded_file_path", "")
+            })
     # UI for thresholds
     st.markdown("### 🎚️ Causal Graph Filtering Thresholds")
     st.session_state.setdefault("stability_threshold", 0.6)
@@ -1713,7 +1729,7 @@ if user_input:
         # ✅ Fallback from ProcessOntologyQA to LLM if nothing matched
         if process_response is None:
             data = Knowledge_Representation.organize_data(AssetLoader.read_data())
-            context = Retr.retrieve_context(data, user_input, symb_model=Symbolic_Model(), top_k=1)[0]
+            st.session_state["context"] += Retr.retrieve_context(data, user_input, symb_model=Symbolic_Model(), top_k=1)[0]
 
             # Enrich with KG semantic info
             if "selected_features" in st.session_state:
@@ -1723,7 +1739,7 @@ if user_input:
                     if desc:
                         kg_descriptions.append(f"{feature.strip()}:\n" + "\n".join(desc))
                 if kg_descriptions:
-                    context += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(kg_descriptions)
+                    st.session_state["context"] += "\n\n---\n📘 Feature Semantic Info from KG:\n" + "\n\n".join(kg_descriptions)
 
             # Enrich with Process Ontology info
             # Add Process Ontology entity descriptions
@@ -1738,7 +1754,7 @@ if user_input:
                         if info:
                             process_ontology_info.append(f"{feature_clean}:\n" + "\n".join(info))
                 if process_ontology_info:
-                    context += "\n\n---\n🏭 Feature Info from Process Ontology:\n" + "\n\n".join(process_ontology_info)
+                    st.session_state["context"] += "\n\n---\n🏭 Feature Info from Process Ontology:\n" + "\n\n".join(process_ontology_info)
 
             # Extra context: auto-include all Sensor_Value nodes
             sensor_value_info = []
@@ -1752,7 +1768,22 @@ if user_input:
             sensor_value_info.sort()
 
             if sensor_value_info:
-                context += "\n\n---\n📈 Sensor Tolerance Limits:\n" + "\n\n".join(sensor_value_info)
+                st.session_state["context"] += "\n\n---\n📈 Sensor Tolerance Limits:\n" + "\n\n".join(sensor_value_info)
+
+            # ✅ Inject causal graph knowledge (Total Effects)
+            if "selected_features" in st.session_state and total_effects is not None and node_labels is not None:
+                causal_insights = []
+                selected = [f.strip() for f in st.session_state["selected_features"].split(",") if
+                                f.strip() in node_labels]
+                for a in selected:
+                    for b in selected:
+                        if a != b:
+                            i, j = node_labels.index(a), node_labels.index(b)
+                            effect = total_effects[i, j]
+                            if abs(effect) > 0.00005: # threshold to skip weak relations
+                                causal_insights.append(f"📈 {a} → {b} (Total Effect: {effect})")
+                if causal_insights:
+                    st.session_state["context"] += "\n\n---\n🧠 Causal Graph Total Effects (|effect| > 0.05):\n" + "\n".join(causal_insights[:20])  # Top 20 max
 
             # Run LLM
             llm = LLM()
@@ -1764,11 +1795,50 @@ if user_input:
             if mentioned_entity:
                 mentioned_info = get_full_entity_semantic_info(mentioned_entity, ontology_data)
                 if mentioned_info:
-                    context += f"\n\n---\n🏭 Info on `{mentioned_entity}` from Process Ontology:\n" + "\n".join(
+                    st.session_state["context"] += f"\n\n---\n🏭 Info on `{mentioned_entity}` from Process Ontology:\n" + "\n".join(
                         mentioned_info)
 
-            llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, context)
-            response = llm.respond_to_prompt()
+            st.session_state["context"] = enrich_context_with_memory(st.session_state["context"], user_input)
+
+            #llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, st.session_state["context"])
+            # 🧠 Limit total history to avoid growing too large
+            MAX_HISTORY = 10
+            st.session_state["messages"] = st.session_state["messages"][-MAX_HISTORY:]
+
+            # ✅ Context-safe message chunk for LLM input
+            MAX_CONTEXT_MESSAGES = 10
+            recent_msgs = st.session_state["messages"][-MAX_CONTEXT_MESSAGES:]
+            recent_assistant_msgs = [m["content"] for m in recent_msgs if m["role"] == "assistant"]
+            recent_context = "\n\n".join(recent_assistant_msgs[-5:])  # last 5 assistant replies
+
+            # ✂️ Truncate long context (static memory) if needed
+            if len(st.session_state["context"]) > 3000:
+                st.session_state["context"] = st.session_state["context"][-3000:]
+
+            # 📦 Build final prompt
+            combined_context = recent_context + "\n\n" + st.session_state["context"]
+            combined_context = enrich_context_with_memory(combined_context, user_input)
+
+            # 🧠 Prepare and send to LLM
+            llm = LLM()
+            llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input, combined_context)
+            llm.set_max_tokens(256)  # cap to avoid token rate limit
+
+            try:
+                response = llm.respond_to_prompt()
+            except Exception as e:
+                if "rate_limit_exceeded" in str(e).lower() or "request too large" in str(e).lower():
+                    st.warning("⚠️ Trimming context and retrying due to token rate limit...")
+                    st.session_state["context"] = st.session_state["context"][-2000:]
+                    llm.set_prompt(AssetLoader.get_templates().get("documentation_agent", ""), user_input,
+                                   st.session_state["context"])
+                    response = llm.respond_to_prompt()
+                else:
+                    raise e
+
+
+
+
 
         else:
             if isinstance(process_response, str):
@@ -1805,6 +1875,12 @@ if user_input:
                         })
 
                         run_lingam()
+                        save_event_to_memory("causal_discovery", {
+                            "graph": "lingam_causal_graph.html",
+                            "features": st.session_state.get("selected_features", ""),
+                            "dataset": st.session_state.get("uploaded_file_path", "")
+                        })
+
 
                     else:
                         st.session_state["messages"].append({
