@@ -1,0 +1,89 @@
+{
+    "user_profile": {},
+    "semantic_memory": {},
+    "episodic_memory": {
+        "causal_discovery": [
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:00:00.007226"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:00:46.739036"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:13:21.269844"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:13:58.303358"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:14:17.518588"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:14:49.713542"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:35:52.988571"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T21:06:40.265143"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T21:07:01.781490"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T21:07:22.751546"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot, I_R03_Gripper_Load, I_R02_Gripper_Pot, I_R02_Gripper_Load, I_R01_Gripper_Pot, I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load, M_R02_RJointAngle_Degree",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T21:07:31.618802"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T22:16:33.207325"
+            }
+        ],
+        "rca_runs": [
+            {
+                "anomalies_found": 1316,
+                "features_used": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-04-22T17:00:44.254662"
+            }
+        ]
+    },
+    "procedural_memory": {}
+}
