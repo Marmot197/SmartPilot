@@ -503,6 +503,10 @@ def validate_counterfactual(df, a_name, a1, a2, b_name, total_effects, node_labe
         "note": "ok"
     }
 
+def clean_actual_state(s):
+    if not isinstance(s, str):
+        return ""
+    return s.replace(" ", "").replace("\n", "").replace("\t", "").lower().strip()
 
 # Run batch evaluation
 def batch_evaluate_causal_pairs(df, total_effects, node_labels, tolerance=50):
@@ -1652,7 +1656,42 @@ if user_input:
     # 🔵 Anomaly prediction
     elif "anomaly" in user_query_lower and re.search(r'\d', user_query_lower):
         predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_input, ["[0. 0. 0.]"])
-        response = f"Predicted anomaly labels: {', '.join(predicted_labels)}"
+        predicted_anomaly = predicted_labels[0] if predicted_labels else None
+        response = f"🧠 Predicted anomaly: **{predicted_anomaly}**"
+
+        # Trigger RCA automatically if dataset and causal graph are available
+        if predicted_anomaly and "uploaded_data" in st.session_state and st.session_state["uploaded_data"] is not None \
+                and total_effects is not None and node_labels is not None:
+            df = st.session_state["uploaded_data"]
+
+            sensor_ranges = parse_sensor_ranges(
+                "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt"
+            )
+            rca_results = analyze_all(df, sensor_ranges, total_effects, node_labels)
+
+            # Find matching RCA result
+            matched_rcas = []
+            for result in rca_results:
+                if clean_actual_state(predicted_anomaly) == clean_actual_state(result["actual_state"]):
+                    matched_rcas.append(result)
+
+            if predicted_anomaly.lower() == "normal":
+                response += "\n\n✅ No anomaly detected. Root cause analysis not needed."
+            else:
+                if matched_rcas:
+                    root_causes = set()
+                    for matched_rca in matched_rcas:
+                        if matched_rca["anomalous_sensors"]:
+                            for sensor in matched_rca["anomalous_sensors"]:
+                                causes = matched_rca["root_cause_paths"].get(sensor, [])
+                                for parent, _ in causes:
+                                    root_causes.add(parent)
+
+                    root_cause_list = "\n- " + "\n- ".join(root_causes) if root_causes else "None found."
+                    response += f"\n\n🔍 Most likely root causes for **{predicted_anomaly}**:\n{root_cause_list}"
+                else:
+                    response += "\n\nℹ️ No matching RCA results found for the predicted anomaly."
+
 
     # 🟣 Production forecasting
     elif "production" in user_query_lower and re.search(r'\d', user_query_lower):
