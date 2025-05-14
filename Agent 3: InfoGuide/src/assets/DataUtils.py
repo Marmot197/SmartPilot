@@ -46,7 +46,7 @@ class AssetLoader:
             - Take in and process user input, and warmly interact with them.
             - Determine which topic the user's question relates to.
             Analyse the user question and respond wiht only one of the following.
-            "Toy rocket" if the question is about the toy rocket manugacturing pipeline. This includes questions about the manufacturing process, safety protocols, troubleshooting, maintenance, calibration, quality checks and documentation.
+            "Toy rocket" if the question is about the toy rocket manufacturing pipeline. This includes questions about the manufacturing process, safety protocols, troubleshooting, maintenance, calibration, quality checks and documentation. Also it can answer any question related to anomalies that can occur in this pipeline, the anomaly prediction model, dataset used etc.
             "Production forecasting" if the question is about the production forecasting agent. This includes questions about the production forecasting process, the data it uses, the algorithms it employs and the predictions it makes.
             "Causal analysis" if the question is about the causal analysis agent. This includes questions about the causal analysis process, causal discovery, causal analysis and root cause analysis.
             Do not respond with anything else except the above topics. If you don't understand the topic, default with "Toy rocket".
