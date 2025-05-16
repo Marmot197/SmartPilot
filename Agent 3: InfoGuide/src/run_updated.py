@@ -28,7 +28,6 @@ from copilots.MemoryManager import save_event_to_memory, enrich_context_with_mem
 if "context" not in st.session_state:
     st.session_state["context"] = ""
 
-
 @st.cache_resource
 def load_embedding_model():
     return SentenceTransformer("all-MiniLM-L6-v2")
@@ -115,14 +114,16 @@ def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
         entity_info.append(f"🔖 Type: {entity_node['type']}")
     if "description" in entity_node:
         entity_info.append(f"📝 Description: {entity_node['description']}")
-    if "unit" in entity_node:
+    if "unit" in entity_node and entity_node["unit"] not in ["x", "", None]:
         entity_info.append(f"📏 Unit: {entity_node['unit']}")
+    if "value_type" in entity_node:
+        entity_info.append(f"🧮 Value Type: {entity_node['value_type']}")
     if "item_spec" in entity_node:
         entity_info.append(f"🏭 Manufacturer Info (from spec): {entity_node['item_spec']}")
     if entity_node.get("type", "").lower() == "sensor_value":
         entity_info.append(
             f"📏 Tolerance Range: {entity_node.get('min_value')} to {entity_node.get('max_value')} "
-            f"(Unit: {entity_node.get('unit', 'N/A')})"
+            f"(Unit: {entity_node.get('unit', 'N/A')}, Type: {entity_node.get('value_type', 'N/A')})"
         )
 
     # Step 2: Look at related links
@@ -541,6 +542,10 @@ def batch_evaluate_causal_pairs(df, total_effects, node_labels, tolerance=50):
 
     return pd.DataFrame(results)
 
+def clean_actual_state(s):
+    if not isinstance(s, str):
+        return ""
+    return s.replace(" ", "").replace("\n", "").replace("\t", "").lower().strip()
 
 def answer_root_cause_query(query: str, rca_results: list):
     query = query.strip()
@@ -689,21 +694,22 @@ def get_prod_forecast(tokenizer_f, model_f, id2label_f, user_query, time_series_
     with torch.no_grad():
         logits = model_f(**tokenized_inputs).logits
 
-    # Post-process logits to ensure positive values
     predicted_indices = torch.argmax(logits, axis=1)
     predicted_labels = [id2label_f[label.item()] for label in predicted_indices]
 
-    # Ensure predictions are numeric and positive
+    # Ensure predictions are numeric, positive, and append "lbs"
     positive_predictions = []
     for label in predicted_labels:
         try:
-            numeric_label = float(label)
-            positive_label = max(0, numeric_label)  # Replace negative values with 0
-            positive_predictions.append(str(positive_label))
+            numeric_label = float(label.strip())
+            positive_label = max(0.0, numeric_label)  # Replace negative with 0.0
+            positive_predictions.append(f"{positive_label:.2f} lbs")
         except ValueError:
-            positive_predictions.append(label)  # Keep as-is if conversion fails
+            positive_predictions.append(label.strip())  # Fallback for non-numeric labels
 
     return positive_predictions
+
+
 
 
 def render_custom_graph(save_path="custom_lingam_graph.html", enable_download=True, edge_list=None, edge_weights=None):
@@ -1129,6 +1135,48 @@ def run_bootstrapped_lingam_evaluation(df, selected_features, n_bootstrap=20, se
 
     return pd.DataFrame(results).sort_values("Stability Score", ascending=False)
 
+def run_rca_for_predicted_anomalies(predicted_labels, fallback_dataset_path, sensor_ranges_path):
+    predicted_anomalies = [clean_actual_state(a) for a in predicted_labels]
+    rca_message = ""
+
+    # Use uploaded dataset if available, otherwise fallback
+    if "uploaded_data" in st.session_state and st.session_state["uploaded_data"] is not None:
+        df = st.session_state["uploaded_data"]
+    else:
+        try:
+            df = pd.read_csv(fallback_dataset_path)
+        except Exception as e:
+            return f"⚠️ RCA skipped: could not load fallback dataset ({e})"
+
+    if total_effects is not None and node_labels is not None:
+        sensor_ranges = parse_sensor_ranges(sensor_ranges_path)
+        rca_results = analyze_all(df, sensor_ranges, total_effects, node_labels)
+
+        if any("normal" in a for a in predicted_anomalies):
+            rca_message += "\n\n✅ No anomaly detected. Root cause analysis not needed."
+        else:
+            matched_rcas = [
+                r for r in rca_results
+                if clean_actual_state(r["actual_state"]) in predicted_anomalies
+            ]
+
+            if matched_rcas:
+                root_causes = set()
+                for matched_rca in matched_rcas:
+                    if matched_rca["anomalous_sensors"]:
+                        for sensor in matched_rca["anomalous_sensors"]:
+                            causes = matched_rca["root_cause_paths"].get(sensor, [])
+                            for parent, _ in causes:
+                                root_causes.add(parent)
+
+                root_cause_list = "\n- " + "\n- ".join(root_causes) if root_causes else "None found."
+                rca_message += f"\n\n🔍 Most likely root causes for **{', '.join(predicted_labels)}**:\n{root_cause_list}"
+            else:
+                rca_message += "\n\nℹ️ No matching RCA results found for the predicted anomaly."
+    else:
+        rca_message += "\n\n⚠️ RCA not available: causal graph not initialized."
+
+    return rca_message
 
 # **Function to execute DiffAN causal discovery**
 def run_diffan():
@@ -1657,12 +1705,40 @@ if user_input:
     # 🔵 Anomaly prediction
     elif "anomaly" in user_query_lower and re.search(r'\d', user_query_lower):
         predicted_labels = get_anomaly_prediction(tokenizer, model, id2label, user_input, ["[0. 0. 0.]"])
-        response = f"Predicted anomaly labels: {', '.join(predicted_labels)}"
+        response = f"🧠 Predicted anomaly: **{', '.join(predicted_labels)}**"
+
+        # 🔁 Automatically run RCA even without user uploading a dataset
+        DEFAULT_DATASET_PATH = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/uploaded_dataset.csv"
+        SENSOR_RANGES_PATH = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt"
+
+        rca_info = run_rca_for_predicted_anomalies(predicted_labels, DEFAULT_DATASET_PATH, SENSOR_RANGES_PATH)
+        response += rca_info
+
+
+
 
     # 🟣 Production forecasting
     elif "production" in user_query_lower and re.search(r'\d', user_query_lower):
         predicted_labels = get_prod_forecast(tokenizer_f, model_f, id2label_f, user_input, ["[0. 0. 0.]"])
-        response = f"Predicted product values: {', '.join(predicted_labels)}"
+
+        try:
+            # Step 1: Handle single string output like "x,y,z"
+            if len(predicted_labels) == 1 and isinstance(predicted_labels[0], str):
+                predicted_labels = predicted_labels[0].split(",")
+
+            # Step 2: Clean, clamp, round, format with labels
+            safe_predictions = []
+            for i, p in enumerate(predicted_labels):
+                value = round(max(0.0, float(p.strip())), 2)
+                safe_predictions.append(f"📦 Product {i + 1}: {value} lbs")
+
+            response = "📦 Predicted product values for next hour:\n\n" + "\n".join(safe_predictions)
+
+        except Exception as e:
+            response = f"⚠️ Error parsing prediction values: {e}"
+
+
+
 
     elif st.session_state.get("ProcessOntologyQa") is not None:
         process_qa = st.session_state["ProcessOntologyQa"]
@@ -1800,8 +1876,9 @@ if user_input:
                         min_val = node.get("min_value", "N/A")
                         max_val = node.get("max_value", "N/A")
                         unit = node.get("unit", "N/A")
+                        value_type = node.get("value_type", "N/A")
                         sensor_value_info.append(
-                            f"{val_name}:\n📏 Tolerance Range: {min_val} to {max_val} (Unit: {unit})")
+                            f"{val_name}:\n📏 Tolerance Range: {min_val} to {max_val} (Unit: {unit}) (Type: {value_type})")
                 sensor_value_info.sort()
 
                 if sensor_value_info:
