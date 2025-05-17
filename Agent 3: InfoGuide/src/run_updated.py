@@ -1513,36 +1513,50 @@ if st.session_state["selected_question"] == "Upload your dataset":
         st.session_state["selected_question"] = None
         st.success(f"✅ Dataset uploaded successfully! Stored as `{file_path}`")
 
+        # display statics right after successful upload
+        df = st.session_state["uploaded_data"]
+
+        st.subheader("📊 Dataset Overview")
+        st.write(f"**🟢 Number of Rows:** {df.shape[0]}")
+        st.write(f"**🟢 Column Names:** {', '.join(df.columns)}")
+
+        st.subheader("📈 Descriptive Statistics")
+        st.dataframe(df.describe())
+
     st.markdown("---")
 
     # Sample Dataset Buttons
-    st.subheader("📊 Or Try a Sample Dataset")
-    col1, col2 = st.columns(2)
-    dest_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/uploaded_dataset.csv"
+    st.markdown("---")
 
-    with col1:
-        if st.button("📎 Secure Water Treatment (SWaT) Dataset"):
-            sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/swat_sample.csv"
-            try:
-                shutil.copy(sample_path, dest_path)
-                st.session_state["uploaded_data"] = pd.read_csv(sample_path)
-                st.session_state["uploaded_file_path"] = sample_path
-                st.session_state["selected_question"] = None
-                st.success("✅ SWAT sample dataset loaded successfully!")
-            except Exception as e:
-                st.error(f"❌ Failed to load SWAT dataset: {e}")
+    # Only show sample datasets if no dataset has been uploaded
+    if st.session_state["uploaded_data"] is None:
+        st.subheader("📊 Or Try a Sample Dataset")
+        col1, col2 = st.columns(2)
+        dest_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/uploaded_dataset.csv"
 
-    with col2:
-        if st.button("📎 Future Factories (FF) Analog Dataset "):
-            sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/FF_test_sample.csv"
-            try:
-                shutil.copy(sample_path, dest_path)
-                st.session_state["uploaded_data"] = pd.read_csv(sample_path)
-                st.session_state["uploaded_file_path"] = sample_path
-                st.session_state["selected_question"] = None
-                st.success("✅ FF sample dataset loaded successfully!")
-            except Exception as e:
-                st.error(f"❌ Failed to load FF dataset: {e}")
+        with col1:
+            if st.button("📎 Secure Water Treatment (SWaT) Dataset"):
+                sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/swat_sample.csv"
+                try:
+                    shutil.copy(sample_path, dest_path)
+                    st.session_state["uploaded_data"] = pd.read_csv(sample_path)
+                    st.session_state["uploaded_file_path"] = sample_path
+                    st.session_state["selected_question"] = None
+                    st.success("✅ SWAT sample dataset loaded successfully!")
+                except Exception as e:
+                    st.error(f"❌ Failed to load SWAT dataset: {e}")
+
+        with col2:
+            if st.button("📎 Future Factories (FF) Analog Dataset "):
+                sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/FF_test_sample.csv"
+                try:
+                    shutil.copy(sample_path, dest_path)
+                    st.session_state["uploaded_data"] = pd.read_csv(sample_path)
+                    st.session_state["uploaded_file_path"] = sample_path
+                    st.session_state["selected_question"] = None
+                    st.success("✅ FF sample dataset loaded successfully!")
+                except Exception as e:
+                    st.error(f"❌ Failed to load FF dataset: {e}")
 
 # **Feature Selection for Causal Analysis**
 # **Feature Selection for Causal Analysis**
