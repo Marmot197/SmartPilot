@@ -42,6 +42,7 @@ sentence-transformers>=2.6.1   # ← NEW
 networkx>=3.2                  # ← NEW
 matplotlib>=3.8                # ← NEW
 codecarbon>=2.3.2      # ← NEW line
+accelerate>=1.7.0        # ← NEW: satisfies transformers’ callback import
 
 # Causal packages
 causal-learn==0.1.3.5             # <— downgraded; works with SciPy 1.11

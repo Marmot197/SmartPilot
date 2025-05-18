@@ -24,7 +24,6 @@ from pyvis.network import Network
 import matplotlib.pyplot as plt
 import seaborn as sns
 from copilots.MemoryManager import save_event_to_memory, enrich_context_with_memory
-torch.classes.__path__ = []
 
 
 if "context" not in st.session_state:
