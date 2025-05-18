@@ -41,7 +41,7 @@ rdflib>=7.0.0
 sentence-transformers>=2.6.1   # ← NEW
 networkx>=3.2                  # ← NEW
 matplotlib>=3.8                # ← NEW
-codecarbon>=2.3.2      # ← NEW line
+codecarbon==3.0.1      # ← bumped to a Py 3.12–compatible release
 accelerate>=1.7.0        # ← NEW: satisfies transformers’ callback import
 
 # Causal packages
