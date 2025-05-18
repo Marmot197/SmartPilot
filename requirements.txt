@@ -17,9 +17,10 @@ nltk==3.8.1
 rouge==1.0.1
 rouge-score==0.1.2
 flair==0.13.1
+gensim==4.3.2          # ✅ Explicit for flair compatibility
 
 # TensorFlow stack
-tensorflow==2.16.2
+tensorflow==2.16.2      # ✅ Ensure no hidden characters
 keras==3.4.1
 
 # Visualization and Web
@@ -41,5 +42,4 @@ cdt
 # External Git dependency
 git+https://github.com/tomsons22/trustworthyAI.git@c2e3535eba28cabf8e1309f55bffc3e4d4d78c00#subdirectory=gcastle
 
-
-scipy
+scipy==1.10.1           # ✅ Fix gensim+flair import error
