@@ -1,60 +1,45 @@
-# Core libraries
-pandas==2.2.3
-numpy==1.26.4
-scipy==1.10.1  # ✅ FIXED: ensures triu import works
-scikit-learn==1.6.1
-matplotlib==3.10.3
-seaborn==0.13.2
+# Core scientific packages
+pandas
+numpy
+scikit-learn
+Pillow
 
-# Torch & DL stack
-torch==2.7.0  # ✅ FIXED: compatible with Python 3.12
-torchvision==0.18.0
-torchaudio==2.7.0
-torchmetrics==1.7.1
+# Torch stack
+torch>=2.2.0,<3.0.0
 pytorch-lightning==2.0.7
 
-# Transformers & NLP
-transformers==4.51.3
-tokenizers==0.21.1
+# HuggingFace + NLP
+transformers
+datasets
+evaluate
+peft
 nltk==3.8.1
-sentencepiece==0.2.0
+rouge==1.0.1
+rouge-score==0.1.2
 flair==0.13.1
-gensim==4.3.2
-bpemb==0.3.6
 
-# Streamlit
-streamlit==1.45.1
-pydeck==0.9.1
-
-# Graphs & Causal
-pyvis==0.3.2
-graphviz==0.20.3
-networkx==3.4.2
-causal-learn==0.1.4.1
-cdt==0.6.0
-gcastle @ git+https://github.com/tomsons22/trustworthyAI.git@c2e3535eba28cabf8e1309f55bffc3e4d4d78c00#subdirectory=gcastle
-
-# TensorFlow (ensure no unicode `ß`!)
+# TensorFlow stack
 tensorflow==2.16.2
-tensorboard==2.16.2
-tensorflow-probability==0.25.0
 keras==3.4.1
 
-# Other essentials
-tqdm==4.67.1
-regex==2024.11.6
-pyyaml==6.0.2
-beautifulsoup4==4.12.3
-bs4==0.0.1
+# Visualization and Web
+streamlit
+pyvis
+seaborn
+BeautifulSoup4==4.12.3
 requests==2.32.3
-huggingface-hub==0.31.2
-evaluate==0.4.3
-datasets==2.14.4
-altair==5.5.0
-markdown==3.8
-protobuf==4.25.7
-filelock==3.18.0
 
-# Optional / Memory
-sqlitedict==2.1.0
-jsonpickle==4.0.5
+# Misc
+efficientnet_pytorch==0.7.1
+distro==1.9.0
+python-decouple==3.8
+
+# Causal packages
+causal-learn
+cdt
+
+# External Git dependency
+git+https://github.com/tomsons22/trustworthyAI.git@c2e3535eba28cabf8e1309f55bffc3e4d4d78c00#subdirectory=gcastle
+
+
+scipy
