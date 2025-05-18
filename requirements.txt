@@ -3,6 +3,7 @@ pandas
 numpy
 scikit-learn
 Pillow
+scipy==1.10.1            # <-- keeps gensim/flair happy
 
 # Torch stack
 torch>=2.2.0,<3.0.0
@@ -17,10 +18,11 @@ nltk==3.8.1
 rouge==1.0.1
 rouge-score==0.1.2
 flair==0.13.1
-gensim==4.3.2          # ✅ Explicit for flair compatibility
+gensim==4.3.2            # explicit for flair
 
 # TensorFlow stack
-tensorflow==2.16.2      # ✅ Ensure no hidden characters
+tensorflow==2.16.2
+tensorflow-probability==0.24.0   # <-- pinned lower to honour SciPy 1.10
 keras==3.4.1
 
 # Visualization and Web
@@ -41,5 +43,3 @@ cdt
 
 # External Git dependency
 git+https://github.com/tomsons22/trustworthyAI.git@c2e3535eba28cabf8e1309f55bffc3e4d4d78c00#subdirectory=gcastle
-
-scipy==1.10.1           # ✅ Fix gensim+flair import error
