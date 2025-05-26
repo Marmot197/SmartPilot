@@ -10,12 +10,12 @@ import pickle
 # Node Descriptions and Colors
 # ================
 NODE_DESCRIPTIONS = {
-    "I_R01_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO1"),
-    "I_R01_Gripper_Load": ("Sensor", "measures the force of the gripper attached to RO1"),
-    "I_R02_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO2"),
-    "I_R02_Gripper_Load": ("Sensor", "measures the force of the gripper attached to RO2"),
     "I_R03_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO3"),
     "I_R03_Gripper_Load": ("Sensor", "measures the force of the gripper attached to RO3"),
+    "I_R02_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO2"),
+    "I_R02_Gripper_Load": ("Sensor", "measures the force of the gripper attached to RO2"),
+    "I_R01_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO1"),
+    "I_R01_Gripper_Load": ("Sensor", "measures the force of the gripper attached to RO1"),
     "I_R04_Gripper_Load": ("Sensor", "measures the pressure of the gripper attached to RO4"),
     "I_R04_Gripper_Pot": ("Sensor", "measures the voltage difference of the gripper attached to RO4")
 }
@@ -118,7 +118,7 @@ def plot_lingam_causal_graph(adj_matrix, node_labels, filename="lingam_causal_gr
 # Load dataset
 # =========================
 csv_file = "uploaded_dataset.csv"
-df = pd.read_csv(csv_file, usecols=["I_R01_Gripper_Pot", "I_R01_Gripper_Load", "I_R02_Gripper_Pot", "I_R02_Gripper_Load", "I_R03_Gripper_Pot", "I_R03_Gripper_Load", "I_R04_Gripper_Pot", "I_R04_Gripper_Load"])
+df = pd.read_csv(csv_file, usecols=["I_R03_Gripper_Pot", "I_R03_Gripper_Load", "I_R02_Gripper_Pot", "I_R02_Gripper_Load", "I_R01_Gripper_Pot", "I_R01_Gripper_Load", "I_R04_Gripper_Pot", "I_R04_Gripper_Load"])
 #df = df.drop(columns=['_time', 'Description', 'actual_state'])
 
 data = df.head(1000).to_numpy()

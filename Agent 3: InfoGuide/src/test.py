@@ -83,7 +83,7 @@ ns = {
 
 if "ProcessOntologyQa" not in st.session_state:
     st.session_state["ProcessOntologyQa"] = ProcessOntologyQA(
-        "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/d3_graph.json")
+        "assets/d3_graph.json")
 
 
 def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):

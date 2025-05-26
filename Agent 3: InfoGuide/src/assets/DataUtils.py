@@ -82,17 +82,17 @@ class AssetLoader:
     def read_data(topic):
         if topic == "Toy rocket":
             with open(
-                    '/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/filtered_manufacturing_text.txt') as f:
+                    'assets/filtered_manufacturing_text.txt') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join(
                     [re.sub(r'[^A-Za-z0-9 ]+', '', line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '', line)])
         elif topic == "Production forecasting":
-            with open('/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/production_forecasting.txt ') as f:
+            with open('assets/production_forecasting.txt ') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join(
                     [re.sub(r'[^A-Za-z0-9 ]+', '', line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '', line)])
         elif topic == "Causal analysis":
-            with open('/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/causal_analysis.txt') as f:
+            with open('assets/causal_analysis.txt') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join(
                     [re.sub(r'[^A-Za-z0-9 ]+', '', line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '', line)])

@@ -24,6 +24,7 @@ from pyvis.network import Network
 import matplotlib.pyplot as plt
 import seaborn as sns
 from copilots.MemoryManager import save_event_to_memory, enrich_context_with_memory
+from pathlib import Path
 
 
 if "context" not in st.session_state:
@@ -1377,7 +1378,7 @@ with st.sidebar:
         else:
             df = st.session_state["uploaded_data"]
             sensor_ranges = parse_sensor_ranges(
-                "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt")
+                "assets/sensor_cycle_ranges.txt")
             rca_results = analyze_all(df, sensor_ranges, total_effects, node_labels)
 
             st.session_state["rca_results"] = rca_results
@@ -1533,27 +1534,30 @@ if st.session_state["selected_question"] == "Upload your dataset":
     if st.session_state["uploaded_data"] is None:
         st.subheader("📊 Or Try a Sample Dataset")
         col1, col2 = st.columns(2)
-        dest_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/uploaded_dataset.csv"
+        dest_path = "uploaded_dataset.csv"
+        # Define base path to the project root (SmartPilot)
+        base_path = Path(__file__).resolve().parent.parent.parent
+        sample_datasets_path = base_path / "Sample datasets"
 
         with col1:
             if st.button("📎 Secure Water Treatment (SWaT) Dataset"):
-                sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/swat_sample.csv"
+                sample_path = sample_datasets_path / "swat_sample.csv"
                 try:
-                    shutil.copy(sample_path, dest_path)
+                    shutil.copy(str(sample_path), dest_path)
                     st.session_state["uploaded_data"] = pd.read_csv(sample_path)
-                    st.session_state["uploaded_file_path"] = sample_path
+                    st.session_state["uploaded_file_path"] = str(sample_path)
                     st.session_state["selected_question"] = None
                     st.success("✅ SWAT sample dataset loaded successfully!")
                 except Exception as e:
                     st.error(f"❌ Failed to load SWAT dataset: {e}")
 
         with col2:
-            if st.button("📎 Future Factories (FF) Analog Dataset "):
-                sample_path = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Sample datasets/FF_test_sample.csv"
+            if st.button("📎 Future Factories (FF) Analog Dataset"):
+                sample_path = sample_datasets_path / "FF_test_sample.csv"
                 try:
-                    shutil.copy(sample_path, dest_path)
+                    shutil.copy(str(sample_path), dest_path)
                     st.session_state["uploaded_data"] = pd.read_csv(sample_path)
-                    st.session_state["uploaded_file_path"] = sample_path
+                    st.session_state["uploaded_file_path"] = str(sample_path)
                     st.session_state["selected_question"] = None
                     st.success("✅ FF sample dataset loaded successfully!")
                 except Exception as e:
@@ -1723,8 +1727,8 @@ if user_input:
         response = f"🧠 Predicted anomaly: **{', '.join(predicted_labels)}**"
 
         # 🔁 Automatically run RCA even without user uploading a dataset
-        DEFAULT_DATASET_PATH = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/uploaded_dataset.csv"
-        SENSOR_RANGES_PATH = "/Users/chathurangishyalika/Custom_Compact_Copilot/SmartPilot/Agent 3: InfoGuide/src/assets/sensor_cycle_ranges.txt"
+        DEFAULT_DATASET_PATH = "uploaded_dataset.csv"
+        SENSOR_RANGES_PATH = "assets/sensor_cycle_ranges.txt"
 
         rca_info = run_rca_for_predicted_anomalies(predicted_labels, DEFAULT_DATASET_PATH, SENSOR_RANGES_PATH)
         response += rca_info
