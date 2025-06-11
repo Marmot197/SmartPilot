@@ -26,7 +26,6 @@ import seaborn as sns
 from copilots.MemoryManager import save_event_to_memory, enrich_context_with_memory
 from pathlib import Path
 
-
 if "context" not in st.session_state:
     st.session_state["context"] = ""
 

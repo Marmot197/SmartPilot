@@ -1274,6 +1274,12 @@
                 "features": "I_R03_Gripper_Pot,I_R03_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
                 "dataset": "uploaded_dataset.csv",
                 "timestamp": "2025-05-26T12:40:02.098680"
+            },
+            {
+                "graph": "lingam_causal_graph.html",
+                "features": "I_R01_Gripper_Pot,I_R01_Gripper_Load, I_R02_Gripper_Pot,I_R02_Gripper_Load, I_R03_Gripper_Pot,I_R03_Gripper_Load,   I_R04_Gripper_Pot, I_R04_Gripper_Load\n",
+                "dataset": "uploaded_dataset.csv",
+                "timestamp": "2025-06-02T15:46:51.644718"
             }
         ],
         "rca_runs": [
