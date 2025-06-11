@@ -20,6 +20,25 @@ cd Agent 3: InfoGuide/src
 streamlit run run_updated.py
 ```
 
+## How to cite
+If you use SmartPilot or any of its components in your research, publications, or systems, please cite the following works:
+
+@inproceedings{shyalika2025smartpilot,
+  title={SmartPilot: Agent-Based CoPilot for Intelligent Manufacturing},
+  author={Shyalika, Chathurangi and Prasad, Renjith and Al Ghazo, Alaa and Eswaramoorthi, Darssan L and Shree Muthuselvam, Sara and Sheth, Amit},
+  booktitle={Proc. of the 24th International Conference on Autonomous Agents and Multiagent Systems},
+  pages={3053--3055},
+  year={2025}
+}
+
+@article{shyalika2025smartpilot,
+  title={SmartPilot: A Multiagent CoPilot for Adaptive and Intelligent Manufacturing},
+  author={Shyalika, Chathurangi and Prasad, Renjith and Ghazo, Alaa Al and Eswaramoorthi, Darssan and Kaur, Harleen and Muthuselvam, Sara Shree and Sheth, Amit},
+  journal={arXiv preprint arXiv:2505.06492},
+  year={2025}
+}
+
+
 ## Core System Framework: Key Components and Technical Features of the SmartPilot Platform
 
 ![Core System Framework](https://github.com/ChathurangiShyalika/Manufacturing_Copilot/blob/master/SmartPilot.png "Core System Framework of SmartPilot")
