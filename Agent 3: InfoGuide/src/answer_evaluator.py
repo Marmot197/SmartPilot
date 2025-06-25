@@ -42,6 +42,7 @@ Please evaluate the input answer based on the following criteria:
 3. Is it well-structured and clear?
 4. Does it miss any additional valuable information present in the ground truth?
 
+If the above criteria are not met perfectly, ensure you reduce the score. Be strict with your evaluation.
 Provide your evaluation in the following JSON format:
 "Score": [1-5] (5 being best)
 "Explanation": [Detailed explanation of the score]
@@ -71,7 +72,7 @@ Your response should be objective and thorough."""
 def main():
     # Example usage
     evaluator = AnswerEvaluator()
-    df = pd.read_csv('C3AN Evaluation - compiled.csv')
+    df = pd.read_csv('C3AN Evaluation - compiled v2.csv')
     print(df.head())
     
     # Create a list to store results
@@ -80,13 +81,8 @@ def main():
     for i in range(len(df)):
         question = df.iloc[i]['Question']
         ground_truth = df.iloc[i]['Ground Truth']
+        input_answer = df.iloc[i]['Smartpilot answer']
         print("Question: ", question)
-        try:
-            input_answer = run_barebones_main(question)
-            print(f"\n🤖 Generated Answer: {input_answer}")
-        except Exception as e:
-            print(f"❌ Error generating answer: {e}")
-            input_answer = "Error generating answer"
         
         try: 
             result = evaluator.evaluate_answer(question, ground_truth, input_answer)

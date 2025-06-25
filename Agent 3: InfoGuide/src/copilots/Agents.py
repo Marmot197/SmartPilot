@@ -65,3 +65,27 @@ class LLM:
             print(e)
             print("Unsupported LLM API or JSON parsing error ...")
             exit()
+    
+    def respond_to_prompt_json(self):
+        """
+        Returns LLM response based on prompt
+        """
+        try:
+            chat_completion = self.groq_client.chat.completions.create(
+                messages=[
+                    {
+                        "role": "user",
+                        "content": self.prompt,
+                    }
+                ],
+                temperature=0.0,
+                model=self.groq_model,
+                max_tokens=self.max_tokens,
+                response_format={"type": "json_object"}
+            )
+            return str(chat_completion.choices[0].message.content)
+
+        except Exception as e:
+            print(e)
+            print("Unsupported LLM API or JSON parsing error ...")
+            exit()

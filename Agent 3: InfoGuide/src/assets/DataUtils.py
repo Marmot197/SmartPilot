@@ -41,14 +41,16 @@ class AssetLoader:
     def get_templates():
         system_templates = {
             "QA" : """You are a helpful agent that is part of a production pipeline system comprising of 3 agents - a toy rocket manufacturing agent, a causal analysis agent and a production forecasting agent.
-            You responsibilities include :
+            Your responsibilities include :
             - Take in and process user input, and warmly interact with them.
             - Determine which topic the user's question relates to.
-            Analyse the user question and respond wiht only one of the following.
-            "Toy rocket" if the question is about the toy rocket manugacturing pipeline. This includes questions about the manufacturing process, safety protocols, troubleshooting, maintenance, calibration, quality checks and documentation.
-            "Production forecasting" if the question is about the production forecasting agent. This includes questions about the production forecasting process, the data it uses, the algorithms it employs and the predictions it makes.
-            "Causal analysis" if the question is about the causal analysis agent. This includes questions about the causal analysis process, causal discovery, causal analysis and root cause analysis.
-            Do not respond with anything else except the above topics. If you don't understand the topic, default with "Toy rocket".
+            Analyse the user question and respond with a JSON object with the following keys:
+            - 'topic': Respond with only one of the following values:
+                - "Toy rocket" if the question is about the toy rocket manufacturing pipeline. This includes questions about the manufacturing process, safety protocols, troubleshooting, maintenance, calibration, quality checks and documentation.
+                - "Production forecasting" if the question is about the production forecasting agent. This includes questions about the vegemite production forecasting process, the data it uses, the algorithms it employs and the predictions it makes.
+                - "Causal analysis" if the question is about the causal analysis agent. This includes questions about the causal analysis process, causal discovery, causal analysis and root cause analysis.
+            - 'reason': Provide a brief explanation of why you selected this topic based on the user's question.
+            Do not respond with anything else except the above JSON object. If you don't understand the topic, default with 'topic' as "Toy rocket" and provide a suitable reason in 'reason'.
             """,
 
             "Documentation": """You assist users with tasks related to the documentation of the toy rocket manufacturing pipeline. Your responsibilities include:
@@ -70,7 +72,7 @@ class AssetLoader:
                                                                - Predicting next hour yeast product yield. 
                                                                - Answering questions about the production forecasting process, the data it uses, the algorithms it employs and the predictions it makes.
                                                                """,
-            "Causal analysis": """You assis users with causal discovery, causal analysis and root cause analysis"""
+            "Causal analysis": """You assist users with causal discovery, causal analysis and root cause analysis"""
 
         }
 
@@ -79,15 +81,15 @@ class AssetLoader:
     @staticmethod
     def read_data(topic):
         if topic == "Toy rocket":
-            with open('/Users/aryamansharma/SmartPilot/Agent 3: InfoGuide/src/assets/filtered_manufacturing_text.txt') as f:
+            with open('assets/filtered_manufacturing_text.txt') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join([re.sub(r'[^A-Za-z0-9 ]+', '' ,line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '' ,line)])
         elif topic == "Production forecasting":
-            with open('/Users/aryamansharma/SmartPilot/Agent 3: InfoGuide/src/assets/production_forecasting.txt') as f:
+            with open('assets/production_forecasting.txt') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join([re.sub(r'[^A-Za-z0-9 ]+', '' ,line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '' ,line)])
         elif topic == "Causal analysis":
-            with open('/Users/aryamansharma/SmartPilot/Agent 3: InfoGuide/src/assets/causal_analysis.txt') as f:
+            with open('assets/causal_analysis.txt') as f:
                 f_lines = f.read().splitlines()
                 f_str = ''.join([re.sub(r'[^A-Za-z0-9 ]+', '' ,line) for line in f_lines if re.sub(r'[^A-Za-z0-9 ]+', '' ,line)])
 
