@@ -1326,6 +1326,40 @@ def run_diffan():
         st.error("❌ Error: DiffAN causal discovery visualization files were not found.")
 
 
+
+# connect to PLC button
+# Sidebar button in top-left corner
+with st.sidebar:
+    st.markdown(
+        """
+        <style>
+            .plc-sidebar-button {
+                margin-top: -20px;
+                margin-bottom: 10px;
+            }
+            .plc-sidebar-button button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+        </style>
+        <div class="plc-sidebar-button">
+            <form action="" method="post">
+                <button name="plc_connect" type="submit">🔌 Connect to PLC</button>
+            </form>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+
 # UI Title
 st.title("SmartPilot: Agent-Based CoPilot for Intelligent Manufacturing")
 
@@ -1333,6 +1367,11 @@ st.title("SmartPilot: Agent-Based CoPilot for Intelligent Manufacturing")
 st.sidebar.title("📌 Sample Questions")
 
 with st.sidebar:
+    # Detect 'Connect to PLC' button click
+    if st.query_params.get("plc_connect") == "submit":
+        st.success("🟢 Connected to PLC! Starting data collection...")
+        # TODO: Insert your PLC connection logic here
+
     if st.button("Upload your dataset", key="causal_agent_queries"):
         st.session_state["selected_question"] = "Upload your dataset"
 
