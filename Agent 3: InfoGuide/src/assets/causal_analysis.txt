@@ -35,8 +35,9 @@ Procedure:
 • Generates causal matrix via differentiable optimization
 3. Output: Directed graph with weighted edges
 2.3 Bootstrapped Stability Analysis
-To evaluate causal edge robustness, SmartPilot runs bootstrapped DirectLiNGAM on
-resampled data.
+To evaluate causal edge robustness, SmartPilot  uses two methods.
+The first method is boostrap analysis.
+In this method, it first runs bootstrapped DirectLiNGAM on resampled data.
 Procedure:
 1. Sample the dataset B times with replacement
 2. Run DirectLiNGAM on each sample
@@ -48,8 +49,7 @@ B w(b)
 ij , σij , sij=
 1
 1 + σij
-2.4 Counterfactual Evaluation
-SmartPilot provides empirical validation for causal predictions using observational data.
+The second method is Counterfactual Evaluation. Here, SmartPilot  provides empirical validation for causal predictions using observational data.
 Procedure:
 • Given A→B with total effect θ
 • Choose a1, a2 (quantiles)
