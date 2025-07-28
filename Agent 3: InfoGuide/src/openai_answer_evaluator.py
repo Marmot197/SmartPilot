@@ -99,7 +99,8 @@ Your response should be objective and thorough. Only return valid JSON."""
 
 def main():
     # Initialize evaluator with your API key
-    api_key = '' #secret key
+    import os
+    api_key = os.environ.get("OPENAI_API_KEY")  # Get from environment variable
     
     try:
         evaluator = OpenAIAnswerEvaluator(api_key=api_key)
