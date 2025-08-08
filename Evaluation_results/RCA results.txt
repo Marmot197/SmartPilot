@@ -1,0 +1,78 @@
+1) RCA results from domain expert (Ranks are in brackets)
+
+RCA for anomaly type:NoBody1
+I_R03_Gripper_Pot (1)
+I_R02_Gripper_Pot (2)
+
+
+RCA for anomaly type: NoBody2,NoBody1
+I_R03_Gripper_Pot (1)
+
+RCA for anomaly type:NoBody2
+I_R03_Gripper_Pot (1)
+
+
+RCA for anomaly type:NoNose,NoBody2
+I_R03_Gripper_Pot (1)   
+
+
+RCA for anomaly type:NoNose,NoBody2,NoBody1
+I_R03_Gripper_Pot   (1)
+I_R02_Gripper_Pot    (2)
+
+RCA for anomaly type:NoNose
+I_R03_Gripper_Pot (1)
+
+2) Correlation based RCA baseline (Done on 154090 sample data)
+
+RCA for anomaly type:NoBody1
+I_R03_Gripper_Pot (1)
+Q_VFD2_Temperature (2)
+
+RCA for anomaly type: NoBody2,NoBody1
+I_R04_Gripper_Pot (1)
+
+RCA for anomaly type:NoBody2
+I_R02_Gripper_Pot (1)
+
+
+RCA for anomaly type:NoNose,NoBody2
+I_R03_Gripper_Pot (1) 
+M_R01_UJointAngle_Degree (2)
+
+RCA for anomaly type:NoNose,NoBody2,NoBody1
+I_R04_Gripper_Pot (1) 
+I_R03_Gripper_Pot  (2)      
+
+RCA for anomaly type:NoNose
+I_R04_Gripper_Pot (1) 
+I_R03_Gripper_Pot  (2) 
+
+
+3) RCA results from CausalTrace (Done on 154090 sample data)
+
+RCA for anomaly type:NoBody1
+I_R03_Gripper_Pot (1) 
+I_R02_Gripper_Pot (2)
+
+
+RCA for anomaly type: NoBody2,NoBody1
+I_R03_Gripper_Pot  (1)
+
+RCA for anomaly type:NoBody2
+I_R03_Gripper_Pot (1)
+
+
+RCA for anomaly type:NoNose,NoBody2
+I_R03_Gripper_Pot    (1)
+I_R04_Gripper_Pot   (2)
+
+
+RCA for anomaly type:NoNose,NoBody2,NoBody1
+I_R03_Gripper_Pot    (1)
+I_R02_Gripper_Pot    (2)
+I_R04_Gripper_Pot  (3)
+
+RCA for anomaly type:NoNose
+I_R04_Gripper_Pot (1)
+I_R03_Gripper_Pot (2)
