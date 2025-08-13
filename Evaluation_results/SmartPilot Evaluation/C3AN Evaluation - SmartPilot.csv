@@ -1,0 +1,583 @@
+Principle,Agent,Question,Ground Truth,Answer,GPT-4o-mini,LLaMA3-70B-8192,E1,E2,E3,E4,E5,E6
+Reliability,InfoGuide,What materials are needed for the manufacturing process?,"The materials needed for the manufacturing processes smartpilot is based on include the robot manipulators, controllers, programming pendants, and the necessary connection cables. Mounting hardware such as bolts, washers, and anchor bolts are required to securely install the robot. Eyebolts are used for lifting the manipulator, while industrial grease is needed for lubricating the moving parts. Additionally, a steel or concrete baseplate, a metal safety fence, and copper grounding wire are necessary for safe and stable installation. If the robot is used in production, end-effector tools, workpieces, and other task-specific consumables may also be required.
+
+","Based on the provided context, it appears that the manufacturing process involves the use of gripper pots and loads with specific tolerance ranges. However, the exact materials needed for the manufacturing process are not explicitly stated.
+
+Usually, the SmartPilot-enabled manufacturing processes require several essential materials. These include robot manipulators, control units, programming pendants, and appropriate connection cables. To ensure secure installation, mounting components such as bolts, washers, and anchor bolts are necessary. Eyebolts facilitate the lifting of the manipulator, and industrial grease is used to lubricate its moving parts. A stable setup also depends on having a steel or concrete baseplate, a metal safety fence, and copper grounding wire for safety. When deployed in production environments, additional items like end-effector tools, workpieces, and other task-specific consumables may be needed.
+",4,4,5,4,5,4,4,4
+Reliability,InfoGuide,What are the safety protocols for the manufacturing process?,"The safety protocols for the manufacturing process using the robot are as follows:
+1.Only authorized and trained personnel should install, operate, or maintain the robot.
+2.Always read and follow all safety instructions in the manual, paying special attention to warnings marked as DANGER, WARNING, or CAUTION.
+3.Turn off all power and servo motors before entering the robot’s operating area or performing any maintenance.
+4.Install a safety fence to prevent accidental entry into the robot’s working range.
+5.Use emergency stop buttons in case of any unexpected movement or emergency situation.
+6.Do not remove protective covers or shields during operation.
+7.Ensure the area is clear of people before activating or moving the robot.
+8.Properly ground all equipment to avoid electrical hazards.
+9.Regularly inspect and maintain the robot according to the schedule provided in the manual.
+10.Never modify the robot or its components without approval, as this can void the warranty and create unsafe conditions.","Safety protocols for the manufacturing process are crucial to ensure a safe working environment for operators and to prevent damage to equipment and products. Here are some general safety protocols that should be followed:
+
+Personal Protective Equipment (PPE): Operators must wear PPE such as gloves, safety glasses, and steel-toed shoes when operating machinery.
+Machine Guarding: Ensure that all machinery is properly guarded to prevent accidental contact with moving parts.
+Lockout/Tagout: Follow proper lockout/tagout procedures when performing maintenance or repairs on machinery to prevent unexpected startup.
+Emergency Stop: Ensure that all machinery is equipped with an emergency stop button that can be easily accessed in case of an emergency.
+Fire Safety: Ensure that fire extinguishers are easily accessible and that operators are trained on their proper use.
+Material Handling: Ensure that materials are handled and stored properly to prevent damage or injury.
+Regular Maintenance: Regularly inspect and maintain machinery to prevent mechanical failures that could lead to accidents.",4,3,3,3,4,4,5,4
+Reliability,InfoGuide,How to set up the toy rocket manufacturing machine?,"Here is a generalized procedure for setting up a robot-based manufacturing machine for toy rockets. This will cover installation, wiring, safety, and startup—just adapt the specifics for your toy rocket process:
+
+1.Site Preparation: Ensure the workspace is clean, flat, and meets environmental requirements.
+2.Install Safety Features: Set up a safety fence and emergency stop buttons around the robot’s work area.
+3.Unpack and Inspect: Check for damage and make sure all components are present.
+4.Mount the Robot: Secure the robot to a sturdy baseplate using proper bolts and torque.
+5.Connect Cables and Wiring: Attach all main cables, ground the system, and connect the programming pendant.
+6.Attach End-Effector/Tools:Mount the required tool to the robot’s wrist and connect any necessary I/O or air lines.
+7.Power-Up and Initial Checks:Verify wiring and safety before turning on power; check for alarms and test emergency stops.
+8.Calibration and Teaching:Calibrate the robot’s home position and program movement paths for each manufacturing step.
+9.Test Run:Run the robot slowly in manual mode to check movements and make adjustments.
+10.Start Production:Begin full-speed operation once the process is tested and validated.","To set up the toy rocket manufacturing machine, follow these steps:
+
+Ensure all safety protocols are in place, including wearing protective gear and ensuring the work area is clear of obstacles.
+
+Begin by calibrating the I_R02_Gripper_Pot and I_R03_Gripper_Pot to their respective tolerance ranges of 1900 to 12000 (Unit: x) and 1900 to 12000 (Unit: x).
+
+Next, configure the I_R03_Gripper_Load and I_R04_Gripper_Load to their tolerance ranges of 1700 to 10300 (Unit: x) and 1700 to 10300 (Unit: x) respectively.
+
+Perform a test run to ensure all grippers and load mechanisms are functioning within their specified tolerance ranges.
+
+Once the machine is set up, proceed with the manufacturing process, ensuring to follow all quality control protocols and documenting the production process accordingly.
+
+Regularly perform maintenance and calibration checks to ensure the machine remains in good working order.
+
+If you encounter any issues during setup or operation, refer to the troubleshooting guide or contact a supervisor for assistance. Remember to always follow safety protocols and emergency procedures to ensure a safe working environment.",4,4,3,4,5,4,5,5
+Reliability,ForeSight,What all features are used for the Vegemite yeast forecasting model?,"The features used in Vegemite yeast forecasting model are as follows.
+Process data:Part,Datetime,Yeast - BRD_VYA , Yeast - BRN_VYA, Yeast - FMX_VYA, Yeast - BRD_RawYeast, Yeast - BRN_RawYeast, Yeast - FMX_RawYeast, Yeast - BRD_IS/TS, Yeast - BRN_IS/TS, Yeast - FMX_IS/TS
+
+Production data: Part,Process,Employee,Date,Time,VYP - Auto Batch,VYP - Total Weight,VYP - Solids,VYP - Yeast Weight,VYP - Body,Comment","I can infer that the model likely uses a combination of process variables, production data and sensor data from the industrial yeast fermentation process. These features may include temperature, pH, yeast types, weights, oxygen levels, nutrient levels, and other relevant parameters that affect yeast growth and production. ",4,4,3,3,3,4,3,4
+Reliability,ForeSight,Explain the hyperparameters used in the Foresight agent.,"The LSTM model uses 100 units in each of the two stacked LSTM layers. The look-back window is set to 30 timesteps. The optimizer is Adam with default learning rate. The loss function is Mean Squared Error (MSE). The model is trained for 100 epochs with batch size 1. For scaling, MinMaxScaler is used to normalize data between 0 and 1.","The Foresight agent, which utilizes the knowledge-infused LSTM model, has several hyperparameters that contribute to its predictive accuracy. These hyperparameters include:
+
+The number of LSTM layers: This hyperparameter determines the complexity of the model and its ability to capture long-term dependencies in the data.
+The number of units in each LSTM layer: This hyperparameter affects the model's capacity to learn and represent complex patterns in the data.
+The dropout rate: This hyperparameter helps prevent overfitting by randomly dropping out a fraction of the neurons during training.
+The learning rate: This hyperparameter controls how quickly the model learns from the data and adapts to new patterns.
+The batch size: This hyperparameter determines the number of samples used to compute the gradient and update the model's parameters.
+The number of epochs: This hyperparameter specifies the number of times the model sees the training data during the training process.
+These hyperparameters are tuned to optimize the model's performance on the specific task of predicting yeast product yield in the vegemite production pipeline. The integration of domain-informed features, such as those influencing evaporation dynamics and solids concentration, enables the model to focus its representational capacity on physiochemically relevant patterns in the data",4,5,3,4,5,3,4,5
+Reliability,CausalTrace,List the 5 capabilities of the causal analysis agent.,"1. Causal DiscoveryLearns causal graphs from data using algorithms like DirectLiNGAM and DiffAN.
+Causal Validation and Robustness Analysis
+
+2. Performs Bootstrapped Stability Analysis and Counterfactual Evaluation to validate and quantify the strength and reliability of discovered causal relations.
+Interactive Causal Graph Construction and Editing
+
+3. Allows users to interactively build, modify, and visualize causal graphs with edge weights, ontology tooltips, and semantic metadata.
+
+4. Root Cause Analysis (RCA)
+Traces causal paths from anomalies to root causes using total causal effects and supports RCA-specific queries like “Why is A a likely cause of B?”
+
+6. Natural Language Querying with Semantic Enrichment
+Supports natural language questions about the causal graph, root causes, and semantic attributes, enriched with ontology-derived information (e.g., type, function, range).","The 5 capabilities of the causal analysis agent are:
+
+Causal Graph Construction: The agent can construct a causal graph that represents the causal relationships between variables.
+
+Causal Inference: The agent can infer causal relationships between variables, enabling the identification of cause-and-effect relationships.
+
+Counterfactual Analysis: The agent can perform counterfactual analysis to estimate the outcome of a scenario if a particular event had occurred or not occurred.
+
+Root Cause Identification: The agent can identify the root cause of a problem or an event by analyzing the causal relationships between variables.
+
+What-If Analysis: The agent can perform what-if analysis to estimate the outcome of a scenario if a particular action is taken or not taken.""
+",4,4,3,3,5,4,5,4
+Reliability,CausalTrace,What are the questions that can be answered about Root Cause Analysis?,"It can answer questions like 
+1.What is the most likely root cause of the anomalous value of variable B?
+2.What are the 3 most likely root causes of the anomalous value of variable B, ranked in descending order?
+3.Is A a likely root cause of the anomalous value of variable B?
+4.Which is more likely to be the root cause, A or D?
+5.Why is D not considered a likely root cause of the anomalous value of variable B?","The following questions can be answered about Root Cause Analysis:
+
+What is the underlying reason for a particular problem or incident?
+What are the contributing factors that led to an event or outcome?
+How do we identify the primary cause of a problem?
+What are the relationships between different variables that led to an outcome?
+How can we prevent similar problems from occurring in the future?
+What are the key indicators that can help identify a root cause?
+What are the most likely root causes for anomalies/defects?
+How does root cause analysis differ from other problem-solving approaches?
+What are the benefits of conducting a root cause analysis?
+These questions can be answered through various root cause analysis techniques such as the 5 Whys, Fishbone diagrams, and SWOT analysis.""",4,5,3,4,5,4,5,5
+Reliability,InfoGuide,What are the emergency procedures in case of a malfunction?,"1.Press the Emergency Stop Button Immediately
+Stop all robot movement at once by pressing any accessible emergency stop button—located on the robot controller (YRC1000), the programming pendant, and at other operator stations.
+2.Turn Off Servo Power
+Switch off the servo power using the controller or pendant to fully disable robot motion.
+3.Remove Personnel from the Work Area
+Ensure that all personnel quickly and safely exit the robot’s operating range.
+4.Identify and Remove the Cause of the Malfunction
+Only after movement has completely stopped, inspect for obstacles, errors, or unsafe conditions that triggered the emergency stop.
+5. Do Not Attempt Repairs Unless Qualified
+Only authorized and trained personnel should perform troubleshooting or repairs. Contact your Yaskawa representative for major repairs or disassembly.
+6.Reset the Emergency Stop and Restore Power Safely
+Once the problem is resolved and the area is confirmed safe, reset the emergency stop and turn servo power back on as per manual instructions.
+7.Document and Report the Incident
+Log the malfunction, cause, and actions taken. Notify supervisors and maintenance according to your site’s protocols.","In the event of a malfunction, please follow these emergency procedures:
+
+Stop the machine immediately: If you notice any unusual behavior or malfunction, stop the machine right away to prevent further damage or injury.
+
+Alert others in the area: Inform your colleagues and supervisors about the malfunction to ensure everyone's safety.
+
+Disconnect power source: If possible, disconnect the power source to the machine to prevent any accidental startups.
+
+Follow lockout/tagout procedures: Ensure that the machine is properly locked out and tagged to prevent unauthorized access or startup.
+
+Contact maintenance personnel: Reach out to the maintenance team to report the malfunction and request assistance.
+
+Do not attempt to repair the machine yourself: Unless you are authorized and trained to do so, do not attempt to repair the machine to avoid further damage or injury.
+
+Review safety protocols: Take this opportunity to review safety protocols and emergency procedures with your team to ensure everyone is prepared in case of a malfunction.
+
+Remember, safety is our top priority. If you're unsure about any part of the process, don't hesitate to ask for guidance.",4,4,4,3,4,4,4,4
+Reliability,InfoGuide,How should we calibrate the sensors in the manufacturing setup?,"1.Refer to Sensor Manufacturer Guidelines
+Always follow the specific calibration procedures provided by the sensor manufacturer (e.g., for force, position, torque, or vision sensors).
+2.Ensure Safe Robot Position and Power Status
+Power off the robot or place it in a safe mode before calibrating any integrated sensors. Ensure no unintended movement can occur.
+3.Connect Calibration Tools
+Use any required calibration pins, fixtures, or test devices as described in the manual (e.g., use the supplied calibration pin for robot home position calibration).
+4.Access the Robot Controller or Programming Pendant
+Navigate to the calibration or setup menu on the YRC1000 controller or pendant.
+5.Follow Step-by-Step Calibration Process
+For position sensors or encoders: Move the robot to its reference (home) position and set/calibrate zero using the pendant.
+For force or vision sensors: Use reference objects or weights and input their values as prompted by the system.
+
+6.Verify and Save the Calibration
+After calibration, test the sensor readings and ensure they match expected values. Save settings and document the calibration.
+
+7.Return to Normal Operation
+Remove any test fixtures or tools, and return the robot to operational status.
+","To calibrate the sensors in the manufacturing setup, follow these steps:
+
+Ensure the sensors are properly installed and connected to the manufacturing machinery.
+Refer to the sensor manufacturer's instructions for specific calibration procedures.
+For the I_R02_Gripper_Pot, I_R03_Gripper_Pot, and I_R04_Gripper_Pot sensors, set the tolerance range to 1900 to 12000 (Unit: x) and ensure the sensor type is integer.
+For the I_R03_Gripper_Load and I_R04_Gripper_Load sensors, set the tolerance range to 1700 to 10300 (Unit: x) and ensure the sensor type is integer.
+Perform a series of test readings to verify the sensors are accurately measuring within their specified tolerance ranges.
+Record the calibration results and store them in the manufacturing setup's documentation for future reference.
+Remember to follow all safety protocols and emergency procedures during the calibration process. If you encounter any issues or have questions, refer to the troubleshooting guides or contact a supervisor for assistance.",4,4,3,4,5,3,5,5
+Reliability,InfoGuide,How to document the production cycle for future reference?,"1.Create a Production Cycle Checklist: Develop a comprehensive checklist that outlines each step of the production process, including machinery setup, operation, and quality checks. This checklist will serve as a guide for future production cycles.
+
+2.Maintain a Production Log: Keep a detailed log of each production cycle, including notes on machinery performance, material usage, and any issues that arose during production. This log will provide valuable insights for future process improvements.
+
+3.Document Machinery Settings and Calibration: Record the settings and calibration procedures for each machine used in the production process. This documentation will ensure that machinery is properly configured for future production cycles.
+
+4.Take Photographs and Videos: Capture photographs and videos of each step of the production process, including machinery setup, material handling, and quality checks. These visual aids will provide a clear understanding of the production process for future reference.
+
+5.Conduct Regular Quality Checks: Perform regular quality checks throughout the production process to ensure that products meet the required standards. Document the results of these quality checks and implement corrective actions as needed.
+
+6.Store Documentation Electronically: Store all documentation, including checklists, logs, and photographs,","To document the production cycle for future reference, I recommend the following steps:
+
+Create a Standard Operating Procedure (SOP) document: This document should outline the step-by-step process of the production cycle, including machinery setup, operation, and troubleshooting.
+Use a template or checklist: Develop a template or checklist to ensure consistency in documenting each production cycle. This can include fields for date, batch number, material used, and any notable events or issues.
+Take photographs and videos: Capture visual evidence of the production process, including machinery setup, material handling, and quality checks. This can be useful for future reference and training purposes.
+Maintain a production log: Keep a log of each production cycle, including any issues encountered, maintenance performed, and quality control results.
+Store documentation electronically: Store all documentation electronically, using a secure and backed-up system, to ensure easy access and retrieval.
+Review and update documentation regularly: Regularly review and update documentation to ensure it remains accurate and relevant.
+By following these steps, you can create a comprehensive and accurate record of the production cycle, which can be used for future reference, training, and quality improvement.",4,4,5,5,5,5,5,5
+Reliability,PredictX,"What is the anomaly status when sensor values for I_R02_Gripper_Pot, I_R03_Gripper_Pot and I_R04_Gripper_Pot are 690, 434, 700?","There is an anomaly in this time. Anomaly type is NoNose,NoBody2,NoBody1. The root causes for this anomaly are  I_R03_Gripper_Pot, I_R02_Gripper_Pot . R04 doesnt cause any of the anomalies but it can help figure out that there is an anomaly.","Predicted anomaly: NoNose,NoBody2,NoBody1
+
+Most likely root causes for NoNose,NoBody2,NoBody1:
+
+i_r01_gripper_load
+i_r03_gripper_pot
+i_r02_gripper_load
+i_r01_gripper_pot
+i_r02_gripper_pot
+i_r04_gripper_pot
+i_r04_gripper_load",3,4,3,4,5,5,2,5
+Reliability,PredictX,Give an overview of the toy rocket manufacturing pipeline.,"The toy rocket manufacturing pipeline is composed of 21 sequential stages, each managed by distinct stations—namely I_R01 through I_R04. Each station is equipped with gripper pot and load mechanisms that operate within strict tolerance ranges: 1900–12000 units for gripper pot and 1700–10300 units for gripper load. These ranges are essential for maintaining production quality and precision.
+The pipeline tagets to assemble a rocket with 4 parts named Nosecone, Body1, Body2 and rocket base.","The toy rocket manufacturing pipeline involves several stages, including gripper pot and load operations. The pipeline consists of multiple stations, each with its own set of machinery and equipment. The stations are identified as I_R01, I_R02, I_R03, and I_R04, each with its own gripper pot and load operations.
+
+The gripper pot operation involves a tolerance range of 1900 to 12000 units, while the gripper load operation has a tolerance range of 1700 to 10300 units. These tolerance ranges are critical in ensuring the quality and precision of the toy rockets produced.
+
+The manufacturing process involves a series of causal graphs that outline the sequence of operations and the relationships between different components. These graphs are essential in understanding the production process and identifying potential bottlenecks or areas for improvement.
+
+In terms of safety protocols and emergency procedures, it is essential to follow established guidelines and protocols to ensure the safety of operators and the quality of the toy rockets produced.
+
+If you have any specific questions or need further guidance on the toy rocket manufacturing pipeline, please let me know and I'll be happy to assist you.",4,4,5,3,5,5,5,5
+Consistency,InfoGuide,Explain the functionality of the I_RO3_Gripper_Pot.,"I_R03_Gripper_Pot (also referred to as Potentiometer 3) is a sensor on Robot 3’s gripper that measures how open or closed it is. It sends position feedback to the controller, enabling precise and automated gripping during tasks like picking or placing.","The I_RO3_Gripper_Pot is a component in the toy rocket manufacturing pipeline that measures the potentiometer value of the gripper on Robot 03. It has a tolerance range of 1900 to 12000 units, which indicates the acceptable range of values for the gripper's potentiometer. This component is likely used to monitor and control the gripper's movement and position during the manufacturing process. If you need more information on how to set up or operate the I_RO3_Gripper_Pot, please let me know and I'll be happy to assist you.",3,4,4,5,4,5,5,4
+Consistency,InfoGuide,What is the use of Potentiometer 3?,"I_R03_Gripper_Pot (also referred to as Potentiometer 3) is a sensor on Robot 3’s gripper that measures how open or closed it is. It sends position feedback to the controller, enabling precise and automated gripping during tasks like picking or placing.","The Potentiometer 3, also known as I_R03_Gripper_Pot, is a sensor used to measure the position or angle of the Gripper 3. It is manufactured by Sensata-BEI and has a tolerance range of 1900 to 12000 units. The potentiometer is connected to the Gripper 3 and provides a value that is used in the manufacturing process. Its exact use case is not specified in the provided context, but it is likely used to monitor and control the movement of the gripper during the production process.",3,4,5,5,5,5,5,5
+Consistency,ForeSight,What is the dataset used in Foresight agent?,"The dataset used in Foresight agent is called vegemite production dataset. It contains the historical data of yeast product yield, which includes points in the evaporation process that influence the yield. This data is used to train the forecasting model to predict the next hour yeast product yield.
+","The dataset used in Foresight agent is the historical data of yeast product yield from the Vegemite production pipeline, which includes features such as temperature, pH levels, and nutrient concentrations. This dataset is used to train the forecasting model to predict the next hour yeast product yield.",4,4,5,5,5,5,5,5
+Consistency,ForeSight,Explain the data used in the Vegemite production pipeline.,"The dataset used in Foresight agent is called vegemite production dataset. It contains the historical data of yeast product yield, which includes points in the evaporation process that influence the yield. This data is used to train the forecasting model to predict the next hour yeast product yield.
+","In the Vegemite production pipeline, various types of data are collected to inform the forecasting process. These data include:
+
+Process variables: Temperature, pH, dissolved oxygen, and nutrient levels in the fermentation tanks, which affect yeast growth and productivity.
+Yeast strain characteristics: Genetic information about the yeast strains used in production, including their growth rates, tolerance to stress, and nutrient uptake patterns.
+Environmental factors: Temperature, humidity, and air quality in the production facility, which can impact yeast growth and fermentation.
+Historical production data: Records of past yeast production yields, including the quantity and quality of yeast produced under different conditions.
+Sensor data: Real-time measurements from sensors monitoring the fermentation process, such as CO2 production, oxygen consumption, and fermentation tank weight.
+These data are collected and integrated with expert knowledge to inform the selection and interpretation of process variables, enabling accurate forecasting of yeast product yield. This data-driven approach allows for optimized production planning, reduced waste, and improved product quality.",4,5,3,4,4,4,4,4
+Consistency,ForeSight,Where is the LSTM model used in the Foresight agent?,"In the Vegemite production pipeline, a hybrid LSTM model combining machine learning and domain knowledge predicts the next hour’s yeast product yield. It uses historical data, real-time sensor readings, and fermentation logic to generate accurate, traceable, and understandable forecasts. The process includes data ingestion, preparation, model training, prediction, and evaluation.","The LSTM model is employed to predict yeast production quality using time-series data from sensors, effectively capturing temporal patterns in the evaporation process. Two versions were implemented: a standard LSTM utilizing all available variables, and a knowledge-enhanced LSTM that incorporates expert-selected key features. Both models are integrated into the Foresight Agent to enhance the accuracy of forecasting.",3,4,5,4,5,4,5,5
+Consistency,ForeSight,How are predictions made in the Vegemite production pipeline?,"In the Vegemite production pipeline, a hybrid LSTM model combining machine learning and domain knowledge predicts the next hour’s yeast product yield. It uses historical data, real-time sensor readings, and fermentation logic to generate accurate, traceable, and understandable forecasts. The process includes data ingestion, preparation, model training, prediction, and evaluation.","In the Vegemite production pipeline, predictions are made using a knowledge-infused modeling approach that combines domain logic with machine learning algorithms. This approach ensures that predictions are traceable, aligned with domain logic, and user-understandable.
+
+To predict the next hour yeast product yield, our system uses a combination of historical production data, real-time sensor readings, and domain-specific knowledge about the fermentation process. The data is fed into a hybrid model that incorporates both machine learning and domain-specific rules to generate accurate predictions.
+
+The production forecasting process involves the following steps:
+
+Data ingestion: Collecting and processing historical production data, sensor readings, and other relevant data sources.
+Data preparation: Cleaning, transforming, and feature engineering the data to prepare it for modeling.
+Model training: Training the hybrid model using the prepared data and domain-specific knowledge.
+Prediction generation: Generating predictions for the next hour yeast product yield using the trained model.
+Model evaluation: Continuously evaluating the performance of the model and refining it as needed to ensure accurate predictions.
+Our system employs a range of algorithms, including regression analysis, decision trees, and neural networks, to generate predictions. ",4,4,3,5,3,5,5,3
+Consistency,CausalTrace,What are SmartPilot’s causal capabilities powered by?,"SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.",SmartPilot's causal capabilities are powered by LiNGAM (Linear Non-Gaussian Acyclic Models and DiffAN (Differentiable Causal Discovery with Attention). It also evaluate the causal graphs using Bootstrapped Stability Analysis to assess the robustness of discovered causal edges via sampling and use counterfactual evaluation using observational data.,4,4,4,4,5,4,4,5
+Consistency,CausalTrace,List the 5 capabilities of the causal analysis agent.,"SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.","""The 5 capabilities of the causal analysis agent are:
+
+Causal Graph Construction: The agent can construct a causal graph that represents the causal relationships between variables**.
+
+Causal Inference: The agent can infer causal relationships between variables, enabling the identification of cause-and-effect relationships.
+
+Counterfactual Analysis: The agent can perform counterfactual analysis to estimate the outcome of a scenario if a particular event had occurred or not occurred.
+
+Root Cause Identification: The agent can identify the root cause of a problem or an event by analyzing the causal relationships between variables.
+
+What-If Analysis: The agent can perform what-if analysis to estimate the outcome of a scenario if a particular action is taken or not taken.""
+
+}",3,4,4,3,4,4,5,4
+Consistency,CausalTrace,Explain how Smartpilot does Bootstrapped Stability Analysis.,"SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.
+",Smartpilot performs Bootstrapped Stability Analysis by generating multiple bootstrapped samples from the original data. Each bootstrapped sample is used to estimate the causal graph using a causal discovery algorithm. The resulting causal graphs from each bootstrapped sample are then compared to identify the most stable causal relationships. The stability of each causal relationship is measured by the frequency of its occurrence across the bootstrapped samples. The most stable causal relationships are then used to identify the root cause of the problem. This approach helps to reduce the uncertainty in causal inference and increases the confidence in the identified root cause.,4,5,4,4,5,4,5,5
+Consistency,CausalTrace,How does Smartpilot evaluate causal edge robustness?,"SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.
+","SmartPilot evaluates causal edge robustness by running bootstrapped samples of the data, which helps to assess the stability of the causal relationships identified. By repeating the causal discovery process on multiple resampled versions of the data, SmartPilot can estimate the robustness of the causal relationships, providing a measure of confidence in the identified causal edges.",3,4,4,5,5,5,5,5
+Consistency,ForeSight,What are the historical data that vegemite dataset contains?,"The historical data includes temperature, pressure, humidity, and yeast yield measurements from different stages of the evaporation process. ","The historical data that our production forecasting process contains includes points in the evaporation process that influence the yeast product yield. This data is used to train our algorithms to predict the next hour yeast product yield. Specifically, our historical data includes temperature, pressure, and humidity readings at various stages of the evaporation process, as well as the corresponding yeast product yields. This data is used to identify patterns and relationships between the evaporation process and the resulting yeast product yield, allowing us to make accurate predictions.",5,5,4,5,5,5,5,5
+Consistency,InfoGuide,What sensors are connected to robot 3?,Gripper Potentiometer Sensor (I_RO3_Gripper_Pot)  and Gripper Load Sensor (I_RO3_Gripper_Load) are connected to the Robot 3,"Sensors connected to Robot 3:
+
+5796da20-c48d-472f-b86a-d65eff307075 (GripperPotentiometerSensor)
+7b5e9a36-cccd-4bc8-8ce7-c0987a562aaf (GripperLoadSensor)",4,5,4,4,5,4,5,5
+Consistency,InfoGuide,5,Gripper Potentiometer Sensor (I_RO3_Gripper_Pot)  and Gripper Load Sensor (I_RO3_Gripper_Load) are connected to the Robot 3,"Sensors connected to Robot 3:
+
+5796da20-c48d-472f-b86a-d65eff307075 (GripperPotentiometerSensor)
+7b5e9a36-cccd-4bc8-8ce7-c0987a562aaf (GripperLoadSensor)",4,5,5,5,5,5,5,5
+Consistency,InfoGuide,What are the sensors in robot 6?,Robot 6 does not exist in the toy manufacturing pipeline," Robot 6 not found in the knowledge graph.
+
+",4,5,5,5,5,5,5,5
+Consistency,InfoGuide,Give me the sensors connected to the robot 6?,Robot 6 does not exist in the toy manufacturing pipeline," Robot 6 not found in the knowledge graph.
+
+",4,5,5,5,5,5,5,5
+Consistency,InfoGuide,What is the function of I_R04_Gripper_Pot?,The I_R04_Gripper_Pot is measures the the analog output signal of the potentiometer on the Robot 4 gripper.,The I_R04_Gripper_Pot is a sensor value that represents the analog output signal of the potentiometer on the Robot 4 gripper. It has a tolerance range of 1900 to 12000 with a unit of 'x' and is of type integer. This sensor value is related to the Potentiometer 4 manufactured by Sensata-BEI,4,5,3,5,5,5,5,
+Consistency,InfoGuide,Trace the path from Robot 3 to its sensor values,"Robot 3 is connected to Gripper 3, which is equipped with two types of sensors:
+
+A Potentiometer, which measures positional or angular information and is represented by the sensor I_R03_Gripper_Pot.
+A Load Cell, which measures force or pressure and is represented by the sensor I_R03_Gripper_Load.
+
+So, the full path is:
+Robot 3 to Gripper 3 to Potentiometer 3 to I_R03_Gripper_Pot
+Robot 3 to Gripper 3 to Load Cell 3 to I_R03_Gripper_Load","📘 Process Ontology Answer:
+
+🔍 Trace Paths:
+Robot 3 ➝ Gripper 3 ➝ Potentiometer 3 ➝ I_R03_Gripper_Pot
+Robot 3 ➝ Gripper 3 ➝ Load cell 3 ➝ I_R03_Gripper_Load",5,5,5,5,5,5,5,5
+Consistency,InfoGuide,"What is the data path from Robot 3 to its sensors?
+","Robot 3 is connected to Gripper 3, which is equipped with two types of sensors:
+
+A Potentiometer, which measures positional or angular information and is represented by the sensor I_R03_Gripper_Pot.
+A Load Cell, which measures force or pressure and is represented by the sensor I_R03_Gripper_Load.
+
+So, the full path is:
+Robot 3 to Gripper 3 to Potentiometer 3 to I_R03_Gripper_Pot
+Robot 3 to Gripper 3 to Load Cell 3 to I_R03_Gripper_Load","📘 Process Ontology Answer:
+
+🔍 Trace Paths:
+Robot 3 ➝ Gripper 3 ➝ Potentiometer 3 ➝ I_R03_Gripper_Pot
+Robot 3 ➝ Gripper 3 ➝ Load cell 3 ➝ I_R03_Gripper_Load",5,5,5,5,5,5,5,5
+Abstraction,InfoGuide,"What are the specs of the sensor I_R03_Gripper_Load
+","The sensor I_R03_Gripper_Load has the following specs according to the provided Dynamic-Process-Ontology JSON:
+
+Sensor Name: Load cell 3
+Sensor Type: Sensor_Value
+Function: Measures pressure applied on the inside of the gripper
+Manufacturer (Item Spec): TE Connectivity
+Associated Robot: Robot 3
+Sensor Value Item Name: I_R03_Gripper_Load
+Value Type: integer
+Unit: x (generic unit — unit not fully specified)
+Minimum Value: 1700
+Maximum Value: 10300
+Cycle State Min: 1300
+Cycle State Max: 11000
+Description: The analog output signal of the load cell on the Robot 3 gripper","The specs of the sensor I_R03_Gripper_Load are as follows: Tolerance Range: 1700 to 10300 (Unit: x), Type: integer. It is an analog output signal of the load cell on the Robot 3 gripper. The manufacturer is TE Connectivity. The function of I_R03_Gripper_Load is to measures the pressure applied on the inside of the gripper
+",4,4,4,3,5,4,5,5
+Abstraction,CausalTrace,"How does causal discovery work? How is the casual graph made?
+","In SmartPilot, causal discovery begins with the user uploading a dataset and selecting relevant features such as sensor readings or machine states. The system then applies a causal discovery algorithm—either DirectLiNGAM, which assumes linear relationships with non-Gaussian noise, or DiffAN, a deep learning method that uses attention mechanisms to infer soft dependencies between variables. These algorithms generate a directed acyclic graph (DAG), where each node represents a variable and each directed edge indicates a potential causal relationship. To ensure reliability, SmartPilot performs bootstrapped stability analysis by running the discovery process on multiple resampled datasets and calculates edge stability scores based on consistency. It also performs counterfactual evaluation to compare predicted and observed effects of interventions. The resulting causal graph is visualized through an interactive PyVis interface, where users can view edge strengths, modify the structure, and query it using natural language. ","Causal discovery identifies cause-and-effect relationships between variables using observational data, producing a causal graph (DAG) with directed edges. Algorithms used include constraint-based (e.g., PC), score-based (e.g., GES), and hybrid methods.
+
+In SmartPilot, users upload data and select features like sensor readings. The system applies either DirectLiNGAM (linear, non-Gaussian) or DiffAN (attention-based deep learning) to generate a causal graph. It then conducts bootstrapped stability analysis and counterfactual evaluation to ensure reliability. The graph is visualized in an interactive interface, allowing users to explore, edit, and query causal relationships naturally.",4,4,5,4,5,4,5,5
+Abstraction,ForeSight,"Explain the hyperparameters used in the Foresight agent.
+","The LSTM model uses 100 units in each of the two stacked LSTM layers. The look-back window is set to 30 timesteps. The optimizer is Adam with default learning rate. The loss function is Mean Squared Error (MSE). The model is trained for 100 epochs with batch size 1. For scaling, MinMaxScaler is used to normalize data between 0 and 1.","The Foresight agent, which utilizes the knowledge-infused LSTM model, has several hyperparameters that contribute to its predictive accuracy. These hyperparameters include:
+
+The number of LSTM layers: This hyperparameter determines the complexity of the model and its ability to capture long-term dependencies in the data.
+The number of units in each LSTM layer: This hyperparameter affects the model's capacity to learn and represent complex patterns in the data.
+The dropout rate: This hyperparameter helps prevent overfitting by randomly dropping out a fraction of the neurons during training.
+The learning rate: This hyperparameter controls how quickly the model learns from the data and adapts to new patterns.
+The batch size: This hyperparameter determines the number of samples used to compute the gradient and update the model's parameters.
+The number of epochs: This hyperparameter specifies the number of times the model sees the training data during the training process.
+These hyperparameters are tuned to optimize the model's performance on the specific task of predicting yeast product yield in the vegemite production pipeline. The integration of domain-informed features, such as those influencing evaporation dynamics and solids concentration, enables the model to focus its representational capacity on physiochemically relevant patterns in the data",3,3,3,3,4,3,3,4
+Abstraction,CausalTrace,"Explain DIFFAN in the context of the causal discovery agent in Smartpilot.
+","In the context of the SmartPilot Causal Discovery Agent, DiffAN (Differentiable Causal Discovery with Attention and Normalization) is a deep learning-based algorithm used to uncover causal relationships between variables when traditional linear assumptions may not hold. Unlike methods like DirectLiNGAM, which rely on strict statistical assumptions (e.g., linearity and non-Gaussian noise), DiffAN uses a neural network architecture with attention mechanisms to learn causal structures in a more flexible and expressive way.
+
+how DiffAN works in SmartPilot: once the user selects a set of features (such as gripper sensor readings from different robots), DiffAN constructs a learnable attention matrix that estimates how strongly each variable might cause another. These attention weights are differentiable, meaning they can be optimized end-to-end using gradient descent. The model includes normalization and regularization steps to ensure the resulting attention map converges toward a valid causal graph with directional edges. The output is a directed graph where the edge weights represent the learned causal influence between variable pairs.
+
+In SmartPilot, DiffAN is particularly useful for capturing non-linear or complex interactions that may exist in high-dimensional or noisy manufacturing data. Its integration into the Streamlit UI allows users to run DiffAN alongside DirectLiNGAM, compare the results, and view the discovered graph through an interactive visualization tool. This empowers operators and engineers to analyze causal interactions in a data-driven way, even when standard assumptions about the data don’t apply.","In the context of the causal discovery agent in Smartpilot, DIFFAN stands for (Differentiable Causal Discovery with Attention and Normalization). DIFFAN is a causal discovery algorithm that identifies the causal relationships between variables by analyzing the differences in their distributions. Specifically, DIFFAN infers the causal direction between two variables, A and B, by checking if the distribution of A is ancestral to the distribution of B. This is done by testing if the distribution of A is independent of the noise in B, which is a fundamental concept in causal inference. By applying DIFFAN, the causal discovery agent in Smartpilot can efficiently identify the causal relationships between variables, enabling root cause analysis and decision-making.",4,3,3,5,5,5,3,5
+Abstraction,CausalTrace,"What are the evaluation procedures used in causal discovery?
+","SmartPilot evaluates the quality of its discovered causal relationships using three key procedures. First, it performs Bootstrapped Stability Analysis, where the dataset is resampled multiple times and causal discovery is repeated to assess how consistently each edge appears. For every edge, it calculates the mean strength, variation, and a stability score that reflects confidence in that causal link—edges with higher stability are deemed more reliable. Second, it uses Counterfactual Evaluation, which tests whether the predicted effect of one variable on another matches what is observed in real data. This involves simulating interventions and comparing predicted changes with actual differences in the dataset, measuring the error between them. Finally, SmartPilot estimates Total Causal Effects by analyzing not only direct links between variables but also all indirect pathways, allowing it to quantify the overall influence of one variable on another across the entire graph. Together, these evaluation methods ensure that the causal graph is both statistically robust and practically meaningful for applications like root cause analysis and decision support.","In causal discovery, evaluation procedures are used to assess the performance of causal models and identify the most likely causal relationships. Some common evaluation procedures used in causal discovery include:
+
+Structural Hamming Distance (SHD): measures the difference between the predicted causal graph and the true causal graph.
+Structural Intervention Distance (SID): measures the difference between the predicted causal graph and the true causal graph under interventions.
+F1-score: evaluates the accuracy of the predicted causal relationships.
+Precision, Recall, and F1-score: evaluate the accuracy of the predicted causal relationships.
+Cross-validation: assesses the generalizability of the causal model to new, unseen data.
+These evaluation procedures help to identify the most likely causal relationships and root cause of a problem. For example, in the context of identifying the 3 most likely root causes of a problem, these evaluation procedures can be used to evaluate the performance of different causal models and identify the most likely root causes.",4,3,4,5,5,5,5,5
+Abstraction,ForeSight,What are the features used to predict the vegemite yield?,"The vegemite yield is predicted using features like temperature, pH levels, yeast strain, nutrient composition, and fermentation time.","To predict the vegemite yield, we utilize a combination of features that include temperature, pH levels, yeast strain, nutrient composition, and fermentation time. These features are incorporated to enrich the input representation, which enables our algorithm to make reliable predictions about the next hour yeast product yield.",5,5,5,5,5,5,5,5
+Abstraction,PredictX,Tell me about the anomalies,"There are 3 main types of anomalies. they are NoNose, NoNoseNoBody2, NoNoseNoBody2NoBody1","Types of anomalies in the Knowledge Graph:
+
+1.NoNose
+2.NoNoseNoBody2
+3.NoNoseNoBody2NoBody1
+",5,5,5,5,5,5,5,5
+Reasoning,InfoGuide,"What is the use of Potentiometer 3?
+","I_R03_Gripper_Pot (also referred to as Potentiometer 3) is a sensor on Robot 3’s gripper that measures how open or closed it is. It sends position feedback to the controller, enabling precise and automated gripping during tasks like picking or placing.","The Potentiometer 3, also known as I_R03_Gripper_Pot, is a sensor used to measure the position or angle of the Gripper 3. It is manufactured by Sensata-BEI and has a tolerance range of 1900 to 12000 units. The potentiometer is connected to the Gripper 3 and provides a value that is used in the manufacturing process. Its exact use case is not specified in the provided context, but it is likely used to monitor and control the movement of the gripper during the production process.",4,4,5,5,5,5,5,5
+Reasoning,ForeSight,"Explain the data used in the Vegemite production pipeline.
+","The data comes from the yeast evaporation stage of the Vegemite production process at an industrial food facility. It includes:
+1.Time-stamped sensor data collected over six months.
+2.Captures both machine sensor readings and machine setting parameters.
+3.Monitored variables include factors like:
+-VMBX - Auto Yield (evaporation control)
+-VMBX - Auto Feed (feed rate control)
+-VYA - Papain added (enzyme dosage)
+-VYA - Final Volume (total batch volume)
+-VFX - Feed SS (feed solids concentration)
+-VMBX - Res IS/TS (%) (residual solids content)
+
+The target outcome is to forecast final yeast paste quality, primarily measured by total solids concentration (obtained offline by refractometry).
+","In the Vegemite production pipeline, various types of data are collected to inform the forecasting process. These data include:
+
+Process variables: Temperature, pH, dissolved oxygen, and nutrient levels in the fermentation tanks, which affect yeast growth and productivity.
+Yeast strain characteristics: Genetic information about the yeast strains used in production, including their growth rates, tolerance to stress, and nutrient uptake patterns.
+Environmental factors: Temperature, humidity, and air quality in the production facility, which can impact yeast growth and fermentation.
+Historical production data: Records of past yeast production yields, including the quantity and quality of yeast produced under different conditions.
+Sensor data: Real-time measurements from sensors monitoring the fermentation process, such as CO2 production, oxygen consumption, and fermentation tank weight.
+These data are collected and integrated with expert knowledge to inform the selection and interpretation of process variables, enabling accurate forecasting of yeast product yield. This data-driven approach allows for optimized production planning, reduced waste, and improved product quality.",4,3,2,3,2,3,3,2
+Reasoning,ForeSight,"How are predictions made in the Vegemite production pipeline?
+",Predictions are made using machine learning models trained on historical sensor data. The standard LSTM predicts directly from full multivariate sequences. The knowledge-infused LSTM uses selected key variables and engineered lag features. The XGBoost model predicts using explicitly constructed lag features and expert-selected variables. All models forecast future yeast paste quality.,"In the Vegemite production pipeline, predictions are made using a knowledge-infused modeling approach that combines domain logic with machine learning algorithms. This approach ensures that predictions are traceable, aligned with domain logic, and user-understandable.
+
+To predict the next hour yeast product yield, our system uses a combination of historical production data, real-time sensor readings, and domain-specific knowledge about the fermentation process. The data is fed into a hybrid model that incorporates both machine learning and domain-specific rules to generate accurate predictions.
+
+The production forecasting process involves the following steps:
+
+Data ingestion: Collecting and processing historical production data, sensor readings, and other relevant data sources.
+Data preparation: Cleaning, transforming, and feature engineering the data to prepare it for modeling.
+Model training: Training the hybrid model using the prepared data and domain-specific knowledge.
+Prediction generation: Generating predictions for the next hour yeast product yield using the trained model.
+Model evaluation: Continuously evaluating the performance of the model and refining it as needed to ensure accurate predictions.
+Our system employs a range of algorithms, including regression analysis, decision trees, and neural networks, to generate predictions. ",4,4,3,5,4,5,3,4
+Reasoning,CausalTrace,"What are SmartPilot’s causal capabilities powered by?
+","SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.",SmartPilot's causal capabilities are powered by LiNGAM (Linear Non-Gaussian Acyclic Models and DiffAN (Differentiable Causal Discovery with Attention). It also evaluate the causal graphs using Bootstrapped Stability Analysis to assess the robustness of discovered causal edges via sampling and use counterfactual evaluation using observational data.,3,4,5,4,5,4,4,5
+Reasoning,CausalTrace,How does Smartpilot evaluate causal edge robustness?,"SmartPilot evaluates causal edge robustness through a process called Bootstrapped Stability Analysis, designed to test how consistently a causal relationship appears across different samples of the data. Here's how it works:
+
+1.Bootstrap Resampling:
+SmartPilot creates multiple resampled versions of the dataset by randomly sampling rows with replacement (e.g., 20 times).
+
+2.Repeated Causal Discovery:
+For each resampled dataset, it runs the DirectLiNGAM algorithm to discover causal edges and record the strength of each edge (i.e., how strong the effect of variable A is on B).
+
+3.Edge Statistics Calculation:
+For every edge (like A → B), it computes:
+
+Mean strength: The average causal strength across all bootstrap runs.
+
+Standard deviation: How much the strength of that edge varies across runs.
+
+Stability score: A normalized score between 0 and 1, calculated from the standard deviation. A lower variation leads to a higher stability score, meaning the edge is more robust.
+
+4.Thresholding for Reliability:
+Edges are classified based on their stability scores:
+
+≥ 0.9 → Very strong, highly stable
+
+0.8–0.9 → Reliable, acceptable for analysis
+
+0.6–0.8 → Moderate, use with caution
+
+< 0.6 → Unstable, usually ignored
+
+5.Result Integration:
+These robustness metrics are integrated into the causal graph visualization in the SmartPilot UI, where users can see which edges are most reliable and prioritize them in root cause analysis and decision-making.
+
+This method ensures that only stable and statistically reliable causal relationships are used in downstream analysis.","SmartPilot evaluates causal edge robustness by running bootstrapped samples of the data, which helps to assess the stability of the causal relationships identified. By repeating the causal discovery process on multiple resampled versions of the data, SmartPilot can estimate the robustness of the causal relationships, providing a measure of confidence in the identified causal edges.",3,4,3,5,5,5,5,5
+Reasoning,CausalTrace,"Which variables have a direct causal effect on I_R03_Gripper_Load?
+
+",I_R03_Gripper_Pot,"After analyzing the causal relationships, I found that the variables 'I_R03_Gripper_Pot'  have a direct causal effect on 'I_R03_Gripper_Load'. This variables are directly influencing the load of the gripper.",4,5,5,5,5,5,5,5
+Reasoning,CausalTrace,"What directly causes I_R03_Gripper_Load?
+",No variable,No variable has a direct causal effect on I_R03_Gripper_Load.,5,5,5,5,5,5,5,5
+Reasoning,CausalTrace,"Which is more likely to be the root cause of variable I_R04_Gripper_Pot, I_R02_Gripper_Pot or I_R01_Gripper_Pot?
+",I_R02_Gripper_Pot is the more likely the root cause of I_R04_Gripper_Pot ,"i_r02_gripper_pot is more likely the root cause of i_r04_gripper_pot (strengths: i_r02_gripper_pot=9.4505, i_r01_gripper_pot=4.2706).",4,5,5,5,5,5,5,5
+Reasoning,CausalTrace,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Load?",I cannot say the exact numeric value. But there is can be a value since this is a causal relation that can exist,"If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Load to change approximately by 11.2926 units (via total causal strength 1.0755).",4,4,3,3,4,4,5,4
+Planning,CausalTrace,"How is the final causal graph made by the causal agent?
+","To create the causal graph, we utilize a combination of machine learning algorithms and domain expertise. Our approach involves integrating various data sources, including sensor data, log files, and other relevant information. We then apply advanced statistical methods and causal inference techniques to identify potential causal relationships between variables. The resulting graph provides a visual representation of these relationships, enabling us to identify key drivers, root causes, and effects. ","The SmartPilot is making the causal graph by leveraging advanced algorithms and machine learning techniques to identify causal relationships between variables. Specifically, it uses a combination of statistical methods, such as Bayesian networks and structural equation modeling, to infer causal relationships from observational data. Additionally, the SmartPilot incorporates domain knowledge and expert input to refine the causal graph and ensure that it accurately represents the underlying causal mechanisms. The strength of the causal relation is determined by the confidence level of the algorithm in identifying the relationship, which is typically measured by metrics such as probability, correlation, or mutual information",4,5,3,5,5,5,5,5
+Planning,PredictX,How is the anomaly prediction done?,"Anomaly prediction in SmartPilot is handled by the PredictX agent, which is built based on a time series and image based fusion model. A DistilBERT language model is fine-tuned on the outputs of PredictX, employing Low-Rank Adaptation (LoRA). The processed model is then employed in smartpilot to detect anomalies from preprocessed sensor data. The input features are encoded and passed through the model to predict composite anomaly labels like ""NoNose,NoBody2"", representing multiple fault types. Once an anomaly is detected, SmartPilot can automatically trigger downstream agents like RCA for further explanation and root cause analysis.","In SmartPilot, anomaly prediction is done using machine learning algorithms that analyze the data from various sensors and machines in the manufacturing pipeline. These algorithms identify patterns and outliers in the data, allowing the system to detect anomalies and predict potential issues before they occur. The model is named PredictX. The causal graphs provided in the memory context suggest that the system is also analyzing the relationships between different sensors and machines to identify potential causal links between anomalies. This allows the system to predict not only individual anomalies but also potential cascading effects across the manufacturing pipeline.",4,4,3,4,5,4,4,5
+Attribution,ForeSight,"I want to predict the next hour yield for a yeast production plant. Explain the hyperparameters of the model in your database for this purpose.
+
+
+","The LSTM model uses 100 units in each of the two stacked LSTM layers. The look-back window is set to 30 timesteps. The optimizer is Adam with default learning rate. The loss function is Mean Squared Error (MSE). The model is trained for 100 epochs with batch size 1. For scaling, MinMaxScaler is used to normalize data between 0 and 1.","The Foresight agent, which utilizes the knowledge-infused LSTM model, has several hyperparameters that contribute to its predictive accuracy. These hyperparameters include:
+
+The number of LSTM layers: This hyperparameter determines the complexity of the model and its ability to capture long-term dependencies in the data.
+The number of units in each LSTM layer: This hyperparameter affects the model's capacity to learn and represent complex patterns in the data.
+The dropout rate: This hyperparameter helps prevent overfitting by randomly dropping out a fraction of the neurons during training.
+The learning rate: This hyperparameter controls how quickly the model learns from the data and adapts to new patterns.
+The batch size: This hyperparameter determines the number of samples used to compute the gradient and update the model's parameters.
+The number of epochs: This hyperparameter specifies the number of times the model sees the training data during the training process.
+These hyperparameters are tuned to optimize the model's performance on the specific task of predicting yeast product yield in the vegemite production pipeline. The integration of domain-informed features, such as those influencing evaporation dynamics and solids concentration, enables the model to focus its representational capacity on physiochemically relevant patterns in the data",4,4,3,3,5,3,3,5
+Attribution,InfoGuide,"Explain the functionality of the I_RO3_Gripper_Pot.
+","I_R03_Gripper_Pot is a sensor that tells the robot controller how far the gripper on Robot 3 is open or closed, enabling precise and automated control of gripping actions.","The I_RO3_Gripper_Pot is a component in the toy rocket manufacturing pipeline that measures the potentiometer value of the gripper on Robot 03. It has a tolerance range of 1900 to 12000 units, which indicates the acceptable range of values for the gripper's potentiometer. This component is likely used to monitor and control the gripper's movement and position during the manufacturing process. If you need more information on how to set up or operate the I_RO3_Gripper_Pot, please let me know and I'll be happy to assist you.",3,4,5,5,5,5,5,5
+Attribution,CausalTrace,"What are the questions that can be answered about Root Cause Analysis?
+","It can answer questions like 
+1.What is the most likely root cause of the anomalous value of variable B?
+2.What are the 3 most likely root causes of the anomalous value of variable B, ranked in descending order?
+3.Is A a likely root cause of the anomalous value of variable B?
+4.Which is more likely to be the root cause, A or D?
+5.Why is D not considered a likely root cause of the anomalous value of variable B?","The following questions can be answered about Root Cause Analysis:
+
+What is the underlying reason for a particular problem or incident?
+What are the contributing factors that led to an event or outcome?
+How do we identify the primary cause of a problem?
+What are the relationships between different variables that led to an outcome?
+How can we prevent similar problems from occurring in the future?
+What are the key indicators that can help identify a root cause?
+What are the most likely root causes for anomalies/defects?
+How does root cause analysis differ from other problem-solving approaches?
+What are the benefits of conducting a root cause analysis?
+These questions can be answered through various root cause analysis techniques such as the 5 Whys, Fishbone diagrams, and SWOT analysis.""",5,5,3,4,5,4,5,5
+Attribution,PredictX,"How is the anomaly prediction done?
+","Anomaly prediction in SmartPilot is handled by the PredictX agent, which is built based on a time series and image based fusion model. A DistilBERT language model is fine-tuned on the outputs of PredictX, employing Low-Rank Adaptation (LoRA). The processed model is then employed in smartpilot to detect anomalies from preprocessed sensor data. The input features are encoded and passed through the model to predict composite anomaly labels like ""NoNose,NoBody2"", representing multiple fault types. Once an anomaly is detected, SmartPilot can automatically trigger downstream agents like RCA for further explanation and root cause analysis.","In SmartPilot, anomaly prediction is done using machine learning algorithms that analyze the data from various sensors and machines in the manufacturing pipeline. These algorithms identify patterns and outliers in the data, allowing the system to detect anomalies and predict potential issues before they occur. The model is named PredictX. The causal graphs provided in the memory context suggest that the system is also analyzing the relationships between different sensors and machines to identify potential causal links between anomalies. This allows the system to predict not only individual anomalies but also potential cascading effects across the manufacturing pipeline.",4,4,5,3,5,3,3,5
+Attribution,CausalTrace,"Explain how Smartpilot does Bootstrapped Stability Analysis.
+","SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.",Smartpilot performs Bootstrapped Stability Analysis by generating multiple bootstrapped samples from the original data. Each bootstrapped sample is used to estimate the causal graph using a causal discovery algorithm. The resulting causal graphs from each bootstrapped sample are then compared to identify the most stable causal relationships. The stability of each causal relationship is measured by the frequency of its occurrence across the bootstrapped samples. The most stable causal relationships are then used to identify the root cause of the problem. This approach helps to reduce the uncertainty in causal inference and increases the confidence in the identified root cause.,4,4,4,3,5,4,4,5
+Attribution,InfoGuide,Who manufactures the sensor I_R02_Gripper_Load?,TE Connectivity ,The manufacturer of the sensor I_R02_Gripper_Load is TE Connectivity.,5,5,5,5,5,5,5,5
+Grounding,InfoGuide,"What type of sensor observes variable Q_VFD1_Temperature?
+",Q_VFD1_Temperature is a type of Temperature Sensor,"The most likely type of sensor that observes variable Q_VFD1_Temperature is a Temperature Sensor, specifically a Thermocouple or RTD (Resistance Temperature Detector) sensor, as it is commonly used to measure temperature in industrial settings, such as in Variable Frequency Drives (VFDs).",4,5,5,5,5,5,5,5
+Grounding,InfoGuide,"What is the range of I_R04_Gripper_Load?
+",The range of the sensor I_R04_Gripper_Load are 1700 to 10300.,📘 Process Ontology Answer: 📏 i_r04_gripper_load range: 1700 to 10300 (Unit: x) (Type: integer),4,5,5,5,5,5,5,5
+Grounding,InfoGuide,What are the tolerance limits of the sensor I_R03_Gripper_Load?,The tolerance limits of the sensor I_R03_Gripper_Load are 1700 to 10300.,"The tolerance limits of the sensor I_R03_Gripper_Load are 1700 to 10300, with a unit of x and a type of integer.",4,5,5,5,5,5,5,5
+Grounding,PredictX,What are the types of anomalies associated with sensor I_R02_Gripper_Pot?,"The sensor I_R02_Gripper_Pot is associated with the following types of anomalies, based on the root cause analysis (RCA) results:
+
+1.NoBody1
+2.NoNose,NoBody2,NoBody1
+
+These anomaly types include I_R02_Gripper_Pot as part of a root cause path, indicating its causal involvement in those specific abnormal outcomes.
+
+
+
+
+
+","Process Ontology Answer:
+Anomaly types related to i_r02_gripper_pot:
+NoNose, NoAnomaly, NoBody2, NoBody1
+
+",4,4,5,5,5,5,5,5
+Causality,CausalTrace,"does I_R01_Gripper_Pot cause I_R03_Gripper_Pot
+","Yes, I_R01_Gripper_Pot causes I_R03_Gripper_Pot.","Yes, I_R01_Gripper_Pot causes I_R03_Gripper_Pot.
+
+",5,5,5,5,5,5,5,5
+Causality,CausalTrace,"does I_R01_Gripper_Pot cause I_R03_Gripper_Load
+","No, I_R01_Gripper_Pot cause I_R03_Gripper_Load","No, I_R01_Gripper_Pot cause I_R03_Gripper_Load
+",5,5,5,5,5,5,5,5
+Causality,CausalTrace,is there a causal relation between I_R01_Gripper_Pot and I_R04_Gripper_Pot,"Yes, I_R01_Gripper_Pot causes I_R04_Gripper_Pot.","Yes, I_R01_Gripper_Pot causes I_R04_Gripper_Pot.",5,5,5,5,5,5,5,5
+Causality,CausalTrace,"is there a causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load
+","No, there is no causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load",No causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load found.,4,5,5,5,5,5,5,5
+Causality,CausalTrace,"Show causal parents of I_R02_Gripper_Load
+",Causal parents can be I_R01_Gripper_Load and I_R01_Gripper_Pot,"Direct causal parents of I_R02_Gripper_Load:
+
+I_R01_Gripper_Load (strength = 0.6785)
+I_R03_Gripper_Load (strength = 23.3332) I_R04_Gripper_Pot (strength = -20.3332)",5,4,5,3,5,5,5,5
+Causality,CausalTrace,"what is the strength of the causal relation between I_R01_Gripper_Pot and I_R04_Gripper_Load ?
+",I cannot say the exact numeric value. But there is can be a value since this is a causal relation that can exist,The total causal strength from I_R01_Gripper_Pot → I_R04_Gripper_Load is -3.17. This is indirect causal effect,5,3,5,4,5,4,3,5
+Causality,CausalTrace,"Which variable has the strongest causal effect on I_R04_Gripper_Pot ?
+",It can be I_R02_Gripper_Pot,I_R02_Gripper_Pot has the strongest total causal effect on I_R04_Gripper_Pot (strength = 1.0754870416448268),5,5,5,5,5,5,4,5
+Causality,CausalTrace,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Pot
+",I cannot say the exact numeric value. But there is can be an effect since this is a causal relation that can exist," If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Pot to change approximately by 11.2926 units (via total causal strength 1.0755).",5,4,4,2,5,4,3,5
+Causality,CausalTrace,"What is the most likely root cause of the anomalous value of variable I_R04_Gripper_Pot
+",I_R03_Gripper_Pot,🔍 Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
+Causality,CausalTrace,"Is I_R03_Gripper_Pot a likely root cause of the anomalous value of variable I_R04_Gripper_Pot ?
+","Yes, can be","Yes, i_r03_gripper_pot is a likely root cause of i_r04_gripper_pot (present in 14.3% of cases).",5,5,5,5,5,5,5,5
+Causality,CausalTrace,"Is I_R02_Gripper_Pot a likely root cause of the anomalous value of variable I_R01_Gripper_Pot ?
+",May be,"Yes, i_r02_gripper_pot is a likely root cause of i_r01_gripper_pot (present in 20.0% of cases).",5,5,5,5,5,5,3,5
+Causality,CausalTrace,"Is I_R01_Gripper_Pot a likely root cause of the anomalous value of variable I_R02_Gripper_Pot ?
+",May be,"No, i_r01_gripper_pot is not a likely root cause of i_r02_gripper_pot (only in 0.0% of cases).
+",5,4,4,4,5,4,3,5
+Causality,CausalTrace,"Why is I_R01_Gripper_Pot not considered a likely root cause of the anomalous value of variable I_R03_Gripper_Pot
+",It can happen, i_r01_gripper_pot is not considered a likely root cause of i_r03_gripper_pot because it never appeared as a cause in the RCA results.,5,4,4,4,5,4,5,5
+Causality,CausalTrace,Why is I_R02_Gripper_Pot not considered a likely root cause of the anomalous value of variable I_R01_Gripper_Pot,"Backward path, so it cannot happen",i_r02_gripper_pot is not considered a strong root cause of i_r01_gripper_pot because its average causal strength is low (0.7478) and it appeared in only 78 cases.,5,3,5,5,5,5,5,5
+Interpretability,InfoGuide,"What are the specs of the sensor I_R03_Gripper_Load
+","The sensor I_R03_Gripper_Load has the following specs according to the provided Dynamic-Process-Ontology JSON:
+
+Sensor Name: Load cell 3
+Sensor Type: Sensor_Value
+Function: Measures pressure applied on the inside of the gripper
+Manufacturer (Item Spec): TE Connectivity
+Associated Robot: Robot 3
+Sensor Value Item Name: I_R03_Gripper_Load
+Value Type: integer
+Unit: x (generic unit — unit not fully specified)
+Minimum Value: 1700
+Maximum Value: 10300
+Cycle State Min: 1300
+Cycle State Max: 11000
+Description: The analog output signal of the load cell on the Robot 3 gripper","The specs of the sensor I_R03_Gripper_Load are as follows: Tolerance Range: 1700 to 10300 (Unit: x), Type: integer. It is an analog output signal of the load cell on the Robot 3 gripper. The manufacturer is TE Connectivity. The function of I_R03_Gripper_Load is to measures the pressure applied on the inside of the gripper
+",4,4,3,3,5,4,5,5
+Interpretability,CausalTrace,"How does causal discovery work? How is the casual graph made?
+","In SmartPilot, causal discovery begins with the user uploading a dataset and selecting relevant features such as sensor readings or machine states. The system then applies a causal discovery algorithm—either DirectLiNGAM, which assumes linear relationships with non-Gaussian noise, or DiffAN, a deep learning method that uses attention mechanisms to infer soft dependencies between variables. These algorithms generate a directed acyclic graph (DAG), where each node represents a variable and each directed edge indicates a potential causal relationship. To ensure reliability, SmartPilot performs bootstrapped stability analysis by running the discovery process on multiple resampled datasets and calculates edge stability scores based on consistency. It also performs counterfactual evaluation to compare predicted and observed effects of interventions. The resulting causal graph is visualized through an interactive PyVis interface, where users can view edge strengths, modify the structure, and query it using natural language. ","Causal discovery identifies cause-and-effect relationships between variables using observational data, producing a causal graph (DAG) with directed edges. Algorithms used include constraint-based (e.g., PC), score-based (e.g., GES), and hybrid methods.
+
+In SmartPilot, users upload data and select features like sensor readings. The system applies either DirectLiNGAM (linear, non-Gaussian) or DiffAN (attention-based deep learning) to generate a causal graph. It then conducts bootstrapped stability analysis and counterfactual evaluation to ensure reliability. The graph is visualized in an interactive interface, allowing users to explore, edit, and query causal relationships naturally.",4,4,5,4,5,4,5,5
+Interpretability,ForeSight,"Explain the hyperparameters used in the Foresight agent.
+","The LSTM model uses 100 units in each of the two stacked LSTM layers. The look-back window is set to 30 timesteps. The optimizer is Adam with default learning rate. The loss function is Mean Squared Error (MSE). The model is trained for 100 epochs with batch size 1. For scaling, MinMaxScaler is used to normalize data between 0 and 1.","The Foresight agent, which utilizes the knowledge-infused LSTM model, has several hyperparameters that contribute to its predictive accuracy. These hyperparameters include:
+
+The number of LSTM layers: This hyperparameter determines the complexity of the model and its ability to capture long-term dependencies in the data.
+The number of units in each LSTM layer: This hyperparameter affects the model's capacity to learn and represent complex patterns in the data.
+The dropout rate: This hyperparameter helps prevent overfitting by randomly dropping out a fraction of the neurons during training.
+The learning rate: This hyperparameter controls how quickly the model learns from the data and adapts to new patterns.
+The batch size: This hyperparameter determines the number of samples used to compute the gradient and update the model's parameters.
+The number of epochs: This hyperparameter specifies the number of times the model sees the training data during the training process.
+These hyperparameters are tuned to optimize the model's performance on the specific task of predicting yeast product yield in the vegemite production pipeline. The integration of domain-informed features, such as those influencing evaporation dynamics and solids concentration, enables the model to focus its representational capacity on physiochemically relevant patterns in the data",3,3,3,3,4,3,3,4
+Interpretability,CausalTrace,"Explain DIFFAN in the context of the causal discovery agent in Smartpilot.
+","In the context of the SmartPilot Causal Discovery Agent, DiffAN (Differentiable Causal Discovery with Attention and Normalization) is a deep learning-based algorithm used to uncover causal relationships between variables when traditional linear assumptions may not hold. Unlike methods like DirectLiNGAM, which rely on strict statistical assumptions (e.g., linearity and non-Gaussian noise), DiffAN uses a neural network architecture with attention mechanisms to learn causal structures in a more flexible and expressive way.
+
+how DiffAN works in SmartPilot: once the user selects a set of features (such as gripper sensor readings from different robots), DiffAN constructs a learnable attention matrix that estimates how strongly each variable might cause another. These attention weights are differentiable, meaning they can be optimized end-to-end using gradient descent. The model includes normalization and regularization steps to ensure the resulting attention map converges toward a valid causal graph with directional edges. The output is a directed graph where the edge weights represent the learned causal influence between variable pairs.
+
+In SmartPilot, DiffAN is particularly useful for capturing non-linear or complex interactions that may exist in high-dimensional or noisy manufacturing data. Its integration into the Streamlit UI allows users to run DiffAN alongside DirectLiNGAM, compare the results, and view the discovered graph through an interactive visualization tool. This empowers operators and engineers to analyze causal interactions in a data-driven way, even when standard assumptions about the data don’t apply.","In the context of the causal discovery agent in Smartpilot, DIFFAN stands for (Differentiable Causal Discovery with Attention and Normalization). DIFFAN is a causal discovery algorithm that identifies the causal relationships between variables by analyzing the differences in their distributions. Specifically, DIFFAN infers the causal direction between two variables, A and B, by checking if the distribution of A is ancestral to the distribution of B. This is done by testing if the distribution of A is independent of the noise in B, which is a fundamental concept in causal inference. By applying DIFFAN, the causal discovery agent in Smartpilot can efficiently identify the causal relationships between variables, enabling root cause analysis and decision-making.",4,3,2,5,5,5,3,5
+Interpretability,CausalTrace,"What are the evaluation procedures used in causal discovery?
+","SmartPilot evaluates the quality of its discovered causal relationships using three key procedures. First, it performs Bootstrapped Stability Analysis, where the dataset is resampled multiple times and causal discovery is repeated to assess how consistently each edge appears. For every edge, it calculates the mean strength, variation, and a stability score that reflects confidence in that causal link—edges with higher stability are deemed more reliable. Second, it uses Counterfactual Evaluation, which tests whether the predicted effect of one variable on another matches what is observed in real data. This involves simulating interventions and comparing predicted changes with actual differences in the dataset, measuring the error between them. Finally, SmartPilot estimates Total Causal Effects by analyzing not only direct links between variables but also all indirect pathways, allowing it to quantify the overall influence of one variable on another across the entire graph. Together, these evaluation methods ensure that the causal graph is both statistically robust and practically meaningful for applications like root cause analysis and decision support.","In causal discovery, evaluation procedures are used to assess the performance of causal models and identify the most likely causal relationships. Some common evaluation procedures used in causal discovery include:
+
+Structural Hamming Distance (SHD): measures the difference between the predicted causal graph and the true causal graph.
+Structural Intervention Distance (SID): measures the difference between the predicted causal graph and the true causal graph under interventions.
+F1-score: evaluates the accuracy of the predicted causal relationships.
+Precision, Recall, and F1-score: evaluate the accuracy of the predicted causal relationships.
+Cross-validation: assesses the generalizability of the causal model to new, unseen data.
+These evaluation procedures help to identify the most likely causal relationships and root cause of a problem. For example, in the context of identifying the 3 most likely root causes of a problem, these evaluation procedures can be used to evaluate the performance of different causal models and identify the most likely root causes.",4,3,3,5,5,5,5,5
+Interpretability,ForeSight,What are the features used to predict the vegemite yield?,"The vegemite yield is predicted using features like temperature, pH levels, yeast strain, nutrient composition, and fermentation time.","To predict the vegemite yield, we utilize a combination of features that include temperature, pH levels, yeast strain, nutrient composition, and fermentation time. These features are incorporated to enrich the input representation, which enables our algorithm to make reliable predictions about the next hour yeast product yield.",5,5,5,5,5,5,5,5
+Interpretability,PredictX,Tell me about the anomalies,"There are 3 main types of anomalies. they are NoNose, NoNoseNoBody2, NoNoseNoBody2NoBody1","Types of anomalies in the Knowledge Graph:
+
+1.NoNose
+2.NoNoseNoBody2
+3.NoNoseNoBody2NoBody1
+",5,5,5,5,5,5,5,5

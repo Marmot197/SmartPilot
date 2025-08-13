@@ -1,0 +1,213 @@
+Principle,Question,Ground Truth,Answer,GPT-4o-mini,LLaMA3-70B-8192,E1,E2,E3,E4,E5,E6
+Reliability,List the 5 capabilities of the causal analysis agent.,"1. Causal DiscoveryLearns causal graphs from data using algorithms like DirectLiNGAM and DiffAN.
+Causal Validation and Robustness Analysis
+
+2. Performs Bootstrapped Stability Analysis and Counterfactual Evaluation to validate and quantify the strength and reliability of discovered causal relations.
+Interactive Causal Graph Construction and Editing
+
+3. Allows users to interactively build, modify, and visualize causal graphs with edge weights, ontology tooltips, and semantic metadata.
+
+4. Root Cause Analysis (RCA)
+Traces causal paths from anomalies to root causes using total causal effects and supports RCA-specific queries like “Why is A a likely cause of B?”
+
+6. Natural Language Querying with Semantic Enrichment
+Supports natural language questions about the causal graph, root causes, and semantic attributes, enriched with ontology-derived information (e.g., type, function, range).","The 5 capabilities of the causal analysis agent are:
+
+Causal Graph Construction: The agent can construct a causal graph that represents the causal relationships between variables.
+
+Causal Inference: The agent can infer causal relationships between variables, enabling the identification of cause-and-effect relationships.
+
+Counterfactual Analysis: The agent can perform counterfactual analysis to estimate the outcome of a scenario if a particular event had occurred or not occurred.
+
+Root Cause Identification: The agent can identify the root cause of a problem or an event by analyzing the causal relationships between variables.
+
+What-If Analysis: The agent can perform what-if analysis to estimate the outcome of a scenario if a particular action is taken or not taken.""
+",4,4,3,3,5,4,5,4
+Reliability,What are the questions that can be answered about Root Cause Analysis?,"It can answer questions like 
+1.What is the most likely root cause of the anomalous value of variable B?
+2.What are the 3 most likely root causes of the anomalous value of variable B, ranked in descending order?
+3.Is A a likely root cause of the anomalous value of variable B?
+4.Which is more likely to be the root cause, A or D?
+5.Why is D not considered a likely root cause of the anomalous value of variable B?","The following questions can be answered about Root Cause Analysis:
+
+What is the underlying reason for a particular problem or incident?
+What are the contributing factors that led to an event or outcome?
+How do we identify the primary cause of a problem?
+What are the relationships between different variables that led to an outcome?
+How can we prevent similar problems from occurring in the future?
+What are the key indicators that can help identify a root cause?
+What are the most likely root causes for anomalies/defects?
+How does root cause analysis differ from other problem-solving approaches?
+What are the benefits of conducting a root cause analysis?
+These questions can be answered through various root cause analysis techniques such as the 5 Whys, Fishbone diagrams, and SWOT analysis.""",4,5,3,4,5,4,5,5
+Consistency,What are SmartPilot’s causal capabilities powered by?,"SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.",SmartPilot's causal capabilities are powered by LiNGAM (Linear Non-Gaussian Acyclic Models and DiffAN (Differentiable Causal Discovery with Attention). It also evaluate the causal graphs using Bootstrapped Stability Analysis to assess the robustness of discovered causal edges via sampling and use counterfactual evaluation using observational data.,4,4,4,4,5,4,4,5
+Consistency,List the 5 capabilities of the causal analysis agent.,"SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.","""The 5 capabilities of the causal analysis agent are:
+
+Causal Graph Construction: The agent can construct a causal graph that represents the causal relationships between variables**.
+
+Causal Inference: The agent can infer causal relationships between variables, enabling the identification of cause-and-effect relationships.
+
+Counterfactual Analysis: The agent can perform counterfactual analysis to estimate the outcome of a scenario if a particular event had occurred or not occurred.
+
+Root Cause Identification: The agent can identify the root cause of a problem or an event by analyzing the causal relationships between variables.
+
+What-If Analysis: The agent can perform what-if analysis to estimate the outcome of a scenario if a particular action is taken or not taken.""
+
+}",3,4,4,3,4,4,5,4
+Consistency,Explain how Smartpilot does Bootstrapped Stability Analysis.,"SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.
+",Smartpilot performs Bootstrapped Stability Analysis by generating multiple bootstrapped samples from the original data. Each bootstrapped sample is used to estimate the causal graph using a causal discovery algorithm. The resulting causal graphs from each bootstrapped sample are then compared to identify the most stable causal relationships. The stability of each causal relationship is measured by the frequency of its occurrence across the bootstrapped samples. The most stable causal relationships are then used to identify the root cause of the problem. This approach helps to reduce the uncertainty in causal inference and increases the confidence in the identified root cause.,4,5,4,4,5,4,5,5
+Consistency,How does Smartpilot evaluate causal edge robustness?,"SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.
+","SmartPilot evaluates causal edge robustness by running bootstrapped samples of the data, which helps to assess the stability of the causal relationships identified. By repeating the causal discovery process on multiple resampled versions of the data, SmartPilot can estimate the robustness of the causal relationships, providing a measure of confidence in the identified causal edges.",3,4,4,5,5,5,5,5
+Abstraction,"How does causal discovery work? How is the casual graph made?
+","In SmartPilot, causal discovery begins with the user uploading a dataset and selecting relevant features such as sensor readings or machine states. The system then applies a causal discovery algorithm—either DirectLiNGAM, which assumes linear relationships with non-Gaussian noise, or DiffAN, a deep learning method that uses attention mechanisms to infer soft dependencies between variables. These algorithms generate a directed acyclic graph (DAG), where each node represents a variable and each directed edge indicates a potential causal relationship. To ensure reliability, SmartPilot performs bootstrapped stability analysis by running the discovery process on multiple resampled datasets and calculates edge stability scores based on consistency. It also performs counterfactual evaluation to compare predicted and observed effects of interventions. The resulting causal graph is visualized through an interactive PyVis interface, where users can view edge strengths, modify the structure, and query it using natural language. ","Causal discovery identifies cause-and-effect relationships between variables using observational data, producing a causal graph (DAG) with directed edges. Algorithms used include constraint-based (e.g., PC), score-based (e.g., GES), and hybrid methods.
+
+In SmartPilot, users upload data and select features like sensor readings. The system applies either DirectLiNGAM (linear, non-Gaussian) or DiffAN (attention-based deep learning) to generate a causal graph. It then conducts bootstrapped stability analysis and counterfactual evaluation to ensure reliability. The graph is visualized in an interactive interface, allowing users to explore, edit, and query causal relationships naturally.",4,4,5,4,5,4,5,5
+Abstraction,"Explain DIFFAN in the context of the causal discovery agent in Smartpilot.
+","In the context of the SmartPilot Causal Discovery Agent, DiffAN (Differentiable Causal Discovery with Attention and Normalization) is a deep learning-based algorithm used to uncover causal relationships between variables when traditional linear assumptions may not hold. Unlike methods like DirectLiNGAM, which rely on strict statistical assumptions (e.g., linearity and non-Gaussian noise), DiffAN uses a neural network architecture with attention mechanisms to learn causal structures in a more flexible and expressive way.
+
+how DiffAN works in SmartPilot: once the user selects a set of features (such as gripper sensor readings from different robots), DiffAN constructs a learnable attention matrix that estimates how strongly each variable might cause another. These attention weights are differentiable, meaning they can be optimized end-to-end using gradient descent. The model includes normalization and regularization steps to ensure the resulting attention map converges toward a valid causal graph with directional edges. The output is a directed graph where the edge weights represent the learned causal influence between variable pairs.
+
+In SmartPilot, DiffAN is particularly useful for capturing non-linear or complex interactions that may exist in high-dimensional or noisy manufacturing data. Its integration into the Streamlit UI allows users to run DiffAN alongside DirectLiNGAM, compare the results, and view the discovered graph through an interactive visualization tool. This empowers operators and engineers to analyze causal interactions in a data-driven way, even when standard assumptions about the data don’t apply.","In the context of the causal discovery agent in Smartpilot, DIFFAN stands for (Differentiable Causal Discovery with Attention and Normalization). DIFFAN is a causal discovery algorithm that identifies the causal relationships between variables by analyzing the differences in their distributions. Specifically, DIFFAN infers the causal direction between two variables, A and B, by checking if the distribution of A is ancestral to the distribution of B. This is done by testing if the distribution of A is independent of the noise in B, which is a fundamental concept in causal inference. By applying DIFFAN, the causal discovery agent in Smartpilot can efficiently identify the causal relationships between variables, enabling root cause analysis and decision-making.",4,3,3,5,5,5,3,5
+Abstraction,"What are the evaluation procedures used in causal discovery?
+","SmartPilot evaluates the quality of its discovered causal relationships using three key procedures. First, it performs Bootstrapped Stability Analysis, where the dataset is resampled multiple times and causal discovery is repeated to assess how consistently each edge appears. For every edge, it calculates the mean strength, variation, and a stability score that reflects confidence in that causal link—edges with higher stability are deemed more reliable. Second, it uses Counterfactual Evaluation, which tests whether the predicted effect of one variable on another matches what is observed in real data. This involves simulating interventions and comparing predicted changes with actual differences in the dataset, measuring the error between them. Finally, SmartPilot estimates Total Causal Effects by analyzing not only direct links between variables but also all indirect pathways, allowing it to quantify the overall influence of one variable on another across the entire graph. Together, these evaluation methods ensure that the causal graph is both statistically robust and practically meaningful for applications like root cause analysis and decision support.","In causal discovery, evaluation procedures are used to assess the performance of causal models and identify the most likely causal relationships. Some common evaluation procedures used in causal discovery include:
+
+Structural Hamming Distance (SHD): measures the difference between the predicted causal graph and the true causal graph.
+Structural Intervention Distance (SID): measures the difference between the predicted causal graph and the true causal graph under interventions.
+F1-score: evaluates the accuracy of the predicted causal relationships.
+Precision, Recall, and F1-score: evaluate the accuracy of the predicted causal relationships.
+Cross-validation: assesses the generalizability of the causal model to new, unseen data.
+These evaluation procedures help to identify the most likely causal relationships and root cause of a problem. For example, in the context of identifying the 3 most likely root causes of a problem, these evaluation procedures can be used to evaluate the performance of different causal models and identify the most likely root causes.",4,3,4,5,5,5,5,5
+Reasoning,"What are SmartPilot’s causal capabilities powered by?
+","SmartPilot’s causal capabilities are powered by the following components:
+
+1.LiNGAM (Linear Non-Gaussian Acyclic Model) – for linear causal discovery under non-Gaussian noise assumptions.
+2.DiffAN (Differentiable Causal Discovery with Attention) – a deep learning-based method using attention mechanisms for discovering causal graphs.
+3.Bootstrapped Stability Analysis – to assess the robustness of discovered causal edges via repeated sampling.
+4.Counterfactual Evaluation using Observational Data – to empirically validate causal effects by comparing predicted vs. observed outcomes.
+5.Interactive Graph Construction and Modification – to support dynamic editing, visualization, and interaction with causal graphs through a user interface.",SmartPilot's causal capabilities are powered by LiNGAM (Linear Non-Gaussian Acyclic Models and DiffAN (Differentiable Causal Discovery with Attention). It also evaluate the causal graphs using Bootstrapped Stability Analysis to assess the robustness of discovered causal edges via sampling and use counterfactual evaluation using observational data.,3,4,5,4,5,4,4,5
+Reasoning,How does Smartpilot evaluate causal edge robustness?,"SmartPilot evaluates causal edge robustness through a process called Bootstrapped Stability Analysis, designed to test how consistently a causal relationship appears across different samples of the data. Here's how it works:
+
+1.Bootstrap Resampling:
+SmartPilot creates multiple resampled versions of the dataset by randomly sampling rows with replacement (e.g., 20 times).
+
+2.Repeated Causal Discovery:
+For each resampled dataset, it runs the DirectLiNGAM algorithm to discover causal edges and record the strength of each edge (i.e., how strong the effect of variable A is on B).
+
+3.Edge Statistics Calculation:
+For every edge (like A → B), it computes:
+
+Mean strength: The average causal strength across all bootstrap runs.
+
+Standard deviation: How much the strength of that edge varies across runs.
+
+Stability score: A normalized score between 0 and 1, calculated from the standard deviation. A lower variation leads to a higher stability score, meaning the edge is more robust.
+
+4.Thresholding for Reliability:
+Edges are classified based on their stability scores:
+
+≥ 0.9 → Very strong, highly stable
+
+0.8–0.9 → Reliable, acceptable for analysis
+
+0.6–0.8 → Moderate, use with caution
+
+< 0.6 → Unstable, usually ignored
+
+5.Result Integration:
+These robustness metrics are integrated into the causal graph visualization in the SmartPilot UI, where users can see which edges are most reliable and prioritize them in root cause analysis and decision-making.
+
+This method ensures that only stable and statistically reliable causal relationships are used in downstream analysis.","SmartPilot evaluates causal edge robustness by running bootstrapped samples of the data, which helps to assess the stability of the causal relationships identified. By repeating the causal discovery process on multiple resampled versions of the data, SmartPilot can estimate the robustness of the causal relationships, providing a measure of confidence in the identified causal edges.",3,4,3,5,5,5,5,5
+Reasoning,"Which variables have a direct causal effect on I_R03_Gripper_Load?
+
+",I_R03_Gripper_Pot,"After analyzing the causal relationships, I found that the variables 'I_R03_Gripper_Pot'  have a direct causal effect on 'I_R03_Gripper_Load'. This variables are directly influencing the load of the gripper.",4,5,5,5,5,5,5,5
+Reasoning,"What directly causes I_R03_Gripper_Load?
+",No variable,No variable has a direct causal effect on I_R03_Gripper_Load.,5,5,5,5,5,5,5,5
+Reasoning,"Which is more likely to be the root cause of variable I_R04_Gripper_Pot, I_R02_Gripper_Pot or I_R01_Gripper_Pot?
+",I_R02_Gripper_Pot is the more likely the root cause of I_R04_Gripper_Pot ,"i_r02_gripper_pot is more likely the root cause of i_r04_gripper_pot (strengths: i_r02_gripper_pot=9.4505, i_r01_gripper_pot=4.2706).",4,5,5,5,5,5,5,5
+Reasoning,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Load?",I cannot say the exact numeric value. But there is can be a value since this is a causal relation that can exist,"If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Load to change approximately by 11.2926 units (via total causal strength 1.0755).",4,4,3,3,4,4,5,4
+Planning,"How is the final causal graph made by the causal agent?
+","To create the causal graph, we utilize a combination of machine learning algorithms and domain expertise. Our approach involves integrating various data sources, including sensor data, log files, and other relevant information. We then apply advanced statistical methods and causal inference techniques to identify potential causal relationships between variables. The resulting graph provides a visual representation of these relationships, enabling us to identify key drivers, root causes, and effects. ","The SmartPilot is making the causal graph by leveraging advanced algorithms and machine learning techniques to identify causal relationships between variables. Specifically, it uses a combination of statistical methods, such as Bayesian networks and structural equation modeling, to infer causal relationships from observational data. Additionally, the SmartPilot incorporates domain knowledge and expert input to refine the causal graph and ensure that it accurately represents the underlying causal mechanisms. The strength of the causal relation is determined by the confidence level of the algorithm in identifying the relationship, which is typically measured by metrics such as probability, correlation, or mutual information",4,5,3,5,5,5,5,5
+Attribution,"What are the questions that can be answered about Root Cause Analysis?
+","It can answer questions like 
+1.What is the most likely root cause of the anomalous value of variable B?
+2.What are the 3 most likely root causes of the anomalous value of variable B, ranked in descending order?
+3.Is A a likely root cause of the anomalous value of variable B?
+4.Which is more likely to be the root cause, A or D?
+5.Why is D not considered a likely root cause of the anomalous value of variable B?","The following questions can be answered about Root Cause Analysis:
+
+What is the underlying reason for a particular problem or incident?
+What are the contributing factors that led to an event or outcome?
+How do we identify the primary cause of a problem?
+What are the relationships between different variables that led to an outcome?
+How can we prevent similar problems from occurring in the future?
+What are the key indicators that can help identify a root cause?
+What are the most likely root causes for anomalies/defects?
+How does root cause analysis differ from other problem-solving approaches?
+What are the benefits of conducting a root cause analysis?
+These questions can be answered through various root cause analysis techniques such as the 5 Whys, Fishbone diagrams, and SWOT analysis.""",5,5,3,4,5,4,5,5
+Attribution,"Explain how Smartpilot does Bootstrapped Stability Analysis.
+","SmartPilot performs Bootstrapped Stability Analysis to evaluate how reliable each discovered causal relationship is. It begins by creating multiple new datasets through random resampling of the original data, a technique known as bootstrapping. For each of these resampled datasets, it runs the DirectLiNGAM algorithm to generate a causal graph and measure the strength of each causal connection between variables. After all iterations, SmartPilot calculates the average strength of each edge, indicating how consistently strong the causal effect is. It also computes the variation in that strength across different samples; lower variation means the relationship is more stable. From this, it derives a stability score that increases when variation is low, reflecting high confidence in the edge. These scores are then visualized in the user interface, allowing users to see which causal links are robust and trustworthy for downstream reasoning and decision-making.",Smartpilot performs Bootstrapped Stability Analysis by generating multiple bootstrapped samples from the original data. Each bootstrapped sample is used to estimate the causal graph using a causal discovery algorithm. The resulting causal graphs from each bootstrapped sample are then compared to identify the most stable causal relationships. The stability of each causal relationship is measured by the frequency of its occurrence across the bootstrapped samples. The most stable causal relationships are then used to identify the root cause of the problem. This approach helps to reduce the uncertainty in causal inference and increases the confidence in the identified root cause.,4,4,4,3,5,4,4,5
+Causality,"does I_R01_Gripper_Pot cause I_R03_Gripper_Pot
+","Yes, I_R01_Gripper_Pot causes I_R03_Gripper_Pot.","Yes, I_R01_Gripper_Pot causes I_R03_Gripper_Pot.
+
+",5,5,5,5,5,5,5,5
+Causality,"does I_R01_Gripper_Pot cause I_R03_Gripper_Load
+","No, I_R01_Gripper_Pot cause I_R03_Gripper_Load","No, I_R01_Gripper_Pot cause I_R03_Gripper_Load
+",5,5,5,5,5,5,5,5
+Causality,is there a causal relation between I_R01_Gripper_Pot and I_R04_Gripper_Pot,"Yes, I_R01_Gripper_Pot causes I_R04_Gripper_Pot.","Yes, I_R01_Gripper_Pot causes I_R04_Gripper_Pot.",5,5,5,5,5,5,5,5
+Causality,"is there a causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load
+","No, there is no causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load",No causal relation between I_R02_Gripper_Pot and I_R04_Gripper_Load found.,4,5,5,5,5,5,5,5
+Causality,"Show causal parents of I_R02_Gripper_Load
+",Causal parents can be I_R01_Gripper_Load and I_R01_Gripper_Pot,"Direct causal parents of I_R02_Gripper_Load:
+
+I_R01_Gripper_Load (strength = 0.6785)
+I_R03_Gripper_Load (strength = 23.3332) I_R04_Gripper_Pot (strength = -20.3332)",5,4,5,3,5,5,5,5
+Causality,"what is the strength of the causal relation between I_R01_Gripper_Pot and I_R04_Gripper_Load ?
+",I cannot say the exact numeric value. But there is can be a value since this is a causal relation that can exist,The total causal strength from I_R01_Gripper_Pot → I_R04_Gripper_Load is -3.17. This is indirect causal effect,5,3,5,4,5,4,3,5
+Causality,"Which variable has the strongest causal effect on I_R04_Gripper_Pot ?
+",It can be I_R02_Gripper_Pot,I_R02_Gripper_Pot has the strongest total causal effect on I_R04_Gripper_Pot (strength = 1.0754870416448268),5,5,5,5,5,5,4,5
+Causality,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Pot
+",I cannot say the exact numeric value. But there is can be an effect since this is a causal relation that can exist," If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Pot to change approximately by 11.2926 units (via total causal strength 1.0755).",5,4,4,2,5,4,3,5
+Causality,"What is the most likely root cause of the anomalous value of variable I_R04_Gripper_Pot
+",I_R03_Gripper_Pot,🔍 Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
+Causality,"Is I_R03_Gripper_Pot a likely root cause of the anomalous value of variable I_R04_Gripper_Pot ?
+","Yes, can be","Yes, i_r03_gripper_pot is a likely root cause of i_r04_gripper_pot (present in 14.3% of cases).",5,5,5,5,5,5,5,5
+Causality,"Is I_R02_Gripper_Pot a likely root cause of the anomalous value of variable I_R01_Gripper_Pot ?
+",May be,"Yes, i_r02_gripper_pot is a likely root cause of i_r01_gripper_pot (present in 20.0% of cases).",5,5,5,5,5,5,3,5
+Causality,"Is I_R01_Gripper_Pot a likely root cause of the anomalous value of variable I_R02_Gripper_Pot ?
+",May be,"No, i_r01_gripper_pot is not a likely root cause of i_r02_gripper_pot (only in 0.0% of cases).
+",5,4,4,4,5,4,3,5
+Causality,"Why is I_R01_Gripper_Pot not considered a likely root cause of the anomalous value of variable I_R03_Gripper_Pot
+",It can happen, i_r01_gripper_pot is not considered a likely root cause of i_r03_gripper_pot because it never appeared as a cause in the RCA results.,5,4,4,4,5,4,5,5
+Causality,Why is I_R02_Gripper_Pot not considered a likely root cause of the anomalous value of variable I_R01_Gripper_Pot,"Backward path, so it cannot happen",i_r02_gripper_pot is not considered a strong root cause of i_r01_gripper_pot because its average causal strength is low (0.7478) and it appeared in only 78 cases.,5,3,5,5,5,5,5,5
+Interpretability,"How does causal discovery work? How is the casual graph made?
+","In SmartPilot, causal discovery begins with the user uploading a dataset and selecting relevant features such as sensor readings or machine states. The system then applies a causal discovery algorithm—either DirectLiNGAM, which assumes linear relationships with non-Gaussian noise, or DiffAN, a deep learning method that uses attention mechanisms to infer soft dependencies between variables. These algorithms generate a directed acyclic graph (DAG), where each node represents a variable and each directed edge indicates a potential causal relationship. To ensure reliability, SmartPilot performs bootstrapped stability analysis by running the discovery process on multiple resampled datasets and calculates edge stability scores based on consistency. It also performs counterfactual evaluation to compare predicted and observed effects of interventions. The resulting causal graph is visualized through an interactive PyVis interface, where users can view edge strengths, modify the structure, and query it using natural language. ","Causal discovery identifies cause-and-effect relationships between variables using observational data, producing a causal graph (DAG) with directed edges. Algorithms used include constraint-based (e.g., PC), score-based (e.g., GES), and hybrid methods.
+
+In SmartPilot, users upload data and select features like sensor readings. The system applies either DirectLiNGAM (linear, non-Gaussian) or DiffAN (attention-based deep learning) to generate a causal graph. It then conducts bootstrapped stability analysis and counterfactual evaluation to ensure reliability. The graph is visualized in an interactive interface, allowing users to explore, edit, and query causal relationships naturally.",4,4,5,4,5,4,5,5
+Interpretability,"Explain DIFFAN in the context of the causal discovery agent in Smartpilot.
+","In the context of the SmartPilot Causal Discovery Agent, DiffAN (Differentiable Causal Discovery with Attention and Normalization) is a deep learning-based algorithm used to uncover causal relationships between variables when traditional linear assumptions may not hold. Unlike methods like DirectLiNGAM, which rely on strict statistical assumptions (e.g., linearity and non-Gaussian noise), DiffAN uses a neural network architecture with attention mechanisms to learn causal structures in a more flexible and expressive way.
+
+how DiffAN works in SmartPilot: once the user selects a set of features (such as gripper sensor readings from different robots), DiffAN constructs a learnable attention matrix that estimates how strongly each variable might cause another. These attention weights are differentiable, meaning they can be optimized end-to-end using gradient descent. The model includes normalization and regularization steps to ensure the resulting attention map converges toward a valid causal graph with directional edges. The output is a directed graph where the edge weights represent the learned causal influence between variable pairs.
+
+In SmartPilot, DiffAN is particularly useful for capturing non-linear or complex interactions that may exist in high-dimensional or noisy manufacturing data. Its integration into the Streamlit UI allows users to run DiffAN alongside DirectLiNGAM, compare the results, and view the discovered graph through an interactive visualization tool. This empowers operators and engineers to analyze causal interactions in a data-driven way, even when standard assumptions about the data don’t apply.","In the context of the causal discovery agent in Smartpilot, DIFFAN stands for (Differentiable Causal Discovery with Attention and Normalization). DIFFAN is a causal discovery algorithm that identifies the causal relationships between variables by analyzing the differences in their distributions. Specifically, DIFFAN infers the causal direction between two variables, A and B, by checking if the distribution of A is ancestral to the distribution of B. This is done by testing if the distribution of A is independent of the noise in B, which is a fundamental concept in causal inference. By applying DIFFAN, the causal discovery agent in Smartpilot can efficiently identify the causal relationships between variables, enabling root cause analysis and decision-making.",4,3,2,5,5,5,3,5
+Interpretability,"What are the evaluation procedures used in causal discovery?
+","SmartPilot evaluates the quality of its discovered causal relationships using three key procedures. First, it performs Bootstrapped Stability Analysis, where the dataset is resampled multiple times and causal discovery is repeated to assess how consistently each edge appears. For every edge, it calculates the mean strength, variation, and a stability score that reflects confidence in that causal link—edges with higher stability are deemed more reliable. Second, it uses Counterfactual Evaluation, which tests whether the predicted effect of one variable on another matches what is observed in real data. This involves simulating interventions and comparing predicted changes with actual differences in the dataset, measuring the error between them. Finally, SmartPilot estimates Total Causal Effects by analyzing not only direct links between variables but also all indirect pathways, allowing it to quantify the overall influence of one variable on another across the entire graph. Together, these evaluation methods ensure that the causal graph is both statistically robust and practically meaningful for applications like root cause analysis and decision support.","In causal discovery, evaluation procedures are used to assess the performance of causal models and identify the most likely causal relationships. Some common evaluation procedures used in causal discovery include:
+
+Structural Hamming Distance (SHD): measures the difference between the predicted causal graph and the true causal graph.
+Structural Intervention Distance (SID): measures the difference between the predicted causal graph and the true causal graph under interventions.
+F1-score: evaluates the accuracy of the predicted causal relationships.
+Precision, Recall, and F1-score: evaluate the accuracy of the predicted causal relationships.
+Cross-validation: assesses the generalizability of the causal model to new, unseen data.
+These evaluation procedures help to identify the most likely causal relationships and root cause of a problem. For example, in the context of identifying the 3 most likely root causes of a problem, these evaluation procedures can be used to evaluate the performance of different causal models and identify the most likely root causes.",4,3,3,5,5,5,5,5
