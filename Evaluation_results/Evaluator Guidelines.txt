@@ -1,0 +1,10 @@
+Evaluator guidelines
+
+Please evaluate the smartpilot answers based on the following criteria:
+1. How well does it cover the key points from the ground truth?
+2. How well does it adhere to the principle you are evaluating for?
+3. Is the information accurate and relevant?
+4. Is it well-structured and clear?
+5. Does it miss any additional valuable information present in the ground truth?
+
+Please provide your evaluation based on the Score: [1-5] (5 being best)

@@ -1,0 +1,26 @@
+Question Number,Question,Expert Answer,Expert Rating,SmartPilot answer without ontology and KG,Expert Rating,ROUGE1_Score
+1,"What is the most likely root cause of the anomaly ""NoNose,NoBody2,NoBody1""","The most likely root cause of ""NoNose,NoBody2,NoBody1"" 
+anomaly is I_R03_Gripper_Pot",1,"The most likely root cause of ""NoNose,NoBody2,NoBody1"" anomaly is ""I_R02_Gripper_Pot "" ",1,0.93
+2,"Which sensors have a direct causal effect on 
+I_R03_Gripper_Pot?","I_R03_Gripper_Load, I_R02_Gripper_Load and 
+I_R02_Gripper_Pot has a direct causal effect on 
+I_R03_Gripper_Pot",1,I_R02_Gripper_Pot has a direct causal effect on I_R03_Gripper_Pot,0.5,0.76
+3,"Which sensor type has a direct causal effect on
+ I_R03_Gripper_Pot?","""Potentiometer 3"" is a sensor type that directly causes 
+the behavior of I_R03_Gripper_Pot.",1,"I cannot infer the type which has a direct causal effect on
+ I_R03_Gripper_Pot",0,0.44
+4,Trace the path from Robot 4 to its sensor values,"Robot 4 → Gripper 4 → Potentiometer 4 → I_R04_Gripper_Pot
+
+Robot 4 → Gripper 4 → Load Cell 4 → I_R04_Gripper_Load",1,"I cannot infer what Robot 4 means in this context. Can you provode 
+additional details and I can assist you with this",0,0.19
+5,What type does the sensor I_R03_Gripper_Pot has?,I_R03_Gripper_Pot has a GripperLoadSensor,1,"I cannot infer what sensor I_R03_Gripper_Pot has. Can you provode 
+additional details and I can assist you with this",0,0.34
+7,"Which robot is most likely responsible when both NoBody1 
+and NoBody2 anomalies occur together?",Robot-2 is mostly likely responsible,1,Yasaskawa motoman robot is mostly likely responsible,0.5,0.77
+8,"Is there a causal pathway from I_R02_Gripper_Pot to NoBody2
+ anomaly? If so, through which cycle(s)?","Yes, there is a causal pathway from I_R02_Gripper_Pot to the NoBody2 anomaly, routed through Cycle 6, where Robot 2 attempts to pick Body 2. The ontology grounds this by linking the potentiometer to Robot 2’s gripper, Robot 2 to Cycle 6, and Cycle 6 to the NoBody2 anomaly.",1,"Yes, a causal path exists from I_R02_Gripper_Pot to the NoBody2 anomaly, passing through Cycle 6, where Robot 2 attempts to pick Body 2. This connection is supported by the ontology, which links the potentiometer to Robot 2’s gripper, associates Robot 2 with Cycle 6, and connects Cycle 6 to the NoBody2 anomaly.",0,0.87
+9,"Are there any cycles in the provided causal graph above that violate physical assembly flow (e.g., Tray→Gripper→Sensor→Robot→Tray)?","Yes, learned causal graphs without ontology guidance often contain cycles and edges that violate physical assembly flow—such as edges from Sensor_Value to Robot or from Gripper to Robot.
+The ontology provides a structural hierarchy that enforces valid directionality (Robot → Gripper → Sensor → Value) and eliminates such implausible or cyclic causal paths.",1,"Please give more information on the ontology, I can assit you",0,0.06
+10,Why is I_R03_Gripper_Pot not considered a likely root cause of the anomalous value of variable I_R02_Gripper_Pot?,"I_R03_Gripper_Pot is not considered a likely root cause of I_R02_Gripper_Pot because it never considered as a cause in the RCA results.
+Also, according to the knowledge graph and process ontology there cannot be a direct causal relation between I_R03_Gripper_Pot and I_R02_Gripper_Pot",1,"I_R03_Gripper_Pot is not considered a likely root cause of I_R02_Gripper_Pot because it never appeared as a cause in the RCA results.
+",1,0.65

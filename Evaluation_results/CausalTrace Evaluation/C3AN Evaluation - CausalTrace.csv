@@ -181,7 +181,7 @@ Causality,"Which variable has the strongest causal effect on I_R04_Gripper_Pot ?
 Causality,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Pot
 ",I cannot say the exact numeric value. But there is can be an effect since this is a causal relation that can exist," If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Pot to change approximately by 11.2926 units (via total causal strength 1.0755).",5,4,4,2,5,4,3,5
 Causality,"What is the most likely root cause of the anomalous value of variable I_R04_Gripper_Pot
-",I_R03_Gripper_Pot,🔍 Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
+",I_R03_Gripper_Pot,Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
 Causality,"Is I_R03_Gripper_Pot a likely root cause of the anomalous value of variable I_R04_Gripper_Pot ?
 ","Yes, can be","Yes, i_r03_gripper_pot is a likely root cause of i_r04_gripper_pot (present in 14.3% of cases).",5,5,5,5,5,5,5,5
 Causality,"Is I_R02_Gripper_Pot a likely root cause of the anomalous value of variable I_R01_Gripper_Pot ?

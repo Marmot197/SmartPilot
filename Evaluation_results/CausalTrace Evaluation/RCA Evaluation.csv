@@ -1,0 +1,18 @@
+Questions,Domain Expert,RCA Baseline,CausalTrace,Jaccard_Expert_Answer_Baseline,Jaccard_Expert_Answer_CausalTrace
+RCA for anomaly type:NoBody1,"I_R03_Gripper_Pot (1)
+I_R02_Gripper_Pot (2)","I_R03_Gripper_Pot (1)
+Q_VFD2_Temperature (2)","I_R03_Gripper_Pot (1)
+I_R02_Gripper_Pot (2)",0.33,1.00
+"RCA for anomaly type: NoBody2,NoBody1",I_R03_Gripper_Pot (1),I_R04_Gripper_Pot (1),I_R03_Gripper_Pot  (1),0.00,1.00
+RCA for anomaly type:NoBody2,I_R03_Gripper_Pot (1),I_R02_Gripper_Pot (1),I_R03_Gripper_Pot (1),0.00,1.00
+"RCA for anomaly type:NoNose,NoBody2",I_R03_Gripper_Pot (1),"I_R03_Gripper_Pot (1)
+M_R01_UJointAngle_Degree (2)","I_R03_Gripper_Pot    (1)
+I_R04_Gripper_Pot   (2)",0.50,0.50
+"RCA for anomaly type:NoNose,NoBody2,NoBody1","I_R03_Gripper_Pot   (1)
+I_R02_Gripper_Pot    (2)","I_R04_Gripper_Pot (1)
+I_R03_Gripper_Pot  (2)","I_R03_Gripper_Pot    (1)
+I_R02_Gripper_Pot    (2)
+I_R04_Gripper_Pot  (3)",0.33,0.67
+RCA for anomaly type:NoNose,I_R03_Gripper_Pot (1),"I_R04_Gripper_Pot (1)
+I_R03_Gripper_Pot  (2)","I_R04_Gripper_Pot (1)
+I_R03_Gripper_Pot (2)",0.50,0.50

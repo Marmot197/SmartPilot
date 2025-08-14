@@ -261,7 +261,7 @@ Consistency,InfoGuide,What sensors are connected to robot 3?,Gripper Potentiomet
 
 5796da20-c48d-472f-b86a-d65eff307075 (GripperPotentiometerSensor)
 7b5e9a36-cccd-4bc8-8ce7-c0987a562aaf (GripperLoadSensor)",4,5,4,4,5,4,5,5
-Consistency,InfoGuide,5,Gripper Potentiometer Sensor (I_RO3_Gripper_Pot)  and Gripper Load Sensor (I_RO3_Gripper_Load) are connected to the Robot 3,"Sensors connected to Robot 3:
+Consistency,InfoGuide,"What sensor types are integrated with Robot 3?",Gripper Potentiometer Sensor (I_RO3_Gripper_Pot)  and Gripper Load Sensor (I_RO3_Gripper_Load) are connected to the Robot 3,"Sensors connected to Robot 3:
 
 5796da20-c48d-472f-b86a-d65eff307075 (GripperPotentiometerSensor)
 7b5e9a36-cccd-4bc8-8ce7-c0987a562aaf (GripperLoadSensor)",4,5,5,5,5,5,5,5
@@ -281,7 +281,7 @@ So, the full path is:
 Robot 3 to Gripper 3 to Potentiometer 3 to I_R03_Gripper_Pot
 Robot 3 to Gripper 3 to Load Cell 3 to I_R03_Gripper_Load","📘 Process Ontology Answer:
 
-🔍 Trace Paths:
+Trace Paths:
 Robot 3 ➝ Gripper 3 ➝ Potentiometer 3 ➝ I_R03_Gripper_Pot
 Robot 3 ➝ Gripper 3 ➝ Load cell 3 ➝ I_R03_Gripper_Load",5,5,5,5,5,5,5,5
 Consistency,InfoGuide,"What is the data path from Robot 3 to its sensors?
@@ -294,7 +294,7 @@ So, the full path is:
 Robot 3 to Gripper 3 to Potentiometer 3 to I_R03_Gripper_Pot
 Robot 3 to Gripper 3 to Load Cell 3 to I_R03_Gripper_Load","📘 Process Ontology Answer:
 
-🔍 Trace Paths:
+Trace Paths:
 Robot 3 ➝ Gripper 3 ➝ Potentiometer 3 ➝ I_R03_Gripper_Pot
 Robot 3 ➝ Gripper 3 ➝ Load cell 3 ➝ I_R03_Gripper_Load",5,5,5,5,5,5,5,5
 Abstraction,InfoGuide,"What are the specs of the sensor I_R03_Gripper_Load
@@ -517,7 +517,7 @@ Causality,CausalTrace,"Which variable has the strongest causal effect on I_R04_G
 Causality,CausalTrace,"If I_R02_Gripper_Pot were set to 10.5, what would be the effect on I_R04_Gripper_Pot
 ",I cannot say the exact numeric value. But there is can be an effect since this is a causal relation that can exist," If I_R02_Gripper_Pot were set to 10.5, it would cause I_R04_Gripper_Pot to change approximately by 11.2926 units (via total causal strength 1.0755).",5,4,4,2,5,4,3,5
 Causality,CausalTrace,"What is the most likely root cause of the anomalous value of variable I_R04_Gripper_Pot
-",I_R03_Gripper_Pot,🔍 Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
+",I_R03_Gripper_Pot,Most likely root cause of i_r04_gripper_pot is i_r03_gripper_pot with average strength 15.7120.,5,5,5,5,5,5,5,5
 Causality,CausalTrace,"Is I_R03_Gripper_Pot a likely root cause of the anomalous value of variable I_R04_Gripper_Pot ?
 ","Yes, can be","Yes, i_r03_gripper_pot is a likely root cause of i_r04_gripper_pot (present in 14.3% of cases).",5,5,5,5,5,5,5,5
 Causality,CausalTrace,"Is I_R02_Gripper_Pot a likely root cause of the anomalous value of variable I_R01_Gripper_Pot ?
