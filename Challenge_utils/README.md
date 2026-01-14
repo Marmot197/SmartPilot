@@ -2,7 +2,7 @@
 
 **SmartPilot** is a custom, compact, and neurosymbolic AI model for intelligent manufacturing. This competition focuses on the **InfoGuide** agent—a question-answering chatbot that leverages knowledge graphs and manufacturing documentation to answer domain-specific queries.
 
-**Demo**: [Watch the demo](https://youtu.be/etgkhH_8jS4)
+**Demo**: [Watch the demo](https://www.youtube.com/watch?v=fh11PULNrTM)
 
 ---
 
@@ -76,7 +76,7 @@ Before starting, ensure you have the following skills and tools:
    - Infrastructure for running and testing your agent
 
 2. **Baseline Agent Implementation**
-   - File: `run_updated.py`
+   - File: `Agent 3: InfoGuide/src/run_updated.py`
    - Function: `run_participant_doc_agent()`
    - This is your starting point—modify this function to improve performance
 
@@ -92,9 +92,8 @@ Before starting, ensure you have the following skills and tools:
    - Query this graph to enhance your answers
 
 5. **Documentation**
-   - Manufacturing manuals and domain knowledge
-   - API documentation for available functions
-   - Example code snippets
+   - Sample manual file: `Manual_sample.pdf`
+
 
 ### Download Instructions
 
@@ -146,9 +145,11 @@ SmartPilot/
 │   └── src/
 │       ├── run_updated.py          # Main file with run_participant_doc_agent
 │       └── ...
-├── Analog24HrRunKG_Demo.ttl        # Knowledge Graph file
-├── requirements.txt                 # Python dependencies
-├── sample_questions.txt            # Test questions
+├── Challenge_utils/
+|   └──Analog24HrRunKG_Demo.ttl        # Knowledge Graph file
+|   └──sample_questions.txt            # Test questions                 
+|   └──Manual_sample.pdf            # Sample manufacturing manual
+|   requirements.txt        # Python dependencies
 └── README.md                       # Documentation
 ```
 
@@ -212,7 +213,7 @@ Return a JSON string with these fields:
 
 **Knowledge Resources:**
 - RDF Knowledge Graph file (manufacturing assets, sensors, robots, anomalies)
-- Process ontology JSON (`d3_graph.json`)
+- Process ontology JSON (`Agent 3: InfoGuide/src/assets/d3_graph.json`)
 - Sensor range metadata (tolerances, units, states)
 - Domain documentation (setup guides, safety procedures, calibration, troubleshooting)
 

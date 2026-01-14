@@ -152,6 +152,16 @@ def get_full_entity_semantic_info(entity_name: str, ontology_json: dict):
 
     return entity_info
 
+def run_participant_doc_agent(user_input, rdf_graph, process_qa, session_state) -> str:
+    """
+    Your implementation goes here.
+    Must return a JSON string with fields:
+        - answer
+        - explanation
+        - kg_entities
+        - kg_relations
+    """
+
 
 def extract_entity_name(user_input: str, ontology_nodes: list):
     candidates = [n.get("item_name", "").lower() for n in ontology_nodes if "item_name" in n]
