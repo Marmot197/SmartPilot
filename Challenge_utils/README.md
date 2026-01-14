@@ -81,7 +81,7 @@ Before starting, ensure you have the following skills and tools:
    - This is your starting point—modify this function to improve performance
 
 3. **Sample Questions**
-   - Development set for local testing
+   - Development set for local testing available at `Challenge_utils/SmartPilot Agentic-KG Challenge.xlsx`
    - Examples of expected question formats
    - Use these to validate your approach
 
