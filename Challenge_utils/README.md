@@ -1,4 +1,4 @@
-# 🤖 SmartPilot Knowledge Graph Challenge
+# 🤖 SmartPilot Agentic-KG Challenge
 
 **SmartPilot** is a custom, compact, and neurosymbolic AI model for intelligent manufacturing. This competition focuses on the **InfoGuide** agent—a question-answering chatbot that leverages knowledge graphs and manufacturing documentation to answer domain-specific queries.
 
