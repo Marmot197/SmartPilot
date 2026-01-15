@@ -168,7 +168,7 @@ SmartPilot/
 └── README.md                           # This documentation
 
 ---
-
+```
 ## Step 3: Develop Your Agent
 
 Your agent must answer manufacturing operator questions like:
