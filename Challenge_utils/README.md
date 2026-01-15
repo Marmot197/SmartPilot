@@ -76,8 +76,8 @@ Before starting, ensure you have the following skills and tools:
    - Infrastructure for running and testing your agent
 
 2. **Datasets**
-   - Final preprocessed multimodal dataset available at: `https://drive.google.com/drive/folders/1l7_Blmk_RrsLHqcW_4F7-ELtll_ZGyDv?usp=sharing`
-   - Final preprocessed analog dataset available at: `https://drive.google.com/drive/folders/1v-UyJqlZMG68Mwd2Gict9E885MS023iR?usp=sharing`
+   - Final preprocessed multimodal dataset available at: https://drive.google.com/drive/folders/1l7_Blmk_RrsLHqcW_4F7-ELtll_ZGyDv?usp=sharing
+   - Final preprocessed analog dataset available at: https://drive.google.com/drive/folders/1v-UyJqlZMG68Mwd2Gict9E885MS023iR?usp=sharing
    
 3.  **Baseline Agent Implementation**
    - File: `Agent 3: InfoGuide/src/run_updated.py`
