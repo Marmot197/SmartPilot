@@ -75,24 +75,35 @@ Before starting, ensure you have the following skills and tools:
    - Baseline implementation of `run_participant_doc_agent`
    - Infrastructure for running and testing your agent
 
-2. **Baseline Agent Implementation**
+2. **Datasets**
+   - Final preprocessed multimodal dataset available at: `https://drive.google.com/drive/folders/1l7_Blmk_RrsLHqcW_4F7-ELtll_ZGyDv?usp=sharing`
+   - Final preprocessed analog dataset available at: `https://drive.google.com/drive/folders/1v-UyJqlZMG68Mwd2Gict9E885MS023iR?usp=sharing`
+   
+3.  **Baseline Agent Implementation**
    - File: `Agent 3: InfoGuide/src/run_updated.py`
    - Function: `run_participant_doc_agent()`
    - This is your starting point—modify this function to improve performance
 
-3. **Sample Questions**
+4. **Sample Questions**
    - Development set for local testing available at `Challenge_utils/SmartPilot Agentic-KG Challenge.xlsx`
    - Examples of expected question formats
    - Use these to validate your approach
 
-4. **Knowledge Graph**
+5. **Knowledge Graph**
    - File: `Analog24HrRunKG_Demo.ttl`
    - Format: RDF Turtle (.ttl)
    - Contains structured manufacturing knowledge
    - Query this graph to enhance your answers
 
-5. **Documentation**
+6. **Documentation**
    - Sample manual file: `Manual_sample.pdf`
+
+7. **Process Ontology**
+   - File: `d3_graph.json`
+   - Format: JSON
+   - A temporal process ontology for a rocket assembly testbed that models 21 assembly cycle states, the robots and sensors involved, their expected values, and possible anomalies. 
+   - The sensor ranges are included in `sensor_cycle_ranges.txt`
+   - Query this graph to enhance your answers
 
 
 ### Download Instructions
