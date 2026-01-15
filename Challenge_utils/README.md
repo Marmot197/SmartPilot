@@ -150,19 +150,22 @@ python -c "import streamlit; print('Streamlit installed')"
 
 ### File Structure Overview
 
-```
+```text
 SmartPilot/
-├── Agent 3: InfoGuide/
+├── Agent 3: InfoGuide/                 # Baseline agent implementation
 │   └── src/
-│       ├── run_updated.py          # Main file with run_participant_doc_agent
-│       └── ...
-├── Challenge_utils/
-|   └──Analog24HrRunKG_Demo.ttl        # Knowledge Graph file
-|   └──sample_questions.txt            # Test questions                 
-|   └──Manual_sample.pdf            # Sample manufacturing manual
-|   requirements.txt        # Python dependencies
-└── README.md                       # Documentation
-```
+│       ├── run_updated.py              # Main file with run_participant_doc_agent()
+│       └── ...                         # Any helper modules you add
+│
+├── Challenge_utils/                    # Challenge resources and utilities
+│   ├── Analog24HrRunKG_Demo.ttl        # Knowledge graph (RDF Turtle)
+│   ├── d3_graph.json                   # Dynamic Process Ontology (DPO)
+│   ├── sensor_cycle_ranges.txt         # Sensor ranges per cycle state
+│   ├── SmartPilot Agentic-KG Challenge.xlsx  # Sample/dev question set
+│   ├── Manual_sample.pdf               # Example manufacturing manual
+│
+├── requirements.txt                    # Python dependencies
+└── README.md                           # This documentation
 
 ---
 
