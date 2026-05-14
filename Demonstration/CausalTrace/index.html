@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CausalTrace SmartPilot Demo</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #667085;
+      --line: #d8dee9;
+      --panel: #ffffff;
+      --page: #f4f6fa;
+      --accent: #006f7f;
+      --accent-2: #b86b16;
+      --ok: #287a4d;
+      --warn: #a55500;
+      --bad: #b42318;
+      --blue: #276ef1;
+      --violet: #7048c8;
+      --shadow: 0 14px 36px rgba(23, 32, 51, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--page);
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 312px minmax(0, 1fr);
+    }
+
+    aside {
+      background: #101828;
+      color: #f8fafc;
+      padding: 22px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: grid;
+      grid-template-columns: 52px 1fr;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 6px;
+    }
+
+    .brand-title {
+      font-weight: 750;
+      line-height: 1.15;
+      font-size: 18px;
+    }
+
+    .brand-subtitle {
+      color: #b9c2d0;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .control-button {
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: #1d2939;
+      color: #ffffff;
+      border-radius: 8px;
+      min-height: 38px;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+
+    .control-button:hover {
+      background: #26364d;
+    }
+
+    .control-button:active {
+      transform: translateY(1px);
+    }
+
+    .control-button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .control-button.primary:hover {
+      background: #005d6b;
+    }
+
+    .scenario {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 22px;
+    }
+
+    .scenario label {
+      display: block;
+      color: #cdd5df;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .scenario select {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #0b1220;
+      color: #ffffff;
+      border-radius: 8px;
+      min-height: 38px;
+      padding: 0 10px;
+    }
+
+    .phase-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .phase-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .phase-item.active {
+      background: rgba(0, 111, 127, 0.28);
+      border-color: rgba(89, 209, 224, 0.55);
+    }
+
+    .phase-index {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.12);
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .phase-item.done .phase-index {
+      background: var(--ok);
+    }
+
+    .phase-name {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1.25;
+    }
+
+    .phase-note {
+      color: #b9c2d0;
+      font-size: 12px;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    main {
+      padding: 22px;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 38px);
+      letter-spacing: 0;
+      line-height: 1.08;
+    }
+
+    .query-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-width: 360px;
+      box-shadow: var(--shadow);
+    }
+
+    .query-card label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .query-input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 40px;
+      padding: 0 10px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(360px, 1.25fr) minmax(320px, 0.75fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .panel-subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #eef6f7;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .agent-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .agent-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 78px;
+      background: #fafbff;
+    }
+
+    .agent-card.active {
+      border-color: var(--accent);
+      background: #eef9fb;
+    }
+
+    .agent-role {
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .agent-name {
+      font-weight: 750;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .agent-state {
+      margin-top: 6px;
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .sensor-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .sensor {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #ffffff;
+    }
+
+    .sensor.warn {
+      border-color: #f0b15e;
+      background: #fff8ed;
+    }
+
+    .sensor.bad {
+      border-color: #f38b82;
+      background: #fff4f2;
+    }
+
+    .sensor-name {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .sensor-value {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .sensor-unit {
+      color: var(--muted);
+      font-size: 12px;
+      margin-left: 3px;
+    }
+
+    .graph-wrap {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      min-height: 390px;
+      background:
+        linear-gradient(90deg, rgba(23, 32, 51, 0.04) 1px, transparent 1px),
+        linear-gradient(rgba(23, 32, 51, 0.04) 1px, transparent 1px);
+      background-size: 28px 28px;
+      overflow: hidden;
+    }
+
+    svg {
+      width: 100%;
+      height: 390px;
+      display: block;
+    }
+
+    .edge {
+      stroke: #98a2b3;
+      stroke-width: 2.2;
+      fill: none;
+      opacity: 0.55;
+      transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+    }
+
+    .edge.active {
+      stroke: var(--accent-2);
+      stroke-width: 4;
+      opacity: 1;
+    }
+
+    .node circle {
+      fill: #ffffff;
+      stroke: #667085;
+      stroke-width: 2;
+      transition: fill 0.2s ease, stroke 0.2s ease;
+    }
+
+    .node.active circle {
+      fill: #e6f7f9;
+      stroke: var(--accent);
+      stroke-width: 3;
+    }
+
+    .node.cause circle {
+      fill: #fff2db;
+      stroke: var(--accent-2);
+      stroke-width: 3;
+    }
+
+    .node.target circle {
+      fill: #fff0ee;
+      stroke: var(--bad);
+      stroke-width: 3;
+    }
+
+    .node text {
+      font-size: 12px;
+      font-weight: 750;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      fill: var(--ink);
+      pointer-events: none;
+    }
+
+    .tooltip {
+      position: absolute;
+      display: none;
+      width: 260px;
+      background: #101828;
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      pointer-events: none;
+      z-index: 5;
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.22);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      border-bottom: 1px solid var(--line);
+      padding: 0 16px;
+    }
+
+    .tab {
+      border: 0;
+      background: transparent;
+      padding: 11px 10px;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .tab.active {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    pre,
+    .code-box {
+      margin: 0;
+      background: #0b1220;
+      color: #dce7f7;
+      border-radius: 8px;
+      padding: 12px;
+      overflow: auto;
+      line-height: 1.45;
+      font-size: 12px;
+      max-height: 330px;
+      white-space: pre-wrap;
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .matrix th,
+    .matrix td {
+      border: 1px solid var(--line);
+      padding: 7px;
+      text-align: right;
+    }
+
+    .matrix th {
+      background: #f2f4f7;
+      color: var(--muted);
+      font-weight: 750;
+    }
+
+    .matrix td.hot {
+      background: #fff2db;
+      color: #8a4a08;
+      font-weight: 800;
+    }
+
+    .rank-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .rank-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #ffffff;
+    }
+
+    .rank-index {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #eef6f7;
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .rank-title {
+      font-weight: 750;
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .rank-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .score {
+      font-weight: 800;
+      color: var(--accent-2);
+    }
+
+    .editor {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .editor select,
+    .editor button {
+      min-height: 38px;
+      border-radius: 8px;
+    }
+
+    .editor select {
+      border: 1px solid var(--line);
+      padding: 0 8px;
+      background: #ffffff;
+    }
+
+    .editor button {
+      border: 0;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 750;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .validation {
+      margin-top: 10px;
+      border-radius: 8px;
+      padding: 10px;
+      background: #f2f4f7;
+      color: var(--muted);
+      font-size: 13px;
+      min-height: 42px;
+    }
+
+    .validation.ok {
+      background: #ecfdf3;
+      color: var(--ok);
+    }
+
+    .validation.bad {
+      background: #fff4f2;
+      color: var(--bad);
+    }
+
+    .hitl-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.8fr) minmax(360px, 1.2fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .hitl-actions {
+      display: grid;
+      gap: 8px;
+    }
+
+    .hitl-button {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      min-height: 42px;
+      padding: 0 12px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 750;
+    }
+
+    .hitl-button:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hitl-button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .hitl-button.warning {
+      border-color: #f0b15e;
+      color: var(--warn);
+      background: #fff8ed;
+    }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .diff-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #ffffff;
+      min-height: 118px;
+    }
+
+    .diff-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 750;
+      margin-bottom: 8px;
+    }
+
+    .diff-value {
+      font-size: 20px;
+      font-weight: 850;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .diff-meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 7px;
+      line-height: 1.35;
+    }
+
+    .feedback-trace {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .trace-row {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      background: #fafbff;
+      line-height: 1.35;
+    }
+
+    .trace-row.ok {
+      background: #ecfdf3;
+      border-color: #acd9bd;
+      color: var(--ok);
+    }
+
+    .trace-row.bad {
+      background: #fff4f2;
+      border-color: #f5b1aa;
+      color: var(--bad);
+    }
+
+    .event-log {
+      display: grid;
+      gap: 7px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .event-time {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .event-text {
+      color: var(--ink);
+    }
+
+    .answer {
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .answer strong {
+      color: var(--accent);
+    }
+
+    .recommendations {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .recommendation {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      font-size: 13px;
+      background: #fafbff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 1180px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: static;
+        height: auto;
+      }
+
+      .dashboard,
+      .topbar {
+        grid-template-columns: 1fr;
+      }
+
+      .query-card {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      main {
+        padding: 14px;
+      }
+
+      .agent-grid,
+      .sensor-strip,
+      .hitl-grid,
+      .diff-grid,
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .editor {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside>
+      <div class="brand">
+        <img src="SmartPilot.png" alt="SmartPilot">
+        <div>
+          <div class="brand-title">CausalTrace Demo</div>
+          <div class="brand-subtitle">SmartPilot 구성요소 추적</div>
+        </div>
+      </div>
+
+      <div class="controls" aria-label="demo controls">
+        <button id="runButton" class="control-button primary">▶ 전체 실행</button>
+        <div class="button-row">
+          <button id="stepButton" class="control-button">↷ 한 단계</button>
+          <button id="resetButton" class="control-button">↺ 초기화</button>
+        </div>
+      </div>
+
+      <div class="scenario">
+        <label for="scenarioSelect">데모 시나리오</label>
+        <select id="scenarioSelect">
+          <option value="f2">F2 최대 힘 이상</option>
+          <option value="nobody">NoBody1 품질 이상</option>
+          <option value="door">Safety Door 지연 이상</option>
+        </select>
+      </div>
+
+      <div id="phaseList" class="phase-list"></div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <h1>논문 파이프라인의 상태 변화 관찰</h1>
+          <div class="panel-subtitle">System State, Agent Card, KG/Ontology, LiNGAM 후보, RCA total effect, LLM grounding, HITL 재실행을 같은 타임라인에서 확인합니다.</div>
+        </div>
+        <div class="query-card">
+          <label for="queryInput">작업자 질의</label>
+          <input id="queryInput" class="query-input" value="현재 F2 센서(최대 힘)의 이상 원인이 뭐야?">
+        </div>
+      </div>
+
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">에이전트 및 데이터 상태</h2>
+            <div class="panel-subtitle">SmartPilot의 PredictX, InfoGuide와 CausalTrace RCA 흐름을 마이크로서비스처럼 표시합니다.</div>
+          </div>
+          <span id="phaseStatus" class="status-pill">대기 중</span>
+        </div>
+        <div class="panel-body">
+          <div id="agentGrid" class="agent-grid"></div>
+          <div id="sensorStrip" class="sensor-strip"></div>
+        </div>
+      </section>
+
+      <div class="dashboard" style="margin-top:16px;">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">인과 그래프와 인간 개입</h2>
+              <div class="panel-subtitle">노드에 마우스를 올리면 지식 그래프 메타데이터가 나타납니다. 엣지 추가는 온톨로지 규칙으로 검증됩니다.</div>
+            </div>
+            <span id="graphStatus" class="status-pill">초기 그래프 없음</span>
+          </div>
+          <div class="panel-body">
+            <div class="graph-wrap">
+              <svg id="graphSvg" viewBox="0 0 780 390" role="img" aria-label="causal graph"></svg>
+              <div id="tooltip" class="tooltip"></div>
+            </div>
+            <div class="editor">
+              <select id="edgeSource"></select>
+              <select id="edgeTarget"></select>
+              <button id="addEdgeButton">엣지 검증/추가</button>
+            </div>
+            <div id="validationBox" class="validation">작업자 수정 요청을 기다리는 중입니다.</div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">RCA 순위</h2>
+              <div class="panel-subtitle">T=(I-B)^-1 총 인과 효과와 경로 점수로 후보 원인을 정렬합니다.</div>
+            </div>
+            <span id="rcaStatus" class="status-pill">계산 전</span>
+          </div>
+          <div class="panel-body">
+            <div id="rankList" class="rank-list"></div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel" style="margin-top:16px;">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Phase 6. 인간 개입 및 피드백</h2>
+            <div class="panel-subtitle">작업자가 그래프를 수정하면 시스템이 의미론적으로 검증하고, 통과한 피드백만 고정 조건으로 넣어 RCA와 프롬프트를 다시 계산합니다.</div>
+          </div>
+          <span id="hitlStatus" class="status-pill">Phase 6 대기</span>
+        </div>
+        <div class="panel-body">
+          <div class="hitl-grid">
+            <div>
+              <div class="hitl-actions">
+                <button id="hitlValidButton" class="hitl-button primary">작업자 피드백 적용: R01 Pot → F2 Load</button>
+                <button id="hitlInvalidButton" class="hitl-button warning">제약 위반 시도: Cycle → F1 Load</button>
+                <button id="hitlUndoButton" class="hitl-button">인간 피드백 되돌리기</button>
+              </div>
+              <div id="hitlExplain" class="validation">Phase 6에 도달하면 HITL 버튼이 활성화됩니다.</div>
+            </div>
+            <div>
+              <div id="hitlDiff" class="diff-grid"></div>
+              <div id="hitlTrace" class="feedback-trace"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="dashboard" style="margin-top:16px;">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">상태와 행렬</h2>
+              <div class="panel-subtitle">LangGraph 스타일 System State가 단계마다 어떤 키를 얻는지 확인합니다.</div>
+            </div>
+          </div>
+          <div class="tabs">
+            <button class="tab active" data-tab="state">System State</button>
+            <button class="tab" data-tab="matrix">B / T Matrix</button>
+            <button class="tab" data-tab="prompt">Prompt Injection</button>
+          </div>
+          <div class="panel-body">
+            <pre id="stateTab"></pre>
+            <div id="matrixTab" class="hidden"></div>
+            <pre id="promptTab" class="hidden"></pre>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">응답 및 SSE 로그</h2>
+              <div class="panel-subtitle">Planner, Executor, Replanner, Recommender가 내보내는 이벤트를 모의 스트리밍합니다.</div>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="answerBox" class="answer">아직 답변이 생성되지 않았습니다.</div>
+            <div id="recommendations" class="recommendations"></div>
+            <hr style="border:0;border-top:1px solid var(--line);margin:14px 0;">
+            <div id="eventLog" class="event-log"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const phases = [
+      {
+        id: "init",
+        name: "시스템 초기화 및 지식 로드",
+        note: "Agent Card, 공정 온톨로지, 센서 KG를 메모리에 등록",
+        activeAgents: ["Registry", "KG/Ontology"],
+        event: "Agent Card 5개와 센서 메타데이터 8개를 등록했습니다."
+      },
+      {
+        id: "ingest",
+        name: "데이터 수집 및 이상 탐지",
+        note: "PredictX가 시계열/이미지 입력을 OK/NOK 페이로드로 변환",
+        activeAgents: ["PredictX", "Background Info"],
+        event: "실시간 센서 태그가 의미론적 메타데이터와 매핑되었습니다."
+      },
+      {
+        id: "plan",
+        name: "사용자 질의와 워크플로우 계획",
+        note: "InfoGuide Planner가 Preprocess→Anomaly→Causal→RCA 실행 계획 수립",
+        activeAgents: ["InfoGuide", "Planner", "Executor"],
+        event: "Planner가 질의를 RCA 워크플로우로 분해했습니다."
+      },
+      {
+        id: "causal",
+        name: "인과 발견 및 RCA 실행",
+        note: "도메인 제약, LiNGAM 후보, bootstrap 안정성, total effect 계산",
+        activeAgents: ["Causal Discovery", "RCA"],
+        event: "안정성 0.6 이상 엣지만 남기고 T=(I-B)^-1을 계산했습니다."
+      },
+      {
+        id: "neurosymbolic",
+        name: "신경기호 통합 및 답변 생성",
+        note: "행렬과 KG 설명을 자연어 프롬프트로 직렬화해 환각을 줄임",
+        activeAgents: ["InfoGuide", "Prompt Injector", "Recommender"],
+        event: "인과 경로와 센서 설명이 LLM 컨텍스트로 주입되었습니다."
+      },
+      {
+        id: "hitl",
+        name: "인간 개입 및 피드백",
+        note: "작업자 엣지 수정, 의미론적 검증, 조건 고정 재실행",
+        activeAgents: ["KG/Ontology", "Causal Discovery", "RCA"],
+        event: "HITL 편집기가 활성화되었습니다. 새 엣지를 검증해보세요."
+      }
+    ];
+
+    const agents = [
+      ["Registry", "Utility", "Agent Card"],
+      ["PredictX", "Agent 1", "Anomaly"],
+      ["Background Info", "Agent", "Metadata"],
+      ["InfoGuide", "Agent 3", "Q&A"],
+      ["Planner", "LangGraph", "Plan"],
+      ["Executor", "CPA", "A2A/MCP"],
+      ["KG/Ontology", "Symbolic", "Neo4j/RDF"],
+      ["Causal Discovery", "CausalTrace", "LiNGAM"],
+      ["RCA", "CausalTrace", "Total Effect"],
+      ["Recommender", "Agent", "Next Action"]
+    ];
+
+    const nodes = [
+      { id: "R01_Pot", label: "R01 Pot", x: 94, y: 96, kind: "sensor", unit: "V", desc: "1번 로봇 그리퍼 전압. 초기 위치와 그립 준비 상태를 나타냅니다.", process: 1 },
+      { id: "R01_Load", label: "R01 Load", x: 236, y: 82, kind: "sensor", unit: "N", desc: "1번 로봇 그리퍼 하중. 부품 집기 여부와 직접 관련됩니다.", process: 1 },
+      { id: "R02_Pot", label: "R02 Pot", x: 188, y: 216, kind: "sensor", unit: "V", desc: "2번 로봇 그리퍼 전압. 몸체 이송 구간의 위치 변화를 반영합니다.", process: 2 },
+      { id: "R02_Load", label: "F1 Load", x: 356, y: 206, kind: "sensor", unit: "N", desc: "2번 로봇의 힘 센서. F2 이전 공정의 압착 상태를 기록합니다.", process: 2 },
+      { id: "R03_Pot", label: "R03 Pot", x: 476, y: 102, kind: "sensor", unit: "V", desc: "3번 로봇 그리퍼 전압. CausalTrace 평가에서 반복적으로 상위 원인으로 등장합니다.", process: 3 },
+      { id: "R03_Load", label: "F2 Load", x: 628, y: 170, kind: "target", unit: "N", desc: "F2 최대 힘 센서. 현재 이상이 감지된 대상 노드입니다.", process: 3 },
+      { id: "Safety_Door", label: "Door", x: 506, y: 302, kind: "control", unit: "bool", desc: "작업 셀 안전 도어. 열림/닫힘 상태가 사이클 진행을 제한합니다.", process: 0 },
+      { id: "CycleState", label: "Cycle", x: 662, y: 294, kind: "state", unit: "step", desc: "공정 사이클 상태. 시간적 선후 제약 검증에 사용됩니다.", process: 4 }
+    ];
+
+    const baseEdges = [
+      { source: "R01_Pot", target: "R01_Load", weight: 0.38, stability: 0.74 },
+      { source: "R01_Load", target: "R02_Pot", weight: 0.32, stability: 0.68 },
+      { source: "R02_Pot", target: "R02_Load", weight: 0.44, stability: 0.71 },
+      { source: "R02_Load", target: "R03_Pot", weight: 0.27, stability: 0.62 },
+      { source: "R03_Pot", target: "R03_Load", weight: 0.71, stability: 0.91 },
+      { source: "R02_Pot", target: "R03_Load", weight: 0.29, stability: 0.66 },
+      { source: "Safety_Door", target: "CycleState", weight: 0.24, stability: 0.64 },
+      { source: "CycleState", target: "R03_Load", weight: 0.21, stability: 0.61 }
+    ];
+
+    const scenarios = {
+      f2: {
+        query: "현재 F2 센서(최대 힘)의 이상 원인이 뭐야?",
+        target: "R03_Load",
+        anomaly: "F2 최대 힘 상한 초과",
+        sensors: [
+          ["R01_Pot", 2.41, "V", "ok"],
+          ["R02_Pot", 2.89, "V", "warn"],
+          ["R03_Pot", 4.72, "V", "bad"],
+          ["F2_Load", 198.4, "N", "bad"]
+        ]
+      },
+      nobody: {
+        query: "NoBody1 품질 이상에서 가장 강한 원인 후보를 알려줘.",
+        target: "R03_Load",
+        anomaly: "NoBody1",
+        sensors: [
+          ["R01_Pot", 2.38, "V", "ok"],
+          ["R02_Pot", 3.12, "V", "warn"],
+          ["R03_Pot", 4.64, "V", "bad"],
+          ["F2_Load", 176.2, "N", "warn"]
+        ]
+      },
+      door: {
+        query: "Safety Door 지연이 F2 힘 이상에 영향을 줬는지 확인해줘.",
+        target: "R03_Load",
+        anomaly: "Safety Door delay",
+        sensors: [
+          ["Door", 1, "open", "bad"],
+          ["CycleState", 7, "step", "warn"],
+          ["R03_Pot", 3.86, "V", "warn"],
+          ["F2_Load", 166.8, "N", "bad"]
+        ]
+      }
+    };
+
+    let currentPhase = -1;
+    let graphEdges = structuredClone(baseEdges);
+    let runTimer = null;
+    let currentScenario = "f2";
+    let activeTab = "state";
+    let systemState = {};
+
+    const phaseList = document.getElementById("phaseList");
+    const agentGrid = document.getElementById("agentGrid");
+    const sensorStrip = document.getElementById("sensorStrip");
+    const phaseStatus = document.getElementById("phaseStatus");
+    const graphStatus = document.getElementById("graphStatus");
+    const rcaStatus = document.getElementById("rcaStatus");
+    const stateTab = document.getElementById("stateTab");
+    const matrixTab = document.getElementById("matrixTab");
+    const promptTab = document.getElementById("promptTab");
+    const eventLog = document.getElementById("eventLog");
+    const answerBox = document.getElementById("answerBox");
+    const recommendations = document.getElementById("recommendations");
+    const graphSvg = document.getElementById("graphSvg");
+    const tooltip = document.getElementById("tooltip");
+    const validationBox = document.getElementById("validationBox");
+    const hitlStatus = document.getElementById("hitlStatus");
+    const hitlExplain = document.getElementById("hitlExplain");
+    const hitlDiff = document.getElementById("hitlDiff");
+    const hitlTrace = document.getElementById("hitlTrace");
+
+    function resetState() {
+      currentPhase = -1;
+      graphEdges = structuredClone(baseEdges);
+      systemState = {
+        query: document.getElementById("queryInput").value,
+        scenario: scenarios[currentScenario].anomaly,
+        memory: {},
+        agent_cards: [],
+        observations: [],
+        anomaly: null,
+        plan: [],
+        causal: null,
+        RCA: null,
+        prompt_context: null,
+        final_answer: null,
+        human_feedback: []
+      };
+      eventLog.innerHTML = "";
+      answerBox.textContent = "아직 답변이 생성되지 않았습니다.";
+      recommendations.innerHTML = "";
+      validationBox.className = "validation";
+      validationBox.textContent = "작업자 수정 요청을 기다리는 중입니다.";
+      hitlExplain.className = "validation";
+      hitlExplain.textContent = "Phase 6에 도달하면 HITL 버튼이 활성화됩니다.";
+      renderAll();
+      addEvent("system", "데모 상태가 초기화되었습니다.");
+    }
+
+    function step() {
+      if (currentPhase >= phases.length - 1) return;
+      currentPhase += 1;
+      applyPhase(phases[currentPhase]);
+      renderAll();
+    }
+
+    function runAll() {
+      if (runTimer) {
+        clearInterval(runTimer);
+        runTimer = null;
+        document.getElementById("runButton").textContent = "▶ 전체 실행";
+        return;
+      }
+      document.getElementById("runButton").textContent = "⏸ 일시정지";
+      if (currentPhase >= phases.length - 1) resetState();
+      step();
+      runTimer = setInterval(() => {
+        if (currentPhase >= phases.length - 1) {
+          clearInterval(runTimer);
+          runTimer = null;
+          document.getElementById("runButton").textContent = "▶ 전체 실행";
+          return;
+        }
+        step();
+      }, 1250);
+    }
+
+    function applyPhase(phase) {
+      const scenario = scenarios[currentScenario];
+      if (phase.id === "init") {
+        systemState.agent_cards = agents.map(([name, role, capability]) => ({ name, role, capability, protocol: name === "Executor" ? "MCP/A2A" : "local" }));
+        systemState.memory.ontology = {
+          constraints: [
+            "later_process -> earlier_process 엣지 금지",
+            "control/state 노드는 센서 값의 직접 물리 원인으로 추가하기 전에 검증 필요",
+            "bootstrap stability >= 0.60"
+          ],
+          kg_nodes: nodes.length,
+          graph_edges: graphEdges.length
+        };
+      }
+      if (phase.id === "ingest") {
+        systemState.observations = scenario.sensors.map(([name, value, unit, status]) => ({ name, value, unit, status }));
+        systemState.anomaly = {
+          label: scenario.anomaly,
+          target_node: scenario.target,
+          payload: "NOK",
+          confidence: currentScenario === "f2" ? 0.94 : 0.88
+        };
+      }
+      if (phase.id === "plan") {
+        systemState.plan = ["Preprocessing", "Anomaly", "BackgroundInfo", "CausalDiscovery", "RCA", "PromptInjection", "Recommender"];
+        systemState.executor_trace = systemState.plan.map((name, index) => ({ step: index + 1, agent: name, status: "scheduled" }));
+      }
+      if (phase.id === "causal") {
+        const ranking = computeRanking();
+        systemState.causal = {
+          algorithm: "LiNGAM/DiffAN mock",
+          bootstrap_runs: 120,
+          stability_threshold: 0.6,
+          retained_edges: graphEdges.filter(edge => edge.stability >= 0.6)
+        };
+        systemState.RCA = {
+          target: scenario.target,
+          total_effect_formula: "T = (I - B)^-1",
+          ranked_causes: ranking
+        };
+      }
+      if (phase.id === "neurosymbolic") {
+        const ranking = computeRanking();
+        const top = ranking[0];
+        systemState.prompt_context = buildPromptContext(ranking);
+        systemState.final_answer = `${top.label}가 ${scenario.anomaly}의 가장 강한 원인 후보입니다. 총 인과 효과는 ${top.score.toFixed(2)}이며, 안정적인 직접 경로와 공정 선후 제약을 동시에 만족합니다.`;
+      }
+      if (phase.id === "hitl") {
+        systemState.human_feedback.push({
+          action: "graph_editor_ready",
+          allowed_inputs: ["add_edge", "reject_invalid_edge", "inspect_node", "rerun_rca"],
+          before_top_cause: computeBaselineRanking()[0]
+        });
+        hitlExplain.className = "validation ok";
+        hitlExplain.textContent = "HITL 활성화: 작업자 수정은 온톨로지 검증을 통과한 경우에만 그래프에 반영됩니다.";
+      }
+      addEvent(phase.id, phase.event);
+    }
+
+    function computeRanking() {
+      const target = scenarios[currentScenario].target;
+      const incoming = graphEdges
+        .filter(edge => edge.target === target && edge.stability >= 0.6)
+        .map(edge => {
+          const source = nodes.find(node => node.id === edge.source);
+          const score = Math.abs(edge.weight) * edge.stability + upstreamBoost(edge.source);
+          return {
+            id: edge.source,
+            label: source ? source.label : edge.source,
+            score,
+            direct_effect: edge.weight,
+            stability: edge.stability,
+            path: `${edge.source} -> ${target}`
+          };
+        })
+        .sort((a, b) => b.score - a.score);
+      return incoming.length ? incoming : [{ id: "none", label: "후보 없음", score: 0, direct_effect: 0, stability: 0, path: "none" }];
+    }
+
+    function computeBaselineRanking() {
+      const savedEdges = graphEdges;
+      graphEdges = structuredClone(baseEdges);
+      const ranking = computeRanking();
+      graphEdges = savedEdges;
+      return ranking;
+    }
+
+    function upstreamBoost(nodeId) {
+      return graphEdges.filter(edge => edge.target === nodeId && edge.stability >= 0.6).reduce((sum, edge) => sum + Math.abs(edge.weight) * 0.08, 0);
+    }
+
+    function buildPromptContext(ranking) {
+      const scenario = scenarios[currentScenario];
+      const edgeText = graphEdges
+        .filter(edge => edge.stability >= 0.6)
+        .map(edge => {
+          const s = nodes.find(node => node.id === edge.source);
+          const t = nodes.find(node => node.id === edge.target);
+          return `- ${s.label} -> ${t.label}: direct=${edge.weight}, stability=${edge.stability}`;
+        })
+        .join("\n");
+      const causeText = ranking
+        .map((item, index) => `${index + 1}. ${item.label}: total_effect_score=${item.score.toFixed(3)}, path=${item.path}`)
+        .join("\n");
+      return [
+        `Question: ${systemState.query}`,
+        `Anomaly: ${scenario.anomaly}`,
+        "Ontology constraints:",
+        "- earlier process may affect later process",
+        "- later process must not be added as a cause of an earlier process",
+        "- retained causal edges require bootstrap stability >= 0.60",
+        "Knowledge graph metadata:",
+        nodes.map(node => `- ${node.id}: ${node.desc} unit=${node.unit}`).join("\n"),
+        "Retained causal graph:",
+        edgeText,
+        "RCA ranking:",
+        causeText,
+        "Answer in Korean with root cause, evidence, and recommended operator action."
+      ].join("\n");
+    }
+
+    function renderAll() {
+      renderPhases();
+      renderAgents();
+      renderSensors();
+      renderGraph();
+      renderRanking();
+      renderHitl();
+      renderTabs();
+      renderAnswer();
+      phaseStatus.textContent = currentPhase >= 0 ? phases[currentPhase].name : "대기 중";
+      graphStatus.textContent = currentPhase >= 3 ? `${graphEdges.length}개 엣지 활성` : "초기 그래프 없음";
+      rcaStatus.textContent = currentPhase >= 3 ? "계산 완료" : "계산 전";
+    }
+
+    function renderPhases() {
+      phaseList.innerHTML = phases.map((phase, index) => {
+        const cls = index === currentPhase ? "phase-item active" : index < currentPhase ? "phase-item done" : "phase-item";
+        return `<div class="${cls}">
+          <div class="phase-index">${index < currentPhase ? "✓" : index + 1}</div>
+          <div>
+            <div class="phase-name">${phase.name}</div>
+            <div class="phase-note">${phase.note}</div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderAgents() {
+      const active = currentPhase >= 0 ? phases[currentPhase].activeAgents : [];
+      agentGrid.innerHTML = agents.map(([name, role, capability]) => {
+        const isActive = active.includes(name);
+        return `<div class="agent-card ${isActive ? "active" : ""}">
+          <div class="agent-role">${role}</div>
+          <div class="agent-name">${name}</div>
+          <div class="agent-state">${isActive ? "RUNNING" : capability}</div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderSensors() {
+      sensorStrip.innerHTML = scenarios[currentScenario].sensors.map(([name, value, unit, status]) => {
+        const visibleStatus = currentPhase >= 1 ? status : "ok";
+        const valueText = currentPhase >= 1 ? value : "--";
+        return `<div class="sensor ${visibleStatus}">
+          <div class="sensor-name">${name}</div>
+          <div><span class="sensor-value">${valueText}</span><span class="sensor-unit">${unit}</span></div>
+        </div>`;
+      }).join("");
+    }
+
+    function renderGraph() {
+      const target = scenarios[currentScenario].target;
+      const ranking = currentPhase >= 3 ? computeRanking() : [];
+      const causeIds = new Set(ranking.map(item => item.id));
+      const activeEdgeKeys = new Set(ranking.map(item => item.path.replace(" -> ", "::")));
+      graphSvg.innerHTML = `
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#98a2b3"></path>
+          </marker>
+          <marker id="arrowActive" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#b86b16"></path>
+          </marker>
+        </defs>
+        ${graphEdges.map(edge => edgePath(edge, activeEdgeKeys.has(`${edge.source}::${edge.target}`))).join("")}
+        ${nodes.map(node => nodeSvg(node, causeIds, target)).join("")}
+      `;
+      graphSvg.querySelectorAll(".node").forEach(group => {
+        group.addEventListener("mousemove", showTooltip);
+        group.addEventListener("mouseleave", hideTooltip);
+      });
+    }
+
+    function edgePath(edge, active) {
+      const s = nodes.find(node => node.id === edge.source);
+      const t = nodes.find(node => node.id === edge.target);
+      const mx = (s.x + t.x) / 2;
+      const my = (s.y + t.y) / 2 - 22;
+      return `<path class="edge ${active && currentPhase >= 3 ? "active" : ""}" d="M ${s.x} ${s.y} Q ${mx} ${my} ${t.x} ${t.y}" marker-end="url(#${active && currentPhase >= 3 ? "arrowActive" : "arrow"})">
+        <title>${edge.source} -> ${edge.target}, effect=${edge.weight}, stability=${edge.stability}</title>
+      </path>`;
+    }
+
+    function nodeSvg(node, causeIds, target) {
+      const cls = [
+        "node",
+        currentPhase >= 3 && causeIds.has(node.id) ? "cause" : "",
+        currentPhase >= 1 && node.id === target ? "target" : "",
+        currentPhase >= 0 ? "active" : ""
+      ].join(" ");
+      return `<g class="${cls}" data-node="${node.id}" transform="translate(${node.x}, ${node.y})">
+        <circle r="38"></circle>
+        <text>${node.label}</text>
+      </g>`;
+    }
+
+    function showTooltip(event) {
+      const node = nodes.find(item => item.id === event.currentTarget.dataset.node);
+      tooltip.style.display = "block";
+      tooltip.style.left = `${event.offsetX + 14}px`;
+      tooltip.style.top = `${event.offsetY + 14}px`;
+      tooltip.innerHTML = `<strong>${node.label}</strong><br>${node.desc}<br>type=${node.kind}, unit=${node.unit}, process=${node.process}`;
+    }
+
+    function hideTooltip() {
+      tooltip.style.display = "none";
+    }
+
+    function renderRanking() {
+      const rankList = document.getElementById("rankList");
+      if (currentPhase < 3) {
+        rankList.innerHTML = `<div class="rank-item"><div class="rank-index">-</div><div><div class="rank-title">RCA 대기</div><div class="rank-meta">인과 발견 단계 이후 표시됩니다.</div></div><div class="score">0.00</div></div>`;
+        return;
+      }
+      rankList.innerHTML = computeRanking().map((item, index) => `<div class="rank-item">
+        <div class="rank-index">${index + 1}</div>
+        <div>
+          <div class="rank-title">${item.label}</div>
+          <div class="rank-meta">${item.path} · direct ${item.direct_effect.toFixed(2)} · stability ${item.stability.toFixed(2)}</div>
+        </div>
+        <div class="score">${item.score.toFixed(2)}</div>
+      </div>`).join("");
+    }
+
+    function renderTabs() {
+      stateTab.textContent = JSON.stringify(systemState, null, 2);
+      matrixTab.innerHTML = matrixHtml();
+      promptTab.textContent = currentPhase >= 4 ? systemState.prompt_context : "프롬프트 컨텍스트는 Phase 5에서 생성됩니다.";
+      stateTab.classList.toggle("hidden", activeTab !== "state");
+      matrixTab.classList.toggle("hidden", activeTab !== "matrix");
+      promptTab.classList.toggle("hidden", activeTab !== "prompt");
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.toggle("active", tab.dataset.tab === activeTab));
+    }
+
+    function matrixHtml() {
+      const labels = nodes.map(node => node.id);
+      const rows = labels.map(target => {
+        const cells = labels.map(source => {
+          const edge = graphEdges.find(item => item.source === source && item.target === target);
+          const value = edge ? edge.weight : (source === target ? 1 : 0);
+          const hot = edge && currentPhase >= 3 && scenarios[currentScenario].target === target;
+          return `<td class="${hot ? "hot" : ""}">${value.toFixed(2)}</td>`;
+        }).join("");
+        return `<tr><th>${target}</th>${cells}</tr>`;
+      }).join("");
+      return `<div class="code-box" style="background:#fff;color:var(--ink);padding:0;max-height:330px;">
+        <table class="matrix"><thead><tr><th>B[target, source]</th>${labels.map(label => `<th>${label}</th>`).join("")}</tr></thead><tbody>${rows}</tbody></table>
+      </div>`;
+    }
+
+    function renderAnswer() {
+      if (currentPhase < 4 || !systemState.final_answer) return;
+      const top = computeRanking()[0];
+      const feedbackCount = graphEdges.filter(edge => edge.human_added).length;
+      const suffix = feedbackCount ? ` 작업자 피드백 ${feedbackCount}건이 고정 조건으로 반영된 재실행 결과입니다.` : "";
+      answerBox.innerHTML = `<strong>${top.label}</strong>가 현재 가장 강한 원인 후보입니다. 직접 효과, bootstrap 안정성, upstream 경로를 합산한 RCA 점수는 <strong>${top.score.toFixed(2)}</strong>입니다.${suffix} 먼저 ${top.label}의 캘리브레이션 로그와 직전 사이클의 그리퍼 위치 변화를 확인하세요.`;
+      recommendations.innerHTML = [
+        "R03 Pot 최근 30분 drift와 캘리브레이션 이력 확인",
+        "F2 Load 상한 초과 시점의 이미지/시계열 동기화 검토",
+        "작업자가 누락 엣지를 추가하면 온톨로지 검증 후 RCA를 재실행"
+      ].map(item => `<div class="recommendation">${item}</div>`).join("");
+    }
+
+    function renderHitl() {
+      const enabled = currentPhase >= 5;
+      hitlStatus.textContent = enabled ? "HITL 활성" : "Phase 6 대기";
+      document.getElementById("hitlValidButton").disabled = !enabled;
+      document.getElementById("hitlInvalidButton").disabled = !enabled;
+      document.getElementById("hitlUndoButton").disabled = !enabled;
+      const before = computeBaselineRanking()[0];
+      const after = currentPhase >= 3 ? computeRanking()[0] : before;
+      hitlDiff.innerHTML = `
+        <div class="diff-card">
+          <div class="diff-label">피드백 전 RCA</div>
+          <div class="diff-value">${before.label}</div>
+          <div class="diff-meta">${before.path}<br>score ${before.score.toFixed(2)}</div>
+        </div>
+        <div class="diff-card">
+          <div class="diff-label">피드백 반영 후 RCA</div>
+          <div class="diff-value">${after.label}</div>
+          <div class="diff-meta">${after.path}<br>score ${after.score.toFixed(2)}</div>
+        </div>
+      `;
+      const feedback = systemState.human_feedback || [];
+      hitlTrace.innerHTML = feedback.length
+        ? feedback.slice().reverse().map(item => {
+            const cls = item.validation === "passed" ? "ok" : item.validation === "rejected" ? "bad" : "";
+            const edge = item.edge ? ` · ${item.edge}` : "";
+            const reason = item.reason ? `<br>${item.reason}` : "";
+            return `<div class="trace-row ${cls}">${item.action}${edge}${reason}</div>`;
+          }).join("")
+        : `<div class="trace-row">아직 작업자 피드백이 없습니다.</div>`;
+    }
+
+    function addEdge(sourceOverride, targetOverride, options = {}) {
+      const source = sourceOverride || document.getElementById("edgeSource").value;
+      const target = targetOverride || document.getElementById("edgeTarget").value;
+      const sourceNode = nodes.find(node => node.id === source);
+      const targetNode = nodes.find(node => node.id === target);
+      if (source === target) {
+        setValidation("bad", "같은 노드로 향하는 자기 루프는 허용되지 않습니다.");
+        systemState.human_feedback.push({ action: "reject_edge", edge: `${source} -> ${target}`, validation: "rejected", reason: "self-loop" });
+        renderHitl();
+        return;
+      }
+      if (sourceNode.process > targetNode.process && targetNode.process !== 0) {
+        setValidation("bad", "검증 실패: 미래/후행 공정 노드는 이전 공정의 원인으로 추가할 수 없습니다.");
+        systemState.human_feedback.push({ action: "reject_edge", edge: `${source} -> ${target}`, validation: "rejected", reason: "온톨로지 시간 제약 위반: 후행 공정은 선행 공정의 원인으로 고정할 수 없습니다." });
+        addEvent("hitl", `Rejected edge ${source} -> ${target}`);
+        renderAll();
+        return;
+      }
+      if (graphEdges.some(edge => edge.source === source && edge.target === target)) {
+        setValidation("bad", "이미 존재하는 엣지입니다.");
+        systemState.human_feedback.push({ action: "reject_edge", edge: `${source} -> ${target}`, validation: "rejected", reason: "duplicate edge" });
+        renderHitl();
+        return;
+      }
+      const newEdge = {
+        source,
+        target,
+        weight: options.weight || 0.25,
+        stability: options.stability || 0.67,
+        human_added: true
+      };
+      graphEdges.push(newEdge);
+      systemState.human_feedback.push({ action: "add_edge_and_rerun", edge: `${source} -> ${target}`, validation: "passed", reason: "온톨로지 검증 통과. 고정 조건으로 추가 후 RCA/프롬프트/답변 재계산." });
+      if (currentPhase >= 3) {
+        systemState.causal.retained_edges = graphEdges.filter(edge => edge.stability >= 0.6);
+        systemState.RCA.ranked_causes = computeRanking();
+        systemState.prompt_context = currentPhase >= 4 ? buildPromptContext(computeRanking()) : systemState.prompt_context;
+        if (currentPhase >= 4) {
+          const top = computeRanking()[0];
+          systemState.final_answer = `${top.label}가 ${scenarios[currentScenario].anomaly}의 가장 강한 원인 후보입니다. 작업자 피드백을 반영한 총 인과 효과 점수는 ${top.score.toFixed(2)}입니다.`;
+        }
+      }
+      setValidation("ok", `검증 통과: ${source} -> ${target} 엣지를 고정 조건으로 추가하고 RCA 결과를 갱신했습니다.`);
+      addEvent("hitl", `Accepted edge ${source} -> ${target}; RCA rerun completed.`);
+      renderAll();
+    }
+
+    function applyGuidedFeedback() {
+      if (currentPhase < 5) return;
+      addEdge("R01_Pot", scenarios[currentScenario].target, { weight: 0.83, stability: 0.89 });
+    }
+
+    function tryInvalidFeedback() {
+      if (currentPhase < 5) return;
+      addEdge("CycleState", "R02_Load");
+    }
+
+    function undoHumanFeedback() {
+      if (currentPhase < 5) return;
+      graphEdges = graphEdges.filter(edge => !edge.human_added);
+      systemState.human_feedback.push({ action: "undo_human_feedback", validation: "passed", reason: "작업자 추가 엣지를 제거하고 원래 그래프로 RCA를 재실행했습니다." });
+      if (currentPhase >= 3) {
+        systemState.causal.retained_edges = graphEdges.filter(edge => edge.stability >= 0.6);
+        systemState.RCA.ranked_causes = computeRanking();
+        systemState.prompt_context = currentPhase >= 4 ? buildPromptContext(computeRanking()) : systemState.prompt_context;
+      }
+      setValidation("ok", "인간 피드백을 되돌리고 원래 인과 그래프로 RCA를 재실행했습니다.");
+      addEvent("hitl", "Human feedback undone; RCA rerun completed.");
+      renderAll();
+    }
+
+    function setValidation(kind, text) {
+      validationBox.className = `validation ${kind}`;
+      validationBox.textContent = text;
+    }
+
+    function addEvent(source, text) {
+      const now = new Date();
+      const time = now.toLocaleTimeString("ko-KR", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const row = document.createElement("div");
+      row.className = "event";
+      row.innerHTML = `<div class="event-time">${time}</div><div class="event-text">[${source}] ${text}</div>`;
+      eventLog.prepend(row);
+    }
+
+    function setupControls() {
+      document.getElementById("runButton").addEventListener("click", runAll);
+      document.getElementById("stepButton").addEventListener("click", step);
+      document.getElementById("resetButton").addEventListener("click", resetState);
+      document.getElementById("addEdgeButton").addEventListener("click", () => addEdge());
+      document.getElementById("hitlValidButton").addEventListener("click", applyGuidedFeedback);
+      document.getElementById("hitlInvalidButton").addEventListener("click", tryInvalidFeedback);
+      document.getElementById("hitlUndoButton").addEventListener("click", undoHumanFeedback);
+      document.getElementById("scenarioSelect").addEventListener("change", event => {
+        currentScenario = event.target.value;
+        document.getElementById("queryInput").value = scenarios[currentScenario].query;
+        resetState();
+      });
+      document.getElementById("queryInput").addEventListener("input", event => {
+        systemState.query = event.target.value;
+        renderTabs();
+      });
+      document.querySelectorAll(".tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          activeTab = tab.dataset.tab;
+          renderTabs();
+        });
+      });
+      const sourceSelect = document.getElementById("edgeSource");
+      const targetSelect = document.getElementById("edgeTarget");
+      sourceSelect.innerHTML = nodes.map(node => `<option value="${node.id}">${node.label}</option>`).join("");
+      targetSelect.innerHTML = nodes.map(node => `<option value="${node.id}" ${node.id === scenarios[currentScenario].target ? "selected" : ""}>${node.label}</option>`).join("");
+    }
+
+    setupControls();
+    resetState();
+  </script>
+</body>
+</html>
